@@ -59,6 +59,8 @@ let readyForShutdown: boolean = false;
 // Tray icon and related objects
 let tray: any = null;
 
+const headless = false
+
 import { config } from '../node/config'; // checked - only node
 
 // Very important to put before the single instance check, since it is based on the
@@ -285,8 +287,8 @@ async function createWindow() {
     picked.y = Math.floor(Math.random() * screenHeight);
   }
 
-  const windowOptions = {
-    show: true,
+  const windowOptions: Electron.BrowserWindowConstructorOptions = {
+    show: !headless,
     minWidth,
     minHeight,
     fullscreen: false as boolean | undefined,
@@ -294,12 +296,14 @@ async function createWindow() {
     backgroundColor: classicDark['--background-primary-color'],
     webPreferences: {
       nodeIntegration: true,
+      // @ts-ignore
       enableRemoteModule: true,
       nodeIntegrationInWorker: true,
       contextIsolation: false,
       preload: path.join(getAppRootPath(), 'preload.js'),
       nativeWindowOpen: true,
       spellcheck: await getSpellCheckSetting(),
+      offscreen: headless
     },
     // only set icon for Linux, the executable one will be used by default for other platforms
     icon:
@@ -314,7 +318,9 @@ async function createWindow() {
   if (!_.isNumber(windowOptions.height) || windowOptions.height < minHeight) {
     windowOptions.height = Math.max(minHeight, height);
   }
+  // @ts-ignore
   if (!_.isBoolean(windowOptions.maximized)) {
+    // @ts-ignore
     delete windowOptions.maximized;
   }
   if (!_.isBoolean(windowOptions.autoHideMenuBar)) {
@@ -326,6 +332,7 @@ async function createWindow() {
       return false;
     }
 
+    // @ts-ignore
     return isVisible(windowOptions, _.get(display, 'bounds'));
   });
   if (!visibleOnAnyScreen) {
@@ -341,8 +348,10 @@ async function createWindow() {
   assertLogger().info('Initializing BrowserWindow config: %s', JSON.stringify(windowOptions));
 
   // Create the browser window.
-  mainWindow = new BrowserWindow(windowOptions);
-  setupSpellChecker(mainWindow, locale.messages);
+  if (!headless) {
+    mainWindow = new BrowserWindow(windowOptions);
+    setupSpellChecker(mainWindow, locale.messages);
+  }
 
   const setWindowFocus = () => {
     if (!mainWindow) {
@@ -350,24 +359,26 @@ async function createWindow() {
     }
     mainWindow.webContents.send('set-window-focus', mainWindow.isFocused());
   };
-  mainWindow.on('focus', setWindowFocus);
-  mainWindow.on('blur', setWindowFocus);
-  mainWindow.once('ready-to-show', setWindowFocus);
+  !headless && mainWindow && mainWindow.on('focus', setWindowFocus);
+  !headless && mainWindow && mainWindow.on('blur', setWindowFocus);
+  !headless && mainWindow && mainWindow.once('ready-to-show', setWindowFocus);
   // This is a fallback in case we drop an event for some reason.
   global.setInterval(setWindowFocus, 5000);
 
-  electronLocalshortcut.register(mainWindow, 'F5', () => {
-    if (!mainWindow) {
-      return;
-    }
-    mainWindow.reload();
-  });
-  electronLocalshortcut.register(mainWindow, 'CommandOrControl+R', () => {
-    if (!mainWindow) {
-      return;
-    }
-    mainWindow.reload();
-  });
+  if(!headless && mainWindow) {
+    electronLocalshortcut.register(mainWindow, 'F5', () => {
+      if (!mainWindow) {
+        return;
+      }
+      mainWindow.reload();
+    });
+    electronLocalshortcut.register(mainWindow, 'CommandOrControl+R', () => {
+      if (!mainWindow) {
+        return;
+      }
+      mainWindow.reload();
+    });
+  }
 
   function captureAndSaveWindowStats() {
     if (!mainWindow) {
@@ -400,24 +411,27 @@ async function createWindow() {
   }
 
   const debouncedCaptureStats = _.debounce(captureAndSaveWindowStats, 500);
-  mainWindow.on('resize', debouncedCaptureStats);
-  mainWindow.on('move', debouncedCaptureStats);
+  if (!headless && mainWindow) {
+    mainWindow.on('resize', debouncedCaptureStats);
+    mainWindow.on('move', debouncedCaptureStats);
 
-  mainWindow.on('focus', () => {
-    if (!mainWindow) {
-      return;
-    }
-    mainWindow.flashFrame(false);
-    if (passwordWindow) {
-      passwordWindow.close();
-      passwordWindow = null;
-    }
-  });
+    mainWindow.on('focus', () => {
+      if (!mainWindow) {
+        return;
+      }
+      mainWindow.flashFrame(false);
+      if (passwordWindow) {
+        passwordWindow.close();
+        passwordWindow = null;
+      }
+    });
+  }
 
   const urlToLoad = prepareURL([getAppRootPath(), 'background.html']);
 
-  await mainWindow.loadURL(urlToLoad);
-  if (isTestIntegration) {
+  if (!headless && mainWindow) {
+    await mainWindow.loadURL(urlToLoad);
+    if (isTestIntegration) {
     setTimeout(() => {
       if (mainWindow && mainWindow.webContents) {
         mainWindow.webContents.openDevTools({
@@ -426,60 +440,63 @@ async function createWindow() {
         });
       }
     }, 5000);
+    }
   }
 
-  if ((process.env.NODE_APP_INSTANCE || '').startsWith('devprod')) {
-    // Open the DevTools.
-    mainWindow.webContents.openDevTools({
-      mode: 'bottom',
-      activate: false,
-    });
-  }
-
-  captureClicks(mainWindow);
-
-  // Emitted when the window is about to be closed.
-  // Note: We do most of our shutdown logic here because all windows are closed by
-  //   Electron before the app quits.
-  mainWindow.on('close', async e => {
-    console.log('close event', {
-      readyForShutdown: mainWindow ? readyForShutdown : null,
-      shouldQuit: windowShouldQuit(),
-    });
-    // If the application is terminating, just do the default
-    if (mainWindow && readyForShutdown && windowShouldQuit()) {
-      return;
+  if (!headless && mainWindow) {
+    if ((process.env.NODE_APP_INSTANCE || '').startsWith('devprod')) {
+      // Open the DevTools.
+      mainWindow.webContents.openDevTools({
+        mode: 'bottom',
+        activate: false,
+      });
     }
 
-    // Prevent the shutdown
-    e.preventDefault();
-    mainWindow?.hide();
+    captureClicks(mainWindow);
 
-    // On Mac, or on other platforms when the tray icon is in use, the window
-    // should be only hidden, not closed, when the user clicks the close button
-    if (!windowShouldQuit() && (getStartInTray().usingTrayIcon || process.platform === 'darwin')) {
-      // toggle the visibility of the show/hide tray icon menu entries
-      if (tray) {
-        tray.updateContextMenu();
+    // Emitted when the window is about to be closed.
+    // Note: We do most of our shutdown logic here because all windows are closed by
+    //   Electron before the app quits.
+    mainWindow.on('close', async e => {
+      console.log('close event', {
+        readyForShutdown: mainWindow ? readyForShutdown : null,
+        shouldQuit: windowShouldQuit(),
+      });
+      // If the application is terminating, just do the default
+      if (mainWindow && readyForShutdown && windowShouldQuit()) {
+        return;
       }
 
-      return;
-    }
+      // Prevent the shutdown
+      e.preventDefault();
+      mainWindow?.hide();
 
-    await requestShutdown();
-    if (mainWindow) {
-      readyForShutdown = true;
-    }
-    app.quit();
-  });
+      // On Mac, or on other platforms when the tray icon is in use, the window
+      // should be only hidden, not closed, when the user clicks the close button
+      if (!windowShouldQuit() && (getStartInTray().usingTrayIcon || process.platform === 'darwin')) {
+        // toggle the visibility of the show/hide tray icon menu entries
+        if (tray) {
+          tray.updateContextMenu();
+        }
 
-  // Emitted when the window is closed.
-  mainWindow.on('closed', () => {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    mainWindow = null;
-  });
+        return;
+      }
+
+      await requestShutdown();
+      if (mainWindow) {
+        readyForShutdown = true;
+      }
+      app.quit();
+    });
+
+    // Emitted when the window is closed.
+    mainWindow.on('closed', () => {
+      // Dereference the window object, usually you would store windows
+      // in an array if your app supports multi windows, this is the time
+      // when you should delete the corresponding element.
+      mainWindow = null;
+    });
+  }
 }
 
 ipc.on('show-window', () => {

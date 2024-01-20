@@ -123,7 +123,7 @@ export const LeftPaneSectionHeader = () => {
     case SectionType.Message:
       label = isMessageRequestOverlayShown
         ? window.i18n('messageRequests')
-        : window.i18n('messagesHeader');
+        : 'ТЕСТ';
       break;
     default:
   }
