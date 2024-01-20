@@ -66,7 +66,7 @@ export class BlockedNumberController {
         // eslint-disable-next-line no-await-in-loop
         await commitConversationAndRefreshWrapper(user);
       } catch (e) {
-        window.log.warn(
+        console.warn(
           'failed to SessionUtilContact.insertContactFromDBIntoWrapperAndRefresh with: ',
           user
         );

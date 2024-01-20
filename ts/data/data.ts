@@ -499,7 +499,7 @@ async function removeAllMessagesInConversation(conversationId: string): Promise<
     if (!messages.length) {
       return;
     }
-    window.log.info(
+    console.info(
       `removeAllMessagesInConversation getLastMessagesByConversation ${conversationId} ${
         messages.length
       } took ${Date.now() - start}ms`
@@ -514,7 +514,7 @@ async function removeAllMessagesInConversation(conversationId: string): Promise<
       // eslint-disable-next-line no-await-in-loop
       await message.cleanup();
     }
-    window.log.info(
+    console.info(
       `removeAllMessagesInConversation messages.cleanup() ${conversationId} took ${Date.now() -
         start}ms`
     );
@@ -522,14 +522,14 @@ async function removeAllMessagesInConversation(conversationId: string): Promise<
 
     // eslint-disable-next-line no-await-in-loop
     await channels.removeMessagesByIds(ids);
-    window.log.info(
+    console.info(
       `removeAllMessagesInConversation: removeMessagesByIds ${conversationId} took ${Date.now() -
         start}ms`
     );
   } while (messages.length);
 
   await channels.removeAllMessagesInConversation(conversationId);
-  window.log.info(
+  console.info(
     `removeAllMessagesInConversation: complete time ${conversationId} took ${Date.now() -
       startFunction}ms`
   );

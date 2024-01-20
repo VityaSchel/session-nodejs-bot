@@ -114,7 +114,7 @@ export const getDecryptedMediaUrl = async (
     urlToDecryptingPromise.set(
       url,
       new Promise(async resolve => {
-        // window.log.debug('about to read and decrypt file :', url, path.isAbsolute(url));
+        // console.debug('about to read and decrypt file :', url, path.isAbsolute(url));
         try {
           const absUrl = path.isAbsolute(url) ? url : getAbsoluteAttachmentPath(url);
           const encryptedFileContent = await readFileContent(absUrl);
@@ -132,7 +132,7 @@ export const getDecryptedMediaUrl = async (
                 forceRetain: isAvatar,
               });
             }
-            // window.log.debug(' file decrypted :', url, ' as ', obj);
+            // console.debug(' file decrypted :', url, ' as ', obj);
             urlToDecryptingPromise.delete(url);
             resolve(obj);
             return;
@@ -140,10 +140,10 @@ export const getDecryptedMediaUrl = async (
           // failed to decrypt, fallback to url image loading
           // it might be a media we received before the update encrypting attachments locally.
           urlToDecryptingPromise.delete(url);
-          window.log.info('error decrypting file :', url);
+          console.info('error decrypting file :', url);
           resolve(url);
         } catch (e) {
-          window.log.warn(e);
+          console.warn(e);
           reject(e.message);
         }
       })

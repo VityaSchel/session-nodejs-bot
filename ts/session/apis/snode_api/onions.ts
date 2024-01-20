@@ -828,7 +828,7 @@ async function sendOnionRequestHandlingSnodeEject({
     });
 
     if (window.sessionFeatureFlags?.debug.debugOnionRequests) {
-      window.log.info(
+      console.info(
         `sendOnionRequestHandlingSnodeEject: sendOnionRequestNoRetries: useV4:${useV4} destSnodeX25519:${destSnodeX25519}; \nfinalDestOptions:${JSON.stringify(
           finalDestOptions
         )}; \nfinalRelayOptions:${JSON.stringify(finalRelayOptions)}\n\n result: ${JSON.stringify(
@@ -996,7 +996,7 @@ const sendOnionRequestNoRetries = async ({
         throw new Error('sendOnionRequestNoRetries calls cannot be v4 for now.');
       }
       if (!isString(finalDestOptions.body)) {
-        window.log.warn(
+        console.warn(
           'sendOnionRequestNoRetries calls should only take body as string: ',
           typeof finalDestOptions.body
         );

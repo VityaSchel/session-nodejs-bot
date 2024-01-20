@@ -68,7 +68,7 @@ export async function autoScaleForAvatar<T extends { contentType: string; blob: 
   }
 
   if (DEBUG_ATTACHMENTS_SCALE) {
-    window.log.info('autoscale for avatar', maxMeasurements);
+    console.info('autoscale for avatar', maxMeasurements);
   }
   return autoScale(attachment, maxMeasurements);
 }
@@ -96,7 +96,7 @@ export async function autoScaleForIncomingAvatar(incomingAvatar: ArrayBuffer) {
   }
 
   if (DEBUG_ATTACHMENTS_SCALE) {
-    window.log.info('autoscale for incoming avatar', maxMeasurements);
+    console.info('autoscale for incoming avatar', maxMeasurements);
   }
 
   return autoScale(
@@ -121,7 +121,7 @@ export async function autoScaleForThumbnail<T extends { contentType: string; blo
   };
 
   if (DEBUG_ATTACHMENTS_SCALE) {
-    window.log.info('autoScaleForThumbnail', maxMeasurements);
+    console.info('autoScaleForThumbnail', maxMeasurements);
   }
 
   return autoScale(attachment, maxMeasurements);
@@ -224,7 +224,7 @@ export async function autoScale<T extends { contentType: string; blob: Blob }>(
     };
   }
   if (DEBUG_ATTACHMENTS_SCALE) {
-    window.log.debug('canvas.originalWidth', {
+    console.debug('canvas.originalWidth', {
       canvasOriginalWidth: canvas.originalWidth,
       canvasOriginalHeight: canvas.originalHeight,
       maxWidth,
@@ -240,7 +240,7 @@ export async function autoScale<T extends { contentType: string; blob: Blob }>(
   do {
     i -= 1;
     if (DEBUG_ATTACHMENTS_SCALE) {
-      // window.log.info(`autoscale iteration: [${i}] for:`, attachment);
+      // console.info(`autoscale iteration: [${i}] for:`, attachment);
     }
     // eslint-disable-next-line no-await-in-loop
     const tempBlob = await canvasToBlob(canvas.image as HTMLCanvasElement, 'image/jpeg', quality);
@@ -259,7 +259,7 @@ export async function autoScale<T extends { contentType: string; blob: Blob }>(
   if (readAndResizedBlob.size > maxSize) {
     throw new Error('Cannot add this attachment even after trying to scale it down.');
   }
-  window.log.debug(`[perf] autoscale took ${Date.now() - start}ms `);
+  console.debug(`[perf] autoscale took ${Date.now() - start}ms `);
 
   return {
     contentType: attachment.contentType,

@@ -40,7 +40,7 @@ export async function downloadAttachment(attachment: {
     window?.log?.info('Download v2 file server attachment', attachmentId);
     res = await downloadFileFromFileServer(attachmentId);
   } else {
-    window.log.warn(
+    console.warn(
       `downloadAttachment attachment is neither opengroup attachment nor fileserver... Dropping it ${asURL.href}`
     );
     throw new Error('Attachment url is not opengroupv2 nor fileserver. Unsupported');
@@ -169,7 +169,7 @@ async function processNormalAttachments(
 
     return attachments.length;
   }
-  window.log.info('No downloading attachments yet as this user is not trusted for now.');
+  console.info('No downloading attachments yet as this user is not trusted for now.');
   return 0;
 }
 

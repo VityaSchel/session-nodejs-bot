@@ -28,7 +28,7 @@ export const filterDuplicatesFromDbAndIncomingV4 = async (
     })
   );
 
-  window.log.debug(
+  console.debug(
     `[perf] filterDuplicatesFromDbAndIncomingV4 took ${Date.now() - start}ms for ${
       newMessages.length
     } messages;   after deduplication:${filteredInDb.length} `

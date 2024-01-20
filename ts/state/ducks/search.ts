@@ -195,7 +195,7 @@ async function queryMessages(query: string): Promise<Array<MessageResultProps>> 
     const limit = Math.min((trimmedQuery.length || 2) * 50, 200);
     return Data.searchMessages(normalized, limit);
   } catch (e) {
-    window.log.warn('queryMessages failed with', e.message);
+    console.warn('queryMessages failed with', e.message);
     return [];
   }
 }

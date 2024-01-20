@@ -108,12 +108,12 @@ export async function deleteMessagesFromSwarmOnly(messages: Array<MessageModel>)
       const errorOnSnode = await SnodeAPI.networkDeleteMessages(deletionMessageHashes);
       return errorOnSnode === null || errorOnSnode.length === 0;
     }
-    window.log?.warn(
+    console?.warn(
       'deleteMessagesFromSwarmOnly: We do not have hashes for some of those messages'
     );
     return false;
   } catch (e) {
-    window.log?.error('deleteMessagesFromSwarmOnly: Error deleting message from swarm', e);
+    console?.error('deleteMessagesFromSwarmOnly: Error deleting message from swarm', e);
     return false;
   }
 }
@@ -127,7 +127,7 @@ export async function deleteMessagesFromSwarmAndCompletelyLocally(
   messages: Array<MessageModel>
 ) {
   if (conversation.isClosedGroup()) {
-    window.log.info('Cannot delete message from a closed group swarm, so we just complete delete.');
+    console.info('Cannot delete message from a closed group swarm, so we just complete delete.');
     await Promise.all(
       messages.map(async message => {
         return deleteMessageLocallyOnly({ conversation, message, deletionType: 'complete' });
@@ -135,7 +135,7 @@ export async function deleteMessagesFromSwarmAndCompletelyLocally(
     );
     return;
   }
-  window.log.warn(
+  console.warn(
     'Deleting from swarm of ',
     ed25519Str(conversation.id),
     ' hashes: ',
@@ -143,7 +143,7 @@ export async function deleteMessagesFromSwarmAndCompletelyLocally(
   );
   const deletedFromSwarm = await deleteMessagesFromSwarmOnly(messages);
   if (!deletedFromSwarm) {
-    window.log.warn(
+    console.warn(
       'deleteMessagesFromSwarmAndCompletelyLocally: some messages failed to be deleted. Maybe they were already deleted?'
     );
   }
@@ -163,7 +163,7 @@ export async function deleteMessagesFromSwarmAndMarkAsDeletedLocally(
   messages: Array<MessageModel>
 ) {
   if (conversation.isClosedGroup()) {
-    window.log.info('Cannot delete messages from a closed group swarm, so we just markDeleted.');
+    console.info('Cannot delete messages from a closed group swarm, so we just markDeleted.');
     await Promise.all(
       messages.map(async message => {
         return deleteMessageLocallyOnly({ conversation, message, deletionType: 'markDeleted' });
@@ -173,7 +173,7 @@ export async function deleteMessagesFromSwarmAndMarkAsDeletedLocally(
   }
   const deletedFromSwarm = await deleteMessagesFromSwarmOnly(messages);
   if (!deletedFromSwarm) {
-    window.log.warn(
+    console.warn(
       'deleteMessagesFromSwarmAndMarkAsDeletedLocally: some messages failed to be deleted but still removing the messages content... '
     );
   }

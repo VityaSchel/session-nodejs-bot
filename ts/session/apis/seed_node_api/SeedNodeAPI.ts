@@ -97,7 +97,7 @@ const getSslAgentForSeedNode = async (seedNodeHost: string, isSsl = false) => {
     keepAlive: true,
 
     checkServerIdentity: (host: string, cert: any) => {
-      window.log.info(`seednode checkServerIdentity: ${host}`);
+      console.info(`seednode checkServerIdentity: ${host}`);
       // Make sure the certificate is issued to the host we are connected to
       const err = tls.checkServerIdentity(host, cert);
       if (err) {
@@ -106,7 +106,7 @@ const getSslAgentForSeedNode = async (seedNodeHost: string, isSsl = false) => {
 
       // Pin the public key, similar to HPKP pin-sha25 pinning
       if (sha256(cert.pubkey) !== pubkey256) {
-        window.log.error('checkServerIdentity: cert.pubkey issue');
+        console.error('checkServerIdentity: cert.pubkey issue');
 
         const msg =
           'Certificate verification error: ' +
@@ -117,7 +117,7 @@ const getSslAgentForSeedNode = async (seedNodeHost: string, isSsl = false) => {
 
       // Pin the exact certificate, rather than the pub key
       if (cert.fingerprint256 !== cert256) {
-        window.log.error('checkServerIdentity: fingerprint256 issue');
+        console.error('checkServerIdentity: fingerprint256 issue');
 
         const msg =
           'Certificate verification error: ' +

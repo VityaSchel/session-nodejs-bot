@@ -11,6 +11,9 @@ import os from 'os';
 import fs from 'fs';
 import crypto from 'crypto';
 
+// @ts-ignore
+global.SBOT = {}
+
 import _ from 'lodash';
 import pify from 'pify';
 import Logger from 'bunyan';
@@ -235,3 +238,4 @@ global.SBOT.setPassword = async (passPhrase, oldPhrase) => {
     sendResponse('Failed to set password');
   }
 }
+global.SBOT.ready()

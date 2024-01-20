@@ -20,7 +20,7 @@ if (!isProduction) {
   }
 }
 
-const userData = __dirname + '/../../session-data/'; 
+const userData = __dirname + '/../../../session-data/'; 
 
 console.log(`userData: ${userData}`);
 

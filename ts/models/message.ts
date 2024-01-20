@@ -331,7 +331,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
     const dataExtractionNotification = this.get('dataExtractionNotification');
 
     if (!dataExtractionNotification) {
-      window.log.warn('dataExtractionNotification should not happen');
+      console.warn('dataExtractionNotification should not happen');
       return null;
     }
 
@@ -353,7 +353,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
     const messageRequestResponse = this.get('messageRequestResponse');
 
     if (!messageRequestResponse) {
-      window.log.warn('messageRequestResponse should not happen');
+      console.warn('messageRequestResponse should not happen');
       return null;
     }
 
@@ -735,7 +735,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
       attachments[0].flags = SignalService.AttachmentPointer.Flags.VOICE_MESSAGE;
     }
 
-    window.log.info(`Upload of message data for message ${this.idForLogging()} is finished.`);
+    console.info(`Upload of message data for message ${this.idForLogging()} is finished.`);
     return {
       body,
       attachments,
@@ -1104,7 +1104,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
       }
       return senderConvo.get('isTrustedForAttachmentDownload') || false;
     } catch (e) {
-      window.log.warn('isTrustedForAttachmentDownload: error; ', e.message);
+      console.warn('isTrustedForAttachmentDownload: error; ', e.message);
       return false;
     }
   }

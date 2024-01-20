@@ -120,7 +120,7 @@ const sendViaOnionV4ToNonSnodeWithRetries = async (
   const payloadObj = buildSendViaOnionPayload(url, fetchOptions);
 
   if (window.sessionFeatureFlags?.debug.debugNonSnodeRequests) {
-    window.log.info(
+    console.info(
       'sendViaOnionV4ToNonSnodeWithRetries: buildSendViaOnionPayload returned ',
       JSON.stringify(payloadObj)
     );
@@ -145,7 +145,7 @@ const sendViaOnionV4ToNonSnodeWithRetries = async (
       async () => {
         const pathNodes = await OnionSending.getOnionPathForSending();
         if (window.sessionFeatureFlags?.debug.debugNonSnodeRequests) {
-          window.log.info(
+          console.info(
             'sendViaOnionV4ToNonSnodeWithRetries: getOnionPathForSending returned',
             JSON.stringify(pathNodes)
           );
@@ -170,7 +170,7 @@ const sendViaOnionV4ToNonSnodeWithRetries = async (
         });
 
         if (window.sessionFeatureFlags?.debug.debugNonSnodeRequests) {
-          window.log.info(
+          console.info(
             'sendViaOnionV4ToNonSnodeWithRetries: sendOnionRequestHandlingSnodeEject returned: ',
             JSON.stringify(onionV4Response)
           );
@@ -211,7 +211,7 @@ const sendViaOnionV4ToNonSnodeWithRetries = async (
             };
           }
           if (foundStatusCode === 404) {
-            window.log.warn(
+            console.warn(
               `Got 404 while sendViaOnionV4ToNonSnodeWithRetries with url:${url}. Stopping retries`
             );
             // most likely, a 404 won't fix itself. So just stop right here retries by throwing a non retryable error
@@ -466,7 +466,7 @@ async function getBinaryViaOnionV4FromFileServer(sendOptions: {
   const builtUrl = new URL(`${fileServerURL}${endpoint}`);
 
   if (window.sessionFeatureFlags?.debug.debugFileServerRequests) {
-    window.log.info(`getBinaryViaOnionV4FromFileServer fsv2: "${builtUrl} `);
+    console.info(`getBinaryViaOnionV4FromFileServer fsv2: "${builtUrl} `);
   }
 
   // this throws for a bunch of reasons.
@@ -485,7 +485,7 @@ async function getBinaryViaOnionV4FromFileServer(sendOptions: {
   );
 
   if (window.sessionFeatureFlags?.debug.debugFileServerRequests) {
-    window.log.info(
+    console.info(
       `getBinaryViaOnionV4FromFileServer fsv2: "${builtUrl}; got:`,
       JSON.stringify(res)
     );

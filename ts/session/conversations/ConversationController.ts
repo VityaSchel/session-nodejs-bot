@@ -193,10 +193,10 @@ export class ConversationController {
     if (!PubKey.isBlinded(blindedId)) {
       throw new Error('deleteBlindedContact allow accepts blinded id');
     }
-    window.log.info(`deleteBlindedContact with ${blindedId}`);
+    console.info(`deleteBlindedContact with ${blindedId}`);
     const conversation = this.conversations.get(blindedId);
     if (!conversation) {
-      window.log.warn(`deleteBlindedContact no such convo ${blindedId}`);
+      console.warn(`deleteBlindedContact no such convo ${blindedId}`);
       return;
     }
 
@@ -216,7 +216,7 @@ export class ConversationController {
     if (!conversation || !conversation.isClosedGroup()) {
       return;
     }
-    window.log.info(`deleteClosedGroup: ${groupId}, sendLeaveMessage?:${options.sendLeaveMessage}`);
+    console.info(`deleteClosedGroup: ${groupId}, sendLeaveMessage?:${options.sendLeaveMessage}`);
     getSwarmPollingInstance().removePubkey(groupId); // we don't need to keep polling anymore.
 
     if (options.sendLeaveMessage) {
@@ -265,14 +265,14 @@ export class ConversationController {
       // we just set the hidden field to true
       // so the conversation still exists (needed for that user's profile in groups) but is not shown on the list of conversation.
       // We also keep the messages for now, as turning a contact as hidden might just be a temporary thing
-      window.log.info(`deleteContact isPrivate, marking as hidden: ${id}`);
+      console.info(`deleteContact isPrivate, marking as hidden: ${id}`);
       conversation.set({
         priority: CONVERSATION_PRIORITIES.hidden,
       });
       // We don't remove entries from the contacts wrapper, so better keep corresponding convo volatile info for now (it will be pruned if needed)
       await conversation.commit(); // this updates the wrappers content to reflect the hidden state
     } else {
-      window.log.info(`deleteContact isPrivate, reset fields and removing from wrapper: ${id}`);
+      console.info(`deleteContact isPrivate, reset fields and removing from wrapper: ${id}`);
 
       await conversation.setIsApproved(false, false);
       await conversation.setDidApproveMe(false, false);
@@ -280,7 +280,7 @@ export class ConversationController {
       await BlockedNumberController.unblockAll([conversation.id]);
       await conversation.commit(); // first commit to DB so the DB knows about the changes
       if (SessionUtilContact.isContactToStoreInWrapper(conversation)) {
-        window.log.warn('isContactToStoreInWrapper still true for ', conversation.attributes);
+        console.warn('isContactToStoreInWrapper still true for ', conversation.attributes);
       }
       if (conversation.id.startsWith('05')) {
         // make sure to filter blinded contacts as it will throw otherwise
@@ -355,7 +355,7 @@ export class ConversationController {
             }
           }
         }
-        window.log.info(`refreshAllWrappersMappedValues took ${Date.now() - start}ms`);
+        console.info(`refreshAllWrappersMappedValues took ${Date.now() - start}ms`);
 
         this._initialFetchComplete = true;
         window?.log?.info(
@@ -394,23 +394,23 @@ export class ConversationController {
       throw new Error(`getConversationController.${deleteType}  needs complete initial fetch`);
     }
 
-    window.log.info(`${deleteType} with ${convoId}`);
+    console.info(`${deleteType} with ${convoId}`);
 
     const conversation = this.conversations.get(convoId);
     if (!conversation) {
-      window.log.warn(`${deleteType} no such convo ${convoId}`);
+      console.warn(`${deleteType} no such convo ${convoId}`);
       return null;
     }
 
     // those are the stuff to do for all conversation types
-    window.log.info(`${deleteType} destroyingMessages: ${convoId}`);
+    console.info(`${deleteType} destroyingMessages: ${convoId}`);
     await deleteAllMessagesByConvoIdNoConfirmation(convoId);
-    window.log.info(`${deleteType} messages destroyed: ${convoId}`);
+    console.info(`${deleteType} messages destroyed: ${convoId}`);
     return conversation;
   }
 
   private async removeGroupOrCommunityFromDBAndRedux(convoId: string) {
-    window.log.info(`cleanUpGroupConversation, removing convo from DB: ${convoId}`);
+    console.info(`cleanUpGroupConversation, removing convo from DB: ${convoId}`);
     // not a private conversation, so not a contact for the ContactWrapper
     await Data.removeConversation(convoId);
 
@@ -424,7 +424,7 @@ export class ConversationController {
       }
     }
 
-    window.log.info(`cleanUpGroupConversation, convo removed from DB: ${convoId}`);
+    console.info(`cleanUpGroupConversation, convo removed from DB: ${convoId}`);
     const conversation = this.conversations.get(convoId);
 
     if (conversation) {
@@ -436,7 +436,7 @@ export class ConversationController {
     }
     window.inboxStore?.dispatch(conversationActions.conversationRemoved(convoId));
 
-    window.log.info(`cleanUpGroupConversation, convo removed from store: ${convoId}`);
+    console.info(`cleanUpGroupConversation, convo removed from store: ${convoId}`);
   }
 }
 

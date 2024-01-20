@@ -69,7 +69,7 @@ function isUserConfigNamespace(namespace: SnodeNamespaces) {
       try {
         assertUnreachable(namespace, `isUserConfigNamespace case not handled: ${namespace}`);
       } catch (e) {
-        window.log.warn(`isUserConfigNamespace case not handled: ${namespace}: ${e.message}`);
+        console.warn(`isUserConfigNamespace case not handled: ${namespace}: ${e.message}`);
         return false;
       }
   }
@@ -95,7 +95,7 @@ function namespacePriority(namespace: SnodeNamespaces): number {
       try {
         assertUnreachable(namespace, `namespacePriority case not handled: ${namespace}`);
       } catch (e) {
-        window.log.warn(`namespacePriority case not handled: ${namespace}: ${e.message}`);
+        console.warn(`namespacePriority case not handled: ${namespace}: ${e.message}`);
         return 1;
       }
   }

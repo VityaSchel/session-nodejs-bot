@@ -143,7 +143,7 @@ export const sendMessageOnionV4BlindedRequest = async (
   const serverId = rawMessage.id as number | undefined;
   const serverTimestamp = rawMessage.posted_at as number | undefined;
   if (!serverTimestamp || serverId === undefined) {
-    window.log.warn('Could not blinded message request, server returned invalid data:', rawMessage);
+    console.warn('Could not blinded message request, server returned invalid data:', rawMessage);
     throw new Error('Could not blinded message request, server returned invalid data');
   }
 

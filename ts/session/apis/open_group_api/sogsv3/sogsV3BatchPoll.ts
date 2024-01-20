@@ -90,7 +90,7 @@ export const sogsBatchSend = async (
     abortSignal
   );
   if (abortSignal.aborted) {
-    window.log.info('sendSogsBatchRequestOnionV4 aborted.');
+    console.info('sendSogsBatchRequestOnionV4 aborted.');
     return null;
   }
 

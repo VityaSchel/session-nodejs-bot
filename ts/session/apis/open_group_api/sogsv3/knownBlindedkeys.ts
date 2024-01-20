@@ -54,7 +54,7 @@ export async function loadKnownBlindedKeys() {
         cachedKnownMapping?.push(elem);
       });
     } catch (e) {
-      window.log.error(e.message);
+      console.error(e.message);
       cachedKnownMapping = [];
     }
   } else {
@@ -119,7 +119,7 @@ export async function addCachedBlindedKey({
 
   if (foundIndex >= 0) {
     if (assertLoadedCache[foundIndex].realSessionId !== realSessionId) {
-      window.log.warn(
+      console.warn(
         `overriding cached blinded mapping for ${assertLoadedCache[foundIndex].realSessionId} with ${realSessionId} on ${serverPublicKey}`
       );
       assertLoadedCache[foundIndex].realSessionId = realSessionId;
@@ -182,7 +182,7 @@ export function tryMatchBlindWithStandardKey(
 
     return true;
   } catch (e) {
-    window.log.warn('Failed to do crypto tryMatchBlindWithStandardKey with ', e.message);
+    console.warn('Failed to do crypto tryMatchBlindWithStandardKey with ', e.message);
     return false;
   }
 }

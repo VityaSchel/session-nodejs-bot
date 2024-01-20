@@ -286,7 +286,7 @@ export async function handleNewClosedGroup(
   ) {
     // not from legacy config, so this is a new closed group deposited on our swarm by a user.
     // we do not want to process it if our wrapper is more recent that that invite to group envelope.
-    window.log.info('dropping invite to legacy group because our wrapper is more recent');
+    console.info('dropping invite to legacy group because our wrapper is more recent');
     await removeFromCache(envelope);
     return;
   }
@@ -316,14 +316,14 @@ export async function handleNewClosedGroup(
       await groupConvo.updateExpireTimer(expireTimer, sender, Date.now());
 
       if (isKeyPairAlreadyHere) {
-        window.log.info('Dropping already saved keypair for group', groupId);
+        console.info('Dropping already saved keypair for group', groupId);
         await removeFromCache(envelope);
         return;
       }
 
-      window.log.info(`Received the encryptionKeyPair for new group ${groupId}`);
+      console.info(`Received the encryptionKeyPair for new group ${groupId}`);
       await removeFromCache(envelope);
-      window.log.warn(
+      console.warn(
         'Closed group message of type NEW: the conversation already exists, but we saved the new encryption keypair'
       );
       return;

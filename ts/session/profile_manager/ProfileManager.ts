@@ -39,7 +39,7 @@ async function updateProfileOfContact(
   const conversation = getConversationController().get(pubkey);
 
   if (!conversation || !conversation.isPrivate()) {
-    window.log.warn('updateProfileOfContact can only be used for existing and private convos');
+    console.warn('updateProfileOfContact can only be used for existing and private convos');
     return;
   }
   let changes = false;

@@ -23,7 +23,7 @@ export async function destroyMessagesAndUpdateRedux(
     // Delete all those messages in a single sql call
     await Data.removeMessagesByIds(messages.map(m => m.messageId));
   } catch (e) {
-    window.log.error('destroyMessages: removeMessagesByIds failed', e && e.message ? e.message : e);
+    console.error('destroyMessages: removeMessagesByIds failed', e && e.message ? e.message : e);
   }
   // trigger a redux update if needed for all those messages
   window.inboxStore?.dispatch(messagesExpired(messages));
@@ -38,7 +38,7 @@ export async function destroyMessagesAndUpdateRedux(
 
 async function destroyExpiredMessages() {
   try {
-    window.log.info('destroyExpiredMessages: Loading messages...');
+    console.info('destroyExpiredMessages: Loading messages...');
     const messages = await Data.getExpiredMessages();
 
     const messagesExpiredDetails: Array<{
@@ -50,20 +50,20 @@ async function destroyExpiredMessages() {
     }));
 
     messages.forEach(expired => {
-      window.log.info('Message expired', {
+      console.info('Message expired', {
         sentAt: expired.get('sent_at'),
       });
     });
 
     await destroyMessagesAndUpdateRedux(messagesExpiredDetails);
   } catch (error) {
-    window.log.error(
+    console.error(
       'destroyExpiredMessages: Error deleting expired messages',
       error && error.stack ? error.stack : error
     );
   }
 
-  window.log.info('destroyExpiredMessages: complete');
+  console.info('destroyExpiredMessages: complete');
   void checkExpiringMessages();
 }
 
@@ -80,8 +80,8 @@ async function checkExpiringMessages() {
   if (!expiresAt) {
     return;
   }
-  window.log.info('next message expires', new Date(expiresAt).toISOString());
-  window.log.info('next message expires in ', (expiresAt - Date.now()) / 1000);
+  console.info('next message expires', new Date(expiresAt).toISOString());
+  console.info('next message expires in ', (expiresAt - Date.now()) / 1000);
 
   let wait = expiresAt - Date.now();
 

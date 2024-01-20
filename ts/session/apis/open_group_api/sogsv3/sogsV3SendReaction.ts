@@ -16,18 +16,18 @@ export const hasReactionSupport = async (
 ): Promise<{ supported: boolean; conversation: ConversationModel | null }> => {
   const found = await Data.getMessageByServerId(conversationId, serverId);
   if (!found) {
-    window.log.warn(`Open Group Message ${serverId} not found in db`);
+    console.warn(`Open Group Message ${serverId} not found in db`);
     return { supported: false, conversation: null };
   }
 
   const conversationModel = found?.getConversation();
   if (!conversationModel) {
-    window.log.warn(`Conversation for ${serverId} not found in db`);
+    console.warn(`Conversation for ${serverId} not found in db`);
     return { supported: false, conversation: null };
   }
 
   if (!conversationModel.hasReactions()) {
-    window.log.warn("This open group doesn't have reaction support. Server Message ID", serverId);
+    console.warn("This open group doesn't have reaction support. Server Message ID", serverId);
     return { supported: false, conversation: null };
   }
 
@@ -62,7 +62,7 @@ export const sendSogsReactionOnionV4 = async (
   }
 
   if (!conversation) {
-    window.log.warn(`Conversation for ${reaction.id} not found in db`);
+    console.warn(`Conversation for ${reaction.id} not found in db`);
     return false;
   }
 

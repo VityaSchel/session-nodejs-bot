@@ -78,7 +78,7 @@ async function insertConvoFromDBIntoWrapperAndRefresh(convoId: string): Promise<
       ? timestampFromDbMs
       : 0;
 
-  window.log.debug(
+  console.debug(
     `inserting into convoVolatile wrapper: ${convoId} lastMessageReadTimestamp:${lastReadMessageTimestamp} forcedUnread:${isForcedUnread}...`
   );
 
@@ -94,7 +94,7 @@ async function insertConvoFromDBIntoWrapperAndRefresh(convoId: string): Promise<
         );
         await refreshConvoVolatileCached(convoId, false, false);
       } catch (e) {
-        window.log.warn(
+        console.warn(
           `ConvoInfoVolatileWrapperActions.set1o1 of ${convoId} failed with ${e.message}`
         );
       }
@@ -108,7 +108,7 @@ async function insertConvoFromDBIntoWrapperAndRefresh(convoId: string): Promise<
         );
         await refreshConvoVolatileCached(convoId, true, false);
       } catch (e) {
-        window.log.warn(
+        console.warn(
           `ConvoInfoVolatileWrapperActions.setLegacyGroup of ${convoId} failed with ${e.message}`
         );
       }
@@ -137,7 +137,7 @@ async function insertConvoFromDBIntoWrapperAndRefresh(convoId: string): Promise<
 
         await refreshConvoVolatileCached(convoId, false, false);
       } catch (e) {
-        window.log.warn(
+        console.warn(
           `ConvoInfoVolatileWrapperActions.setCommunityByFullUrl of ${convoId} failed with ${e.message}`
         );
       }
@@ -206,7 +206,7 @@ async function refreshConvoVolatileCached(
         ?.triggerUIRefresh();
     }
   } catch (e) {
-    window.log.info(`refreshMappedValue for volatile convoID: ${convoId}`, e.message);
+    console.info(`refreshMappedValue for volatile convoID: ${convoId}`, e.message);
   }
 }
 
@@ -225,7 +225,7 @@ async function removeCommunityFromWrapper(convoId: string, fullUrlWithPubkey: st
   try {
     await ConvoInfoVolatileWrapperActions.eraseCommunityByFullUrl(fullUrlWithPubkey);
   } catch (e) {
-    window.log.warn('removeCommunityFromWrapper failed with ', e.message);
+    console.warn('removeCommunityFromWrapper failed with ', e.message);
   }
 
   mappedCommunityWrapperValues.delete(convoId);
@@ -238,7 +238,7 @@ async function removeLegacyGroupFromWrapper(convoId: string) {
   try {
     await ConvoInfoVolatileWrapperActions.eraseLegacyGroup(convoId);
   } catch (e) {
-    window.log.warn('removeLegacyGroupFromWrapper failed with ', e.message);
+    console.warn('removeLegacyGroupFromWrapper failed with ', e.message);
   }
   mappedLegacyGroupWrapperValues.delete(convoId);
 }
@@ -250,7 +250,7 @@ async function removeContactFromWrapper(convoId: string) {
   try {
     await ConvoInfoVolatileWrapperActions.erase1o1(convoId);
   } catch (e) {
-    window.log.warn('removeContactFromWrapper failed with ', e.message);
+    console.warn('removeContactFromWrapper failed with ', e.message);
   }
   mapped1o1WrapperValues.delete(convoId);
 }

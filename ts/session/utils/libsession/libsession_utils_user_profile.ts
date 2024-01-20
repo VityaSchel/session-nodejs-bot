@@ -25,7 +25,7 @@ async function insertUserProfileIntoWrapper(convoId: string) {
 
   const areBlindedMsgRequestEnabled = !!Storage.get(SettingsKey.hasBlindedMsgRequestsEnabled);
 
-  window.log.debug(
+  console.debug(
     `inserting into userprofile wrapper: username:"${dbName}", priority:${priority} image:${JSON.stringify(
       { url: dbProfileUrl, key: dbProfileKey }
     )}, settings: ${JSON.stringify({ areBlindedMsgRequestEnabled })}`

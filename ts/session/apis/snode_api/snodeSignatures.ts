@@ -28,7 +28,7 @@ async function getSnodeSignatureByHashesParams({
 
   if (!ourEd25519Key) {
     const err = `getSnodeSignatureParams "${method}": User has no getUserED25519KeyPair()`;
-    window.log.warn(err);
+    console.warn(err);
     throw new Error(err);
   }
   const edKeyPrivBytes = fromHexToArray(ourEd25519Key?.privKey);
@@ -47,7 +47,7 @@ async function getSnodeSignatureByHashesParams({
       messages,
     };
   } catch (e) {
-    window.log.warn('getSnodeSignatureParams failed with: ', e.message);
+    console.warn('getSnodeSignatureParams failed with: ', e.message);
     throw e;
   }
 }
@@ -61,7 +61,7 @@ async function getSnodeSignatureParams(params: {
 
   if (!ourEd25519Key) {
     const err = `getSnodeSignatureParams "${params.method}": User has no getUserED25519KeyPair()`;
-    window.log.warn(err);
+    console.warn(err);
     throw new Error(err);
   }
   const namespace = params.namespace || 0;
@@ -91,7 +91,7 @@ async function getSnodeSignatureParams(params: {
       pubkey: params.pubkey,
     };
   } catch (e) {
-    window.log.warn('getSnodeSignatureParams failed with: ', e.message);
+    console.warn('getSnodeSignatureParams failed with: ', e.message);
     throw e;
   }
 }
@@ -109,7 +109,7 @@ async function generateUpdateExpirySignature({
 
   if (!ourEd25519Key) {
     const err = 'getSnodeSignatureParams "expiry": User has no getUserED25519KeyPair()';
-    window.log.warn(err);
+    console.warn(err);
     throw new Error(err);
   }
 
@@ -130,7 +130,7 @@ async function generateUpdateExpirySignature({
       pubkey_ed25519: ourEd25519Key.pubKey,
     };
   } catch (e) {
-    window.log.warn('generateSignature failed with: ', e.message);
+    console.warn('generateSignature failed with: ', e.message);
     return null;
   }
 }

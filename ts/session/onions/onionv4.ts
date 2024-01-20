@@ -118,7 +118,7 @@ const decodeV4Response = (snodeResponse: SnodeResponseV4): DecodedResponseV4 | u
       bodyBinary,
     };
   } catch (e) {
-    window.log.warn('failed to decodeV4Response:', e.message);
+    console.warn('failed to decodeV4Response:', e.message);
     return undefined;
   }
 };

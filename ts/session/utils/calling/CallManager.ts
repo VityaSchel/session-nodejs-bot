@@ -280,7 +280,7 @@ export async function selectCameraByDeviceId(cameraDeviceId: string) {
         throw new Error('cannot selectCameraByDeviceId without a peer connection');
       }
 
-      window.log.info('replacing video track');
+      console.info('replacing video track');
       const videoSender = peerConnection
         .getTransceivers()
         .find(t => t.sender.track?.kind === 'video')?.sender;
@@ -304,7 +304,7 @@ export async function selectCameraByDeviceId(cameraDeviceId: string) {
       sendVideoStatusViaDataChannel();
       callVideoListeners();
     } catch (e) {
-      window.log.warn('selectCameraByDeviceId failed with', e.message);
+      console.warn('selectCameraByDeviceId failed with', e.message);
       ToastUtils.pushToastError('selectCamera', e.message);
       callVideoListeners();
     }
@@ -351,7 +351,7 @@ export async function selectAudioInputByDeviceId(audioInputDeviceId: string) {
       const audioSender = peerConnection.getSenders().find(s => {
         return s.track?.kind === audioTrack.kind;
       });
-      window.log.info('replacing audio track');
+      console.info('replacing audio track');
       // we actually do not need to toggle the track here, as toggling it here unmuted here locally (so we start to hear ourselves)
       // do the same changes locally
       localStream?.getAudioTracks().forEach(t => {
@@ -364,7 +364,7 @@ export async function selectAudioInputByDeviceId(audioInputDeviceId: string) {
         throw new Error('Failed to get sender for selectAudioInputByDeviceId ');
       }
     } catch (e) {
-      window.log.warn('selectAudioInputByDeviceId failed with', e.message);
+      console.warn('selectAudioInputByDeviceId failed with', e.message);
     }
 
     callVideoListeners();
@@ -388,7 +388,7 @@ export async function selectAudioOutputByDeviceId(audioOutputDeviceId: string) {
 async function createOfferAndSendIt(recipient: string) {
   try {
     makingOffer = true;
-    window.log.info('got createOfferAndSendIt event. creating offer');
+    console.info('got createOfferAndSendIt event. creating offer');
     await (peerConnection as any)?.setLocalDescription();
     const offer = peerConnection?.localDescription;
     if (!offer) {
@@ -396,7 +396,7 @@ async function createOfferAndSendIt(recipient: string) {
     }
 
     if (!currentCallUUID) {
-      window.log.warn('cannot send offer without a currentCallUUID');
+      console.warn('cannot send offer without a currentCallUUID');
       throw new Error('cannot send offer without a currentCallUUID');
     }
 
@@ -419,19 +419,19 @@ async function createOfferAndSendIt(recipient: string) {
         uuid: currentCallUUID,
       });
 
-      window.log.info(`sending '${offer.type}'' with callUUID: ${currentCallUUID}`);
+      console.info(`sending '${offer.type}'' with callUUID: ${currentCallUUID}`);
       const negotiationOfferSendResult = await getMessageQueue().sendToPubKeyNonDurably({
         pubkey: PubKey.cast(recipient),
         message: offerMessage,
         namespace: SnodeNamespaces.UserMessages,
       });
       if (typeof negotiationOfferSendResult === 'number') {
-        // window.log?.warn('setting last sent timestamp');
+        // console?.warn('setting last sent timestamp');
         lastOutgoingOfferTimestamp = negotiationOfferSendResult;
       }
     }
   } catch (err) {
-    window.log?.error(`Error createOfferAndSendIt ${err}`);
+    console?.error(`Error createOfferAndSendIt ${err}`);
   } finally {
     makingOffer = false;
   }
@@ -455,7 +455,7 @@ async function openMediaDevicesAndAddTracks() {
 
     selectedAudioInputId = DEVICE_DISABLED_DEVICE_ID; // audioInputsList[0].deviceId;
     selectedCameraId = DEVICE_DISABLED_DEVICE_ID;
-    window.log.info(
+    console.info(
       `openMediaDevices videoDevice:${selectedCameraId} audioDevice:${selectedAudioInputId}`
     );
 
@@ -466,7 +466,7 @@ async function openMediaDevicesAndAddTracks() {
       }
     });
   } catch (err) {
-    window.log.warn('openMediaDevices: ', err);
+    console.warn('openMediaDevices: ', err);
     ToastUtils.pushVideoCallPermissionNeeded();
     closeVideoCall();
   }
@@ -479,7 +479,7 @@ export async function USER_callRecipient(recipient: string) {
     return;
   }
   if (currentCallUUID) {
-    window.log.warn(
+    console.warn(
       'Looks like we are already in a call as in USER_callRecipient is not undefined'
     );
     return;
@@ -505,7 +505,7 @@ export async function USER_callRecipient(recipient: string) {
     uuid: currentCallUUID,
   });
 
-  window.log.info('Sending preOffer message to ', ed25519Str(recipient));
+  console.info('Sending preOffer message to ', ed25519Str(recipient));
   const calledConvo = getConversationController().get(recipient);
   calledConvo.set('active_at', Date.now()); // addSingleOutgoingMessage does the commit for us on the convo
   await calledConvo.unhideIfNeeded(false);
@@ -537,7 +537,7 @@ export async function USER_callRecipient(recipient: string) {
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   global.setTimeout(async () => {
     if (justCreatedCallUUID === currentCallUUID && getIsRinging()) {
-      window.log.info(
+      console.info(
         'calling timeout reached. hanging up the call we started:',
         justCreatedCallUUID
       );
@@ -569,7 +569,7 @@ const iceSenderDebouncer = _.debounce(async (recipient: string) => {
     })
   );
   if (!currentCallUUID) {
-    window.log.warn('Cannot send ice candidates without a currentCallUUID');
+    console.warn('Cannot send ice candidates without a currentCallUUID');
     return;
   }
   const callIceCandicates = new CallMessage({
@@ -581,7 +581,7 @@ const iceSenderDebouncer = _.debounce(async (recipient: string) => {
     uuid: currentCallUUID,
   });
 
-  window.log.info(
+  console.info(
     `sending ICE CANDIDATES MESSAGE to ${ed25519Str(recipient)} about call ${currentCallUUID}`
   );
 
@@ -616,7 +616,7 @@ function handleSignalingStateChangeEvent() {
 }
 
 function handleConnectionStateChanged(pubkey: string) {
-  window.log.info('handleConnectionStateChanged :', peerConnection?.connectionState);
+  console.info('handleConnectionStateChanged :', peerConnection?.connectionState);
 
   if (peerConnection?.signalingState === 'closed' || peerConnection?.connectionState === 'failed') {
     window.inboxStore?.dispatch(callReconnecting({ pubkey }));
@@ -638,7 +638,7 @@ function handleConnectionStateChanged(pubkey: string) {
 }
 
 function closeVideoCall() {
-  window.log.info('closingVideoCall ');
+  console.info('closingVideoCall ');
   currentCallStartTimestamp = undefined;
   weAreCallerOnCurrentCall = undefined;
   if (peerConnection) {
@@ -718,12 +718,12 @@ function onDataChannelReceivedMessage(ev: MessageEvent<string>) {
       remoteVideoStreamIsMuted = !parsed.video;
     }
   } catch (e) {
-    window.log.warn('onDataChannelReceivedMessage Could not parse data in event', ev);
+    console.warn('onDataChannelReceivedMessage Could not parse data in event', ev);
   }
   callVideoListeners();
 }
 function onDataChannelOnOpen() {
-  window.log.info('onDataChannelOnOpen: sending video status');
+  console.info('onDataChannelOnOpen: sending video status');
   sendVideoStatusViaDataChannel();
 }
 
@@ -762,7 +762,7 @@ function createOrGetPeerConnection(withPubkey: string) {
   };
 
   peerConnection.oniceconnectionstatechange = () => {
-    window.log.info(
+    console.info(
       'oniceconnectionstatechange peerConnection.iceConnectionState: ',
       peerConnection?.iceConnectionState
     );
@@ -771,7 +771,7 @@ function createOrGetPeerConnection(withPubkey: string) {
       // this will trigger a negotiation event with iceRestart set to true in the createOffer options set
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       global.setTimeout(async () => {
-        window.log.info('onconnectionstatechange disconnected: restartIce()');
+        console.info('onconnectionstatechange disconnected: restartIce()');
 
         if (
           peerConnection?.iceConnectionState === 'disconnected' &&
@@ -791,9 +791,9 @@ function createOrGetPeerConnection(withPubkey: string) {
 }
 
 export async function USER_acceptIncomingCallRequest(fromSender: string) {
-  window.log.info('USER_acceptIncomingCallRequest');
+  console.info('USER_acceptIncomingCallRequest');
   if (currentCallUUID) {
-    window.log.warn(
+    console.warn(
       'Looks like we are already in a call as in USER_acceptIncomingCallRequest is not undefined'
     );
     return;
@@ -838,7 +838,7 @@ export async function USER_acceptIncomingCallRequest(fromSender: string) {
       new RTCSessionDescription({ sdp: sdps[0], type: 'offer' })
     );
   } catch (e) {
-    window.log?.error(`Error setting RTC Session Description ${e}`);
+    console?.error(`Error setting RTC Session Description ${e}`);
   }
 
   const lastCandidatesFromSender = findLastMessageTypeFromSender(
@@ -847,7 +847,7 @@ export async function USER_acceptIncomingCallRequest(fromSender: string) {
   );
 
   if (lastCandidatesFromSender) {
-    window.log.info('found sender ice candicate message already sent. Using it');
+    console.info('found sender ice candicate message already sent. Using it');
     for (let index = 0; index < lastCandidatesFromSender.sdps.length; index++) {
       const sdp = lastCandidatesFromSender.sdps[index];
       const sdpMLineIndex = lastCandidatesFromSender.sdpMLineIndexes[index];
@@ -878,7 +878,7 @@ export async function USER_acceptIncomingCallRequest(fromSender: string) {
 }
 
 export async function rejectCallAlreadyAnotherCall(fromSender: string, forcedUUID: string) {
-  window.log.info(`rejectCallAlreadyAnotherCall ${ed25519Str(fromSender)}: ${forcedUUID}`);
+  console.info(`rejectCallAlreadyAnotherCall ${ed25519Str(fromSender)}: ${forcedUUID}`);
   rejectedCallUUIDS.add(forcedUUID);
   const rejectCallMessage = new CallMessage({
     type: SignalService.CallMessage.Type.END_CALL,
@@ -900,7 +900,7 @@ export async function USER_rejectIncomingCallRequest(fromSender: string) {
   );
 
   const aboutCallUUID = lastOfferMessage?.uuid;
-  window.log.info(`USER_rejectIncomingCallRequest ${ed25519Str(fromSender)}: ${aboutCallUUID}`);
+  console.info(`USER_rejectIncomingCallRequest ${ed25519Str(fromSender)}: ${aboutCallUUID}`);
   if (aboutCallUUID) {
     rejectedCallUUIDS.add(aboutCallUUID);
     const endCallMessage = new CallMessage({
@@ -938,10 +938,10 @@ async function sendCallMessageAndSync(callmessage: CallMessage, user: string) {
 }
 
 export async function USER_hangup(fromSender: string) {
-  window.log.info('USER_hangup');
+  console.info('USER_hangup');
 
   if (!currentCallUUID) {
-    window.log.warn('should not be able to hangup without a currentCallUUID');
+    console.warn('should not be able to hangup without a currentCallUUID');
     return;
   }
   rejectedCallUUIDS.add(currentCallUUID);
@@ -957,7 +957,7 @@ export async function USER_hangup(fromSender: string) {
   });
 
   window.inboxStore?.dispatch(endCall());
-  window.log.info('sending hangup with an END_CALL MESSAGE');
+  console.info('sending hangup with an END_CALL MESSAGE');
 
   sendHangupViaDataChannel();
 
@@ -970,7 +970,7 @@ export async function USER_hangup(fromSender: string) {
  * This can actually be called from either the datachannel or from the receiver END_CALL event
  */
 export async function handleCallTypeEndCall(sender: string, aboutCallUUID?: string) {
-  window.log.info('handling callMessage END_CALL:', aboutCallUUID);
+  console.info('handling callMessage END_CALL:', aboutCallUUID);
 
   if (aboutCallUUID) {
     rejectedCallUUIDS.add(aboutCallUUID);
@@ -1010,13 +1010,13 @@ export async function handleCallTypeEndCall(sender: string, aboutCallUUID?: stri
 async function buildAnswerAndSendIt(sender: string) {
   if (peerConnection) {
     if (!currentCallUUID) {
-      window.log.warn('cannot send answer without a currentCallUUID');
+      console.warn('cannot send answer without a currentCallUUID');
       return;
     }
     await (peerConnection as any).setLocalDescription();
     const answer = peerConnection.localDescription;
     if (!answer?.sdp || answer.sdp.length === 0) {
-      window.log.warn('failed to create answer');
+      console.warn('failed to create answer');
       return;
     }
     const answerSdp = answer.sdp;
@@ -1027,7 +1027,7 @@ async function buildAnswerAndSendIt(sender: string) {
       uuid: currentCallUUID,
     });
 
-    window.log.info('sending ANSWER MESSAGE and sync');
+    console.info('sending ANSWER MESSAGE and sync');
     await sendCallMessageAndSync(callAnswerMessage, sender);
   }
 }
@@ -1072,7 +1072,7 @@ export async function handleCallTypeOffer(
     if (!remoteCallUUID || remoteCallUUID.length === 0) {
       throw new Error('incoming offer call has no valid uuid');
     }
-    window.log.info('handling callMessage OFFER with uuid: ', remoteCallUUID);
+    console.info('handling callMessage OFFER with uuid: ', remoteCallUUID);
 
     if (!getCallMediaPermissionsSettings()) {
       // we still add it to the cache so if user toggles settings in the next 60 sec, he can still reply to it
@@ -1123,12 +1123,12 @@ export async function handleCallTypeOffer(
     ignoreOffer = !polite && offerCollision;
 
     if (ignoreOffer) {
-      window.log?.warn('Received offer when unready for offer; Ignoring offer.');
+      console?.warn('Received offer when unready for offer; Ignoring offer.');
       return;
     }
 
     if (peerConnection && remoteCallUUID === currentCallUUID && currentCallUUID) {
-      window.log.info('Got a new offer message from our ongoing call');
+      console.info('Got a new offer message from our ongoing call');
 
       const remoteOfferDesc = new RTCSessionDescription({
         type: 'offer',
@@ -1156,7 +1156,7 @@ export async function handleCallTypeOffer(
 
     pushCallMessageToCallCache(sender, remoteCallUUID, cachedMessage);
   } catch (err) {
-    window.log?.error(`Error handling offer message ${err}`);
+    console?.error(`Error handling offer message ${err}`);
   }
 }
 
@@ -1229,12 +1229,12 @@ export async function handleCallTypeAnswer(
   envelopeTimestamp: number
 ) {
   if (!callMessage.sdps || callMessage.sdps.length === 0) {
-    window.log.warn('cannot handle answered message without signal description proto sdps');
+    console.warn('cannot handle answered message without signal description proto sdps');
     return;
   }
   const callMessageUUID = callMessage.uuid;
   if (!callMessageUUID || callMessageUUID.length === 0) {
-    window.log.warn('handleCallTypeAnswer has no valid uuid');
+    console.warn('handleCallTypeAnswer has no valid uuid');
     return;
   }
 
@@ -1246,13 +1246,13 @@ export async function handleCallTypeAnswer(
     const isDeviceWhichJustAcceptedCall = currentCallUUID === callMessageUUID;
 
     if (isDeviceWhichJustAcceptedCall) {
-      window.log.info(
+      console.info(
         `isDeviceWhichJustAcceptedCall: skipping message back ANSWER from ourself about call ${callMessageUUID}`
       );
 
       return;
     }
-    window.log.info(`handling callMessage ANSWER from ourself about call ${callMessageUUID}`);
+    console.info(`handling callMessage ANSWER from ourself about call ${callMessageUUID}`);
 
     const { ongoingCallStatus, ongoingCallWith } = getCallingStateOutsideOfRedux();
     const foundOwnerOfCallUUID = getOwnerOfCallUUID(callMessageUUID);
@@ -1272,14 +1272,14 @@ export async function handleCallTypeAnswer(
     }
     return;
   }
-  window.log.info(`handling callMessage ANSWER from ${callMessageUUID}`);
+  console.info(`handling callMessage ANSWER from ${callMessageUUID}`);
 
   const cachedMessage = getCachedMessageFromCallMessage(callMessage, envelopeTimestamp);
 
   pushCallMessageToCallCache(sender, callMessageUUID, cachedMessage);
 
   if (!peerConnection) {
-    window.log.info('handleCallTypeAnswer without peer connection. Dropping');
+    console.info('handleCallTypeAnswer without peer connection. Dropping');
     return;
   }
   window.inboxStore?.dispatch(
@@ -1298,7 +1298,7 @@ export async function handleCallTypeAnswer(
 
     await peerConnection?.setRemoteDescription(remoteDesc); // SRD rolls back as needed
   } catch (e) {
-    window.log.warn('setRemoteDescriptio failed:', e);
+    console.warn('setRemoteDescriptio failed:', e);
   } finally {
     isSettingRemoteAnswerPending = false;
   }
@@ -1310,15 +1310,15 @@ export async function handleCallTypeIceCandidates(
   envelopeTimestamp: number
 ) {
   if (!callMessage.sdps || callMessage.sdps.length === 0) {
-    window.log.warn('cannot handle iceCandicates message without candidates');
+    console.warn('cannot handle iceCandicates message without candidates');
     return;
   }
   const remoteCallUUID = callMessage.uuid;
   if (!remoteCallUUID || remoteCallUUID.length === 0) {
-    window.log.warn('handleCallTypeIceCandidates has no valid uuid');
+    console.warn('handleCallTypeIceCandidates has no valid uuid');
     return;
   }
-  window.log.info('handling callMessage ICE_CANDIDATES');
+  console.info('handling callMessage ICE_CANDIDATES');
   const cachedMessage = getCachedMessageFromCallMessage(callMessage, envelopeTimestamp);
 
   pushCallMessageToCallCache(sender, remoteCallUUID, cachedMessage);
@@ -1339,12 +1339,12 @@ async function addIceCandidateToExistingPeerConnection(callMessage: SignalServic
         await peerConnection.addIceCandidate(candicate);
       } catch (err) {
         if (!ignoreOffer) {
-          window.log?.warn('Error handling ICE candidates message', err);
+          console?.warn('Error handling ICE candidates message', err);
         }
       }
     }
   } else {
-    window.log.info('handleIceCandidatesMessage but we do not have a peerconnection set');
+    console.info('handleIceCandidatesMessage but we do not have a peerconnection set');
   }
 }
 
@@ -1355,7 +1355,7 @@ export async function handleOtherCallTypes(
 ) {
   const remoteCallUUID = callMessage.uuid;
   if (!remoteCallUUID || remoteCallUUID.length === 0) {
-    window.log.warn('handleOtherCallTypes has no valid uuid');
+    console.warn('handleOtherCallTypes has no valid uuid');
     return;
   }
   const cachedMessage = getCachedMessageFromCallMessage(callMessage, envelopeTimestamp);

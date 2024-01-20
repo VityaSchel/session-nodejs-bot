@@ -321,17 +321,17 @@ async function shouldDropIncomingPrivateMessage(
         privateConvoInWrapper.priority <= CONVERSATION_PRIORITIES.hidden
       ) {
         // the wrapper is more recent that this message and there is no such private conversation. Just drop this incoming message.
-        window.log.info(
+        console.info(
           `received message on conversation ${syncTargetOrSource} which appears to be hidden/removed in our most recent libsession contactconfig, sentAt: ${sentAtTimestamp}. Dropping it`
         );
         return true;
       }
 
-      window.log.info(
+      console.info(
         `received message on conversation ${syncTargetOrSource} which appears to NOT be hidden/removed in our most recent libsession contactconfig, sentAt: ${sentAtTimestamp}. `
       );
     } catch (e) {
-      window.log.warn(
+      console.warn(
         'ContactsWrapperActions.get in handleSwarmDataMessage failed with',
         e.message
       );
@@ -393,7 +393,7 @@ export async function innerHandleSwarmContentMessage(
 ): Promise<void> {
   try {
     perfStart(`SignalService.Content.decode-${envelope.id}`);
-    window.log.info('innerHandleSwarmContentMessage');
+    console.info('innerHandleSwarmContentMessage');
     perfStart(`isBlocked-${envelope.id}`);
 
     const content = SignalService.Content.decode(new Uint8Array(plaintext));
@@ -493,7 +493,7 @@ export async function innerHandleSwarmContentMessage(
       return;
     }
     if (content.sharedConfigMessage) {
-      window.log.warn('content.sharedConfigMessage are handled outside of the receiving pipeline');
+      console.warn('content.sharedConfigMessage are handled outside of the receiving pipeline');
       // this should never happen, but remove it from cache just in case something is messed up
       await removeFromCache(envelope);
       return;
@@ -611,7 +611,7 @@ async function handleTypingMessage(
  */
 async function handleUnsendMessage(envelope: EnvelopePlus, unsendMessage: SignalService.Unsend) {
   const { author: messageAuthor, timestamp } = unsendMessage;
-  window.log.info(`handleUnsendMessage from ${messageAuthor}: of timestamp: ${timestamp}`);
+  console.info(`handleUnsendMessage from ${messageAuthor}: of timestamp: ${timestamp}`);
   if (messageAuthor !== (envelope.senderIdentity || envelope.source)) {
     window?.log?.error(
       'handleUnsendMessage: Dropping request as the author and the sender differs.'
@@ -645,7 +645,7 @@ async function handleUnsendMessage(envelope: EnvelopePlus, unsendMessage: Signal
 
   // #region executing deletion
   if (messageHash && messageToDelete) {
-    window.log.info('handleUnsendMessage: got a request to delete ', messageHash);
+    console.info('handleUnsendMessage: got a request to delete ', messageHash);
     const conversation = getConversationController().get(messageToDelete.get('conversationId'));
     if (!conversation) {
       await removeFromCache(envelope);
@@ -659,7 +659,7 @@ async function handleUnsendMessage(envelope: EnvelopePlus, unsendMessage: Signal
       void deleteMessagesFromSwarmAndMarkAsDeletedLocally(conversation, [messageToDelete]);
     }
   } else {
-    window.log.info(
+    console.info(
       'handleUnsendMessage: got a request to delete an unknown messageHash:',
       messageHash,
       ' and found messageToDelete:',
@@ -720,7 +720,7 @@ async function handleMessageRequestResponse(
     });
 
     // we have to merge all of those to a single conversation under the unblinded. including the messages
-    window.log.info(
+    console.info(
       `We just found out ${unblindedConvoId} matches some blinded conversations. Merging them together:`,
       convosToMerge.map(m => m.id)
     );

@@ -76,7 +76,7 @@ export async function handleHardforkResult(json: Record<string, any>) {
 
   if (hasSeenHardfork191 && hasSeenHardfork190) {
     // no need to do any of this if we already know both forks happened
-    // window.log.info('hardfork 19.1 already happened. No need to go any further');
+    // console.info('hardfork 19.1 already happened. No need to go any further');
     return;
   }
 

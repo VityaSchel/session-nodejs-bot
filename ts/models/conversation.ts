@@ -486,7 +486,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
     const quotedAttachments = await this.getQuoteAttachment(attachments, preview);
 
     if (!quotedMessage.get('sent_at')) {
-      window.log.warn('tried to make a quote without a sent_at timestamp');
+      console.warn('tried to make a quote without a sent_at timestamp');
       return null;
     }
     let msgSource = quotedMessage.getSource();
@@ -544,7 +544,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
       const hasIncomingMessages = incomingMessageCount > 0;
 
       if (PubKey.isBlinded(this.id)) {
-        window.log.info('Sending a blinded message react to this user: ', this.id);
+        console.info('Sending a blinded message react to this user: ', this.id);
         await this.sendBlindedMessageRequest(chatMessageParams);
         return;
       }
@@ -629,7 +629,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
 
       throw new TypeError(`Invalid conversation type: '${this.get('type')}'`);
     } catch (e) {
-      window.log.error(`Reaction job failed id:${reaction.id} error:`, e);
+      console.error(`Reaction job failed id:${reaction.id} error:`, e);
     }
   }
 
@@ -1039,7 +1039,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
 
   public async setNickname(nickname: string | null, shouldCommit = false) {
     if (!this.isPrivate()) {
-      window.log.info('cannot setNickname to a non private conversation.');
+      console.info('cannot setNickname to a non private conversation.');
       return;
     }
     const trimmed = nickname && nickname.trim();
@@ -1529,7 +1529,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
     const decryptedAvatarUrl = await getDecryptedMediaUrl(avatarUrl, IMAGE_JPEG, true);
 
     if (!decryptedAvatarUrl) {
-      window.log.warn('Could not decrypt avatar stored locally for getNotificationIcon..');
+      console.warn('Could not decrypt avatar stored locally for getNotificationIcon..');
       return noIconUrl;
     }
     return decryptedAvatarUrl;
@@ -1714,7 +1714,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
       const hasIncomingMessages = incomingMessageCount > 0;
 
       if (PubKey.isBlinded(this.id)) {
-        window.log.info('Sending a blinded message to this user: ', this.id);
+        console.info('Sending a blinded message to this user: ', this.id);
         await this.sendBlindedMessageRequest(chatMessageParams);
         return;
       }

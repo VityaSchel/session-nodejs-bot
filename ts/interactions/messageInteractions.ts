@@ -23,7 +23,7 @@ export function banUser(userToBan: string, conversationId: string) {
     return;
   }
   if (!isOpenGroupV2(conversationId)) {
-    window.log.warn(`Conversation ${conversationId} is not an open group`);
+    console.warn(`Conversation ${conversationId} is not an open group`);
     ToastUtils.pushUserBanFailure();
 
     return;
@@ -48,7 +48,7 @@ export function unbanUser(userToUnBan: string, conversationId: string) {
     return;
   }
   if (!isOpenGroupV2(conversationId)) {
-    window.log.warn(`Conversation ${conversationId} is not an open group`);
+    console.warn(`Conversation ${conversationId} is not an open group`);
     ToastUtils.pushUserUnbanFailure();
 
     return;

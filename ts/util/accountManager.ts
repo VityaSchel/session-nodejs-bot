@@ -191,7 +191,7 @@ async function registrationDone(ourPubkey: string, displayName: string) {
   try {
     await LibSessionUtil.initializeLibSessionUtilWrappers();
   } catch (e) {
-    window.log.warn('LibSessionUtil.initializeLibSessionUtilWrappers failed with', e.message);
+    console.warn('LibSessionUtil.initializeLibSessionUtilWrappers failed with', e.message);
   }
   // Ensure that we always have a conversation for ourself
   const conversation = await getConversationController().getOrCreateAndWait(

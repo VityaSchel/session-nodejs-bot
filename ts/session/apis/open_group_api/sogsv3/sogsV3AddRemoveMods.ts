@@ -31,7 +31,7 @@ export const sogsV3AddAdmin = async (
   );
   const isSuccess = batchFirstSubIsSuccess(batchSendResponse);
   if (!isSuccess) {
-    window.log.warn('add as mod failed with body', batchSendResponse?.body);
+    console.warn('add as mod failed with body', batchSendResponse?.body);
   }
   return isSuccess;
 };
@@ -62,7 +62,7 @@ export const sogsV3RemoveAdmins = async (
   );
   const isSuccess = batchSendResponse?.body?.every(m => m?.code === 200) || false;
   if (!isSuccess) {
-    window.log.warn('remove mods failed with body', batchSendResponse?.body);
+    console.warn('remove mods failed with body', batchSendResponse?.body);
   }
   return isSuccess;
 };

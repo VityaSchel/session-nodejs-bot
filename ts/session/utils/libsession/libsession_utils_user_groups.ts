@@ -97,14 +97,14 @@ async function insertGroupsFromDBIntoWrapperAndRefresh(convoId: string): Promise
       });
 
       try {
-        window.log.debug(`inserting into usergroup wrapper "${JSON.stringify(wrapperComm)}"...`);
+        console.debug(`inserting into usergroup wrapper "${JSON.stringify(wrapperComm)}"...`);
         // this does the create or the update of the matching existing community
         await UserGroupsWrapperActions.setCommunityByFullUrl(
           wrapperComm.fullUrl,
           wrapperComm.priority
         );
       } catch (e) {
-        window.log.warn(`UserGroupsWrapperActions.set of ${convoId} failed with ${e.message}`);
+        console.warn(`UserGroupsWrapperActions.set of ${convoId} failed with ${e.message}`);
         // we still let this go through
       }
       break;
@@ -124,14 +124,14 @@ async function insertGroupsFromDBIntoWrapperAndRefresh(convoId: string): Promise
       });
 
       try {
-        window.log.debug(
+        console.debug(
           `inserting into usergroup wrapper "${foundConvo.id}"... }`,
           JSON.stringify(wrapperLegacyGroup)
         );
         // this does the create or the update of the matching existing legacy group
         await UserGroupsWrapperActions.setLegacyGroup(wrapperLegacyGroup);
       } catch (e) {
-        window.log.warn(`UserGroupsWrapperActions.set of ${convoId} failed with ${e.message}`);
+        console.warn(`UserGroupsWrapperActions.set of ${convoId} failed with ${e.message}`);
         // we still let this go through
       }
       break;
@@ -172,7 +172,7 @@ async function removeLegacyGroupFromWrapper(groupPk: string) {
   try {
     await UserGroupsWrapperActions.eraseLegacyGroup(groupPk);
   } catch (e) {
-    window.log.warn(
+    console.warn(
       `UserGroupsWrapperActions.eraseLegacyGroup with = ${groupPk} failed with`,
       e.message
     );

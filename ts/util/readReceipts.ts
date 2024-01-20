@@ -23,7 +23,7 @@ async function onReadReceipt(receipt: { source: string; timestamp: number; readA
     const message = await getTargetMessage(receipt.source, messages);
 
     if (!message) {
-      window.log.info('No message for read receipt', receipt.source, receipt.timestamp);
+      console.info('No message for read receipt', receipt.source, receipt.timestamp);
       return;
     }
     const convoId = message.get('conversationId'); // this might be a group and we don't want to handle them
@@ -34,7 +34,7 @@ async function onReadReceipt(receipt: { source: string; timestamp: number; readA
         .get(convoId)
         .isPrivate()
     ) {
-      window.log.info(
+      console.info(
         'Convo is undefined or not a private chat for read receipt in convo',
         convoId
       );
@@ -71,7 +71,7 @@ async function onReadReceipt(receipt: { source: string; timestamp: number; readA
       conversation.updateLastMessage();
     }
   } catch (error) {
-    window.log.error('ReadReceipts.onReceipt error:', error && error.stack ? error.stack : error);
+    console.error('ReadReceipts.onReceipt error:', error && error.stack ? error.stack : error);
   }
 }
 

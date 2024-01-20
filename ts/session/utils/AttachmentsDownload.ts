@@ -203,7 +203,7 @@ async function _runJob(job: any) {
     }
 
     if (!attachment.contentType) {
-      window.log.warn('incoming attachment has no contentType');
+      console.warn('incoming attachment has no contentType');
     }
     const upgradedAttachment = await processNewAttachment({
       ...downloaded,

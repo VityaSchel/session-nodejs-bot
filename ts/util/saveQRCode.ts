@@ -23,6 +23,6 @@ export function saveQRCode(
       document,
     });
   } else {
-    window.log.info('[saveQRCode] QR code not found');
+    console.info('[saveQRCode] QR code not found');
   }
 }

@@ -166,14 +166,14 @@ class ConfigurationSyncJob extends PersistedJob<ConfigurationSyncPersistedData> 
     const start = Date.now();
 
     try {
-      window.log.debug(`ConfigurationSyncJob starting ${this.persistedData.identifier}`);
+      console.debug(`ConfigurationSyncJob starting ${this.persistedData.identifier}`);
 
       const us = UserUtils.getOurPubKeyStrFromCache();
       const ed25519Key = await UserUtils.getUserED25519KeyPairBytes();
       const conversation = getConversationController().get(us);
       if (!us || !conversation || !ed25519Key) {
         // we check for ed25519Key because it is needed for authenticated requests
-        window.log.warn('did not find our own conversation');
+        console.warn('did not find our own conversation');
         return RunJobResult.PermanentFailure;
       }
 
@@ -218,7 +218,7 @@ class ConfigurationSyncJob extends PersistedJob<ConfigurationSyncPersistedData> 
         singleDestChanges.messages.length + (oldHashesToDelete.size ? 1 : 0);
       // we do a sequence call here. If we do not have the right expected number of results, consider it a failure
       if (!isArray(result) || result.length !== expectedReplyLength) {
-        window.log.info(
+        console.info(
           `ConfigurationSyncJob: unexpected result length: expected ${expectedReplyLength} but got ${result?.length}`
         );
         // this might be a 421 error (already handled) so let's retry this request a little bit later
@@ -239,7 +239,7 @@ class ConfigurationSyncJob extends PersistedJob<ConfigurationSyncPersistedData> 
     } catch (e) {
       throw e;
     } finally {
-      window.log.debug(`ConfigurationSyncJob run() took ${Date.now() - start}ms`);
+      console.debug(`ConfigurationSyncJob run() took ${Date.now() - start}ms`);
 
       // this is a simple way to make sure whatever happens here, we update the lastest timestamp.
       // (a finally statement is always executed (no matter if exception or returns in other try/catch block)
@@ -284,7 +284,7 @@ class ConfigurationSyncJob extends PersistedJob<ConfigurationSyncPersistedData> 
  */
 async function queueNewJobIfNeeded() {
   if (isSignInByLinking()) {
-    window.log.info('NOT Scheduling ConfSyncJob: as we are linking a device');
+    console.info('NOT Scheduling ConfSyncJob: as we are linking a device');
 
     return;
   }
@@ -292,7 +292,7 @@ async function queueNewJobIfNeeded() {
     !lastRunConfigSyncJobTimestamp ||
     lastRunConfigSyncJobTimestamp < Date.now() - defaultMsBetweenRetries
   ) {
-    // window.log.debug('Scheduling ConfSyncJob: ASAP');
+    // console.debug('Scheduling ConfSyncJob: ASAP');
     // we postpone by 1000ms to make sure whoever is adding this job is done with what is needs to do first
     // this call will make sure that there is only one configuration sync job at all times
     await runners.configurationSyncRunner.addJob(
@@ -303,7 +303,7 @@ async function queueNewJobIfNeeded() {
     const diff = Math.max(Date.now() - lastRunConfigSyncJobTimestamp, 0);
     // but we want to run every 30, so what we need is actually `30-10` from now = 20
     const leftBeforeNextTick = Math.max(defaultMsBetweenRetries - diff, 1000);
-    // window.log.debug('Scheduling ConfSyncJob: LATER');
+    // console.debug('Scheduling ConfSyncJob: LATER');
 
     await runners.configurationSyncRunner.addJob(
       new ConfigurationSyncJob({ nextAttemptTimestamp: Date.now() + leftBeforeNextTick })

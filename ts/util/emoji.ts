@@ -92,7 +92,7 @@ export async function initialiseEmojiData(data: any): Promise<void> {
 // If we upgrade the package things will probably break
 export function searchSync(query: string, args?: any): Array<any> {
   if (!nativeEmojiData) {
-    window.log.error('No native emoji data found');
+    console.error('No native emoji data found');
     return [];
   }
 

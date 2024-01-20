@@ -81,7 +81,7 @@ async function buildRetrieveRequest(
       messageHashes: configHashesToBump,
     });
     if (!signResult) {
-      window.log.warn(
+      console.warn(
         `SnodeSignature.generateUpdateExpirySignature returned result empty for hashes ${configHashesToBump}`
       );
     } else {

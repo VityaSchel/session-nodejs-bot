@@ -37,11 +37,11 @@ export class FakeSleepForMultiJob extends PersistedJob<FakeSleepForMultiJobData>
   }
 
   public async run(): Promise<RunJobResult> {
-    window.log.warn(
+    console.warn(
       `running job ${this.persistedData.jobType} with id:"${this.persistedData.identifier}". sleeping for ${this.persistedData.sleepDuration} & returning ${this.persistedData.returnResult} `
     );
     await sleepFor(this.persistedData.sleepDuration);
-    window.log.warn(
+    console.warn(
       `${this.persistedData.jobType} with id:"${this.persistedData.identifier}" done. returning success `
     );
     if (this.persistedData.returnResult) {
@@ -97,11 +97,11 @@ export class FakeSleepForJob extends PersistedJob<FakeSleepJobData> {
   }
 
   public async run(): Promise<RunJobResult> {
-    window.log.warn(
+    console.warn(
       `running job ${this.persistedData.jobType} with id:"${this.persistedData.identifier}" `
     );
     await sleepFor(this.persistedData.sleepDuration);
-    window.log.warn(
+    console.warn(
       `${this.persistedData.jobType} with id:"${this.persistedData.identifier}" done. returning failed `
     );
     return RunJobResult.RetryJobIfPossible;

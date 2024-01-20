@@ -69,7 +69,7 @@ export async function fetchBinaryFromSogsWithOnionV4(sendOptions: {
   );
 
   if (!res?.bodyBinary) {
-    window.log.info('fetchBinaryFromSogsWithOnionV4 no binary content with code', res?.status_code);
+    console.info('fetchBinaryFromSogsWithOnionV4 no binary content with code', res?.status_code);
     return null;
   }
   return res.bodyBinary;
@@ -82,7 +82,7 @@ export async function sogsV3FetchPreviewAndSaveIt(roomInfos: OpenGroupV2RoomWith
   const { roomId, serverUrl, imageID } = roomInfos;
 
   if (!imageID || Number.isNaN(Number(imageID))) {
-    window.log.warn(`imageId of room ${roomId} is not valid ${imageID}`);
+    console.warn(`imageId of room ${roomId} is not valid ${imageID}`);
     return;
   }
   const imageIdNumber = toNumber(imageID);

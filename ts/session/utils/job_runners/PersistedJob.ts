@@ -102,7 +102,7 @@ export abstract class PersistedJob<T extends PersistedJobData> {
     try {
       return this.runningPromise || Promise.resolve(true);
     } catch (e) {
-      window.log.warn('waitForCurrentTry got an error: ', e.message);
+      console.warn('waitForCurrentTry got an error: ', e.message);
       return Promise.resolve(true);
     }
   }

@@ -80,7 +80,7 @@ function decodeBatchRequest(snodeResponse: SnodeResponse): NotEmptyArrayOfBatchR
 
     return parsed.results;
   } catch (e) {
-    window.log.error('decodeBatchRequest failed with ', e.message);
+    console.error('decodeBatchRequest failed with ', e.message);
     throw e;
   }
   // "{"results":[{"body":"retrieve signature verification failed","code":401}]}"

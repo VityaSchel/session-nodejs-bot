@@ -100,14 +100,14 @@ async function mergeConfigsWithIncomingUpdates(
         hash: msg.messageHash,
       }));
       if (window.sessionFeatureFlags.debug.debugLibsessionDumps) {
-        window.log.info(
+        console.info(
           `printDumpsForDebugging: before merge of ${variant}:`,
           StringUtils.toHex(await GenericWrapperActions.dump(variant))
         );
 
         for (let dumpIndex = 0; dumpIndex < toMerge.length; dumpIndex++) {
           const element = toMerge[dumpIndex];
-          window.log.info(
+          console.info(
             `printDumpsForDebugging: toMerge of ${dumpIndex}:${element.hash}:  ${StringUtils.toHex(
               element.data
             )} `,
@@ -121,12 +121,12 @@ async function mergeConfigsWithIncomingUpdates(
       const needsDump = await GenericWrapperActions.needsDump(variant);
       const latestEnvelopeTimestamp = Math.max(...sameVariant.map(m => m.envelopeTimestamp));
 
-      window.log.debug(
+      console.debug(
         `${variant}: "${publicKey}" needsPush:${needsPush} needsDump:${needsDump}; mergedCount:${mergedCount} `
       );
 
       if (window.sessionFeatureFlags.debug.debugLibsessionDumps) {
-        window.log.info(
+        console.info(
           `printDumpsForDebugging: after merge of ${variant}:`,
           StringUtils.toHex(await GenericWrapperActions.dump(variant))
         );
@@ -143,7 +143,7 @@ async function mergeConfigsWithIncomingUpdates(
 
     return groupedResults;
   } catch (e) {
-    window.log.error('mergeConfigsWithIncomingUpdates failed with', e);
+    console.error('mergeConfigsWithIncomingUpdates failed with', e);
     throw e;
   }
 }
@@ -167,7 +167,7 @@ export function getSettingsKeyFromLibsessionWrapper(
           `getSettingsKeyFromLibsessionWrapper unknown type: ${wrapperType}`
         );
       } catch (e) {
-        window.log.warn('assertUnreachable:', e.message);
+        console.warn('assertUnreachable:', e.message);
       }
       return null;
   }
@@ -272,7 +272,7 @@ function getContactsToRemoveFromDB(contactsInWrapper: Array<ContactInfo>) {
 }
 
 async function deleteContactsFromDB(contactsToRemove: Array<string>) {
-  window.log.debug('contacts to fully remove after wrapper merge', contactsToRemove);
+  console.debug('contacts to fully remove after wrapper merge', contactsToRemove);
   for (let index = 0; index < contactsToRemove.length; index++) {
     const contactToRemove = contactsToRemove[index];
     try {
@@ -281,7 +281,7 @@ async function deleteContactsFromDB(contactsToRemove: Array<string>) {
         justHidePrivate: false,
       });
     } catch (e) {
-      window.log.warn(
+      console.warn(
         `after merge: deleteContactsFromDB ${contactToRemove} failed with `,
         e.message
       );
@@ -320,7 +320,7 @@ async function handleContactsUpdate(result: IncomingConfResult): Promise<Incomin
       const currentPriority = contactConvo.get('priority');
       if (wrapperConvo.priority !== currentPriority) {
         if (wrapperConvo.priority === CONVERSATION_PRIORITIES.hidden) {
-          window.log.info(
+          console.info(
             'contact marked as hidden and was not before. Deleting all messages from that user'
           );
           await deleteAllMessagesByConvoIdNoConfirmation(wrapperConvo.id);
@@ -374,7 +374,7 @@ async function handleCommunitiesUpdate() {
   // first let's check which communities needs to be joined or left by doing a diff of what is in the wrapper and what is in the DB
 
   const allCommunitiesInWrapper = await UserGroupsWrapperActions.getAllCommunities();
-  window.log.debug(
+  console.debug(
     'allCommunitiesInWrapper',
     allCommunitiesInWrapper.map(m => m.fullUrlWithPubkey)
   );
@@ -383,7 +383,7 @@ async function handleCommunitiesUpdate() {
     .filter(SessionUtilUserGroups.isCommunityToStoreInWrapper);
 
   const allCommunitiesIdsInDB = allCommunitiesConversation.map(m => m.id as string);
-  window.log.debug('allCommunitiesIdsInDB', allCommunitiesIdsInDB);
+  console.debug('allCommunitiesIdsInDB', allCommunitiesIdsInDB);
 
   const communitiesIdsInWrapper = compact(
     allCommunitiesInWrapper.map(m => {
@@ -421,7 +421,7 @@ async function handleCommunitiesUpdate() {
 
   for (let index = 0; index < communitiesToLeaveInDB.length; index++) {
     const toLeave = communitiesToLeaveInDB[index];
-    window.log.info('leaving community with convoId ', toLeave.id);
+    console.info('leaving community with convoId ', toLeave.id);
     await getConversationController().deleteCommunity(toLeave.id, {
       fromSyncMessage: true,
     });
@@ -431,7 +431,7 @@ async function handleCommunitiesUpdate() {
   try {
     await Promise.all(
       communitiesToJoinInDB.map(async toJoin => {
-        window.log.info('joining community with convoId ', toJoin.fullUrlWithPubkey);
+        console.info('joining community with convoId ', toJoin.fullUrlWithPubkey);
         return getOpenGroupManager().attemptConnectionV2OneAtATime(
           toJoin.baseUrl,
           toJoin.roomCasePreserved,
@@ -440,7 +440,7 @@ async function handleCommunitiesUpdate() {
       })
     );
   } catch (e) {
-    window.log.warn(
+    console.warn(
       `joining community with failed with one of ${communitiesToJoinInDB}`,
       e.message
     );
@@ -483,23 +483,23 @@ async function handleLegacyGroupUpdate(latestEnvelopeTimestamp: number) {
     return !allLegacyGroupsIdsInDB.includes(m.pubkeyHex);
   });
 
-  window.log.debug(`allLegacyGroupsInWrapper: ${allLegacyGroupsInWrapper.map(m => m.pubkeyHex)} `);
-  window.log.debug(`allLegacyGroupsIdsInDB: ${allLegacyGroupsIdsInDB} `);
+  console.debug(`allLegacyGroupsInWrapper: ${allLegacyGroupsInWrapper.map(m => m.pubkeyHex)} `);
+  console.debug(`allLegacyGroupsIdsInDB: ${allLegacyGroupsIdsInDB} `);
 
   const legacyGroupsToLeaveInDB = allLegacyGroupsInDb.filter(m => {
     return !allLegacyGroupsIdsInWrapper.includes(m.id);
   });
-  window.log.info(
+  console.info(
     `we have to join ${legacyGroupsToJoinInDB.length} legacy groups in DB compared to what is in the wrapper`
   );
 
-  window.log.info(
+  console.info(
     `we have to leave ${legacyGroupsToLeaveInDB.length} legacy groups in DB compared to what is in the wrapper`
   );
 
   for (let index = 0; index < legacyGroupsToLeaveInDB.length; index++) {
     const toLeave = legacyGroupsToLeaveInDB[index];
-    window.log.info(
+    console.info(
       'leaving legacy group from configuration sync message with convoId ',
       toLeave.id
     );
@@ -513,7 +513,7 @@ async function handleLegacyGroupUpdate(latestEnvelopeTimestamp: number) {
 
   for (let index = 0; index < legacyGroupsToJoinInDB.length; index++) {
     const toJoin = legacyGroupsToJoinInDB[index];
-    window.log.info(
+    console.info(
       'joining legacy group from configuration sync message with convoId ',
       toJoin.pubkeyHex
     );
@@ -531,7 +531,7 @@ async function handleLegacyGroupUpdate(latestEnvelopeTimestamp: number) {
     const legacyGroupConvo = getConversationController().get(fromWrapper.pubkeyHex);
     if (!legacyGroupConvo) {
       // this should not happen as we made sure to create them before
-      window.log.warn(
+      console.warn(
         'could not find legacy group which should already be there:',
         fromWrapper.pubkeyHex
       );
@@ -592,7 +592,7 @@ async function handleLegacyGroupUpdate(latestEnvelopeTimestamp: number) {
 
           await addKeyPairToCacheAndDBIfNeeded(fromWrapper.pubkeyHex, inWrapperKeypair);
         } catch (e) {
-          window.log.warn('failed to save keypair for legacugroup', fromWrapper.pubkeyHex);
+          console.warn('failed to save keypair for legacugroup', fromWrapper.pubkeyHex);
         }
       }
     }
@@ -639,7 +639,7 @@ async function applyConvoVolatileUpdateFromWrapper(
   }
 
   try {
-    // window.log.debug(
+    // console.debug(
     //   `applyConvoVolatileUpdateFromWrapper: ${convoId}: forcedUnread:${forcedUnread}, lastReadMessage:${lastReadMessageTimestamp}`
     // );
     // this should mark all the messages sent before fromWrapper.lastRead as read and update the unreadCount
@@ -657,7 +657,7 @@ async function applyConvoVolatileUpdateFromWrapper(
       await foundConvo.refreshInMemoryDetails();
     }
   } catch (e) {
-    window.log.warn(
+    console.warn(
       `applyConvoVolatileUpdateFromWrapper of "${convoId}" failed with error ${e.message}`
     );
   }
@@ -684,7 +684,7 @@ async function handleConvoInfoVolatileUpdate(
             );
           }
         } catch (e) {
-          window.log.warn('handleConvoInfoVolatileUpdate of "1o1" failed with error: ', e.message);
+          console.warn('handleConvoInfoVolatileUpdate of "1o1" failed with error: ', e.message);
         }
 
         break;
@@ -706,7 +706,7 @@ async function handleConvoInfoVolatileUpdate(
             );
           }
         } catch (e) {
-          window.log.warn(
+          console.warn(
             'handleConvoInfoVolatileUpdate of "Community" failed with error: ',
             e.message
           );
@@ -726,7 +726,7 @@ async function handleConvoInfoVolatileUpdate(
             );
           }
         } catch (e) {
-          window.log.warn(
+          console.warn(
             'handleConvoInfoVolatileUpdate of "LegacyGroup" failed with error: ',
             e.message
           );
@@ -775,7 +775,7 @@ async function processMergingResults(results: Map<ConfigWrapperObjectTypes, Inco
             // we catch errors here because an old client knowing about a new type of config coming from the network should not just crash
             assertUnreachable(kind, `processMergingResults unsupported kind: "${kind}"`);
           } catch (e) {
-            window.log.warn('assertUnreachable failed', e.message);
+            console.warn('assertUnreachable failed', e.message);
           }
       }
       const variant = LibSessionUtil.kindToVariant(kind);
@@ -785,7 +785,7 @@ async function processMergingResults(results: Map<ConfigWrapperObjectTypes, Inco
           incomingResult.latestEnvelopeTimestamp
         );
       } catch (e) {
-        window.log.error(`updateLibsessionLatestProcessedUserTimestamp failed with "${e.message}"`);
+        console.error(`updateLibsessionLatestProcessedUserTimestamp failed with "${e.message}"`);
       }
 
       if (incomingResult.needsDump) {
@@ -803,7 +803,7 @@ async function processMergingResults(results: Map<ConfigWrapperObjectTypes, Inco
         anyNeedsPush = true;
       }
     } catch (e) {
-      window.log.error(`processMergingResults failed with ${e.message}`);
+      console.error(`processMergingResults failed with ${e.message}`);
       return;
     }
   }

@@ -30,7 +30,7 @@ async function verifySignature({
   unchangedHashes?: Record<string, string>;
 }): Promise<boolean> {
   if (!expiryApplied || isEmpty(messageHashes) || isEmpty(signature)) {
-    window.log.warn('verifySignature missing argument');
+    console.warn('verifySignature missing argument');
     return false;
   }
 
@@ -53,7 +53,7 @@ async function verifySignature({
 
   const verificationString = `${pubkey}${expiryApplied}${hashes.join('')}`;
   const verificationData = StringUtils.encode(verificationString, 'utf8');
-  window.log.debug('verifySignature verificationString', verificationString);
+  console.debug('verifySignature verificationString', verificationString);
 
   const sodium = await getSodiumRenderer();
   try {
@@ -65,7 +65,7 @@ async function verifySignature({
 
     return isValid;
   } catch (e) {
-    window.log.warn('verifySignature failed with: ', e.message);
+    console.warn('verifySignature failed with: ', e.message);
     return false;
   }
 }
@@ -82,7 +82,7 @@ async function processExpirationResults(
 
   // TODO need proper typing for swarm and results
   const results: Record<string, { hashes: Array<string>; expiry: number }> = {};
-  // window.log.debug(`processExpirationResults start`, swarm, messageHashes);
+  // console.debug(`processExpirationResults start`, swarm, messageHashes);
 
   for (const nodeKey of Object.keys(swarm)) {
     if (!isEmpty(swarm[nodeKey].failed)) {
@@ -114,7 +114,7 @@ async function processExpirationResults(
     });
 
     if (!isValid) {
-      window.log.warn(
+      console.warn(
         'loki_message:::expireMessage - Signature verification failed!',
         messageHashes
       );
@@ -153,7 +153,7 @@ async function expireOnNodes(targetNode: Snode, params: UpdateExpireNodeParams) 
         parsed.swarm,
         params.messages
       );
-      window.log.debug('expireOnNodes attempt complete. Here are the results', expirationResults);
+      console.debug('expireOnNodes attempt complete. Here are the results', expirationResults);
 
       return true;
     } catch (e) {
@@ -178,7 +178,7 @@ export async function expireMessageOnSnode(props: ExpireMessageOnSnodeProps) {
   const { messageHash, expireTimer, extend, shorten } = props;
 
   if (extend && shorten) {
-    window.log.error(
+    console.error(
       '[expireMessageOnSnode] We cannot extend and shorten a message at the same time',
       messageHash
     );
@@ -190,7 +190,7 @@ export async function expireMessageOnSnode(props: ExpireMessageOnSnodeProps) {
   const ourPubKey = UserUtils.getOurPubKeyStrFromCache();
 
   if (!ourPubKey) {
-    window.log.eror('[expireMessageOnSnode] No pubkey found', messageHash);
+    console.eror('[expireMessageOnSnode] No pubkey found', messageHash);
     return;
   }
 
@@ -204,7 +204,7 @@ export async function expireMessageOnSnode(props: ExpireMessageOnSnodeProps) {
   });
 
   if (!signResult) {
-    window.log.error('[expireMessageOnSnode] Signing message expiry on swarm failed', messageHash);
+    console.error('[expireMessageOnSnode] Signing message expiry on swarm failed', messageHash);
     return;
   }
 

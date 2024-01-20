@@ -64,7 +64,7 @@ const handleOpenGroupMessage = async (
   }
 
   if (!messageHasVisibleContent(idataMessage as SignalService.DataMessage)) {
-    window.log.info('received an empty message for sogs');
+    console.info('received an empty message for sogs');
     return;
   }
 

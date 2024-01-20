@@ -441,7 +441,7 @@ async function sendMessagesToSnode(
 
     return batchResults;
   } catch (e) {
-    window.log.warn(`sendMessagesToSnode failed with ${e.message}`);
+    console.warn(`sendMessagesToSnode failed with ${e.message}`);
     return null;
   }
 }

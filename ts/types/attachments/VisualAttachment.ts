@@ -35,7 +35,7 @@ export const getImageDimensions = async ({
       });
     });
     image.addEventListener('error', error => {
-      window.log.error('getImageDimensions error', toLogFormat(error));
+      console.error('getImageDimensions error', toLogFormat(error));
       reject(error);
     });
     // image/jpg is hard coded here but does not look to cause any issues
@@ -95,7 +95,7 @@ export const makeVideoScreenshot = async ({
 
     video.addEventListener('canplay', capture);
     video.addEventListener('error', error => {
-      window.log.error('makeVideoScreenshot error', toLogFormat(error));
+      console.error('makeVideoScreenshot error', toLogFormat(error));
       reject(error);
     });
 
@@ -131,7 +131,7 @@ export async function autoScaleAvatarBlob(file: File) {
       'An error happened while picking/resizing the image',
       e.message || ''
     );
-    window.log.error(e);
+    console.error(e);
     return null;
   }
 }
@@ -141,7 +141,7 @@ export async function autoScaleAvatarBlob(file: File) {
  */
 export async function pickFileForAvatar(): Promise<string | null> {
   if (window.sessionFeatureFlags.integrationTestEnv) {
-    window.log.info(
+    console.info(
       'shorting pickFileForAvatar as it does not work in playwright/notsending the filechooser event'
     );
 

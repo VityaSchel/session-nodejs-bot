@@ -50,7 +50,7 @@ export async function copyPublicKeyByConvoId(convoId: string) {
     const fromWrapper = await UserGroupsWrapperActions.getCommunityByFullUrl(convoId);
 
     if (!fromWrapper) {
-      window.log.warn('opengroup to copy was not found in the UserGroupsWrapper');
+      console.warn('opengroup to copy was not found in the UserGroupsWrapper');
       return;
     }
 
@@ -391,7 +391,7 @@ export async function setDisappearingMessagesByConvoId(
 export async function uploadOurAvatar(newAvatarDecrypted?: ArrayBuffer) {
   const ourConvo = getConversationController().get(UserUtils.getOurPubKeyStrFromCache());
   if (!ourConvo) {
-    window.log.warn('ourConvo not found... This is not a valid case');
+    console.warn('ourConvo not found... This is not a valid case');
     return null;
   }
 
@@ -410,20 +410,20 @@ export async function uploadOurAvatar(newAvatarDecrypted?: ArrayBuffer) {
 
     profileKey = ourConvoProfileKey ? fromHexToArray(ourConvoProfileKey) : null;
     if (!profileKey) {
-      window.log.info('our profileKey not found. Not reuploading our avatar');
+      console.info('our profileKey not found. Not reuploading our avatar');
       return null;
     }
     const currentAttachmentPath = ourConvo.getAvatarPath();
 
     if (!currentAttachmentPath) {
-      window.log.warn('No attachment currently set for our convo.. Nothing to do.');
+      console.warn('No attachment currently set for our convo.. Nothing to do.');
       return null;
     }
 
     const decryptedAvatarUrl = await getDecryptedMediaUrl(currentAttachmentPath, IMAGE_JPEG, true);
 
     if (!decryptedAvatarUrl) {
-      window.log.warn('Could not decrypt avatar stored locally..');
+      console.warn('Could not decrypt avatar stored locally..');
       return null;
     }
     const blob = await urlToBlob(decryptedAvatarUrl);
@@ -432,7 +432,7 @@ export async function uploadOurAvatar(newAvatarDecrypted?: ArrayBuffer) {
   }
 
   if (!decryptedAvatarData?.byteLength) {
-    window.log.warn('Could not read content of avatar ...');
+    console.warn('Could not read content of avatar ...');
     return null;
   }
 
@@ -440,7 +440,7 @@ export async function uploadOurAvatar(newAvatarDecrypted?: ArrayBuffer) {
 
   const avatarPointer = await uploadFileToFsWithOnionV4(encryptedData);
   if (!avatarPointer) {
-    window.log.warn('failed to upload avatar to fileserver');
+    console.warn('failed to upload avatar to fileserver');
     return null;
   }
   const { fileUrl, fileId } = avatarPointer;
@@ -478,7 +478,7 @@ export async function uploadOurAvatar(newAvatarDecrypted?: ArrayBuffer) {
       await SyncUtils.forceSyncConfigurationNowIfNeeded(true);
     }
   } else {
-    window.log.info(
+    console.info(
       `Reuploading avatar finished at ${newTimestampReupload}, newAttachmentPointer ${fileUrl}`
     );
   }
@@ -494,7 +494,7 @@ export async function uploadOurAvatar(newAvatarDecrypted?: ArrayBuffer) {
 export async function clearOurAvatar(commit: boolean = true) {
   const ourConvo = getConversationController().get(UserUtils.getOurPubKeyStrFromCache());
   if (!ourConvo) {
-    window.log.warn('ourConvo not found... This is not a valid case');
+    console.warn('ourConvo not found... This is not a valid case');
     return;
   }
 
@@ -522,7 +522,7 @@ export async function clearOurAvatar(commit: boolean = true) {
 export async function replyToMessage(messageId: string) {
   const quotedMessageModel = await Data.getMessageById(messageId);
   if (!quotedMessageModel) {
-    window.log.warn('Failed to find message to reply to');
+    console.warn('Failed to find message to reply to');
     return;
   }
   const conversationModel = getConversationController().getOrThrow(

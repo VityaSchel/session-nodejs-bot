@@ -48,7 +48,7 @@ const debouncedUpdate = debounce(update, 2000);
 const fastUpdate = update;
 
 function clear() {
-  // window.log.info('Remove all notifications');
+  // console.info('Remove all notifications');
   currentNotifications = [];
   debouncedUpdate();
 }
@@ -139,7 +139,7 @@ function update(forceRefresh = false) {
     userSetting,
   });
 
-  // window.log.info(
+  // console.info(
   //   'Update notifications:',
   //   Object.assign({}, status, {
   //     isNotificationGroupingSupported,
@@ -214,7 +214,7 @@ function update(forceRefresh = false) {
       iconUrl = lastNotification.iconUrl;
       break;
     default:
-      window.log.error(`Error: Unknown user notification setting: '${userSetting}'`);
+      console.error(`Error: Unknown user notification setting: '${userSetting}'`);
   }
 
   const shouldHideExpiringMessageBody = lastNotification.isExpiringMessage && isMacOS();
@@ -248,7 +248,7 @@ function getUserSetting() {
   return (Storage.get('notification-setting') as UserSetting) || SettingNames.MESSAGE;
 }
 function onRemove() {
-  // window.log.info('Remove notification');
+  // console.info('Remove notification');
   debouncedUpdate();
 }
 

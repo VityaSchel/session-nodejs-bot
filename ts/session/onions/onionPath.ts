@@ -339,7 +339,7 @@ export async function selectGuardNodes(): Promise<Array<Snode>> {
   // this is to avoid having circular dependencies of path building, needing new snodes, which needs new paths building...
   const nodePool = await SnodePool.getSnodePoolFromDBOrFetchFromSeed();
 
-  window.log.info(`selectGuardNodes snodePool length: ${nodePool.length}`);
+  console.info(`selectGuardNodes snodePool length: ${nodePool.length}`);
   if (nodePool.length < SnodePool.minSnodePoolCount) {
     window?.log?.error(
       `Could not select guard nodes. Not enough nodes in the pool: ${nodePool.length}`
@@ -368,10 +368,10 @@ export async function selectGuardNodes(): Promise<Array<Snode>> {
 
     if (attempts > 5) {
       // too many retries. something is wrong.
-      window.log.info(`selectGuardNodes stopping after attempts: ${attempts}`);
+      console.info(`selectGuardNodes stopping after attempts: ${attempts}`);
       throw new Error(`selectGuardNodes stopping after attempts: ${attempts}`);
     }
-    window.log.info(`selectGuardNodes attempts: ${attempts}`);
+    console.info(`selectGuardNodes attempts: ${attempts}`);
 
     // Test all three nodes at once, wait for all to resolve or reject
     // eslint-disable-next-line no-await-in-loop
@@ -434,7 +434,7 @@ export async function getGuardNodeOrSelectNewOnes() {
     // if an error is thrown, the caller must take care of it.
     const start = Date.now();
     guardNodes = await OnionPaths.selectGuardNodes();
-    window.log.info(`OnionPaths.selectGuardNodes took ${Date.now() - start}ms`);
+    console.info(`OnionPaths.selectGuardNodes took ${Date.now() - start}ms`);
   }
 }
 

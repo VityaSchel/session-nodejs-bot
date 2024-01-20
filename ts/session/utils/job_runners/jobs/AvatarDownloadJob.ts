@@ -27,12 +27,12 @@ export function shouldAddAvatarDownloadJob({ conversationId }: { conversationId:
   const conversation = getConversationController().get(conversationId);
   if (!conversation) {
     // return true so we do not retry this task.
-    window.log.warn('shouldAddAvatarDownloadJob did not corresponding conversation');
+    console.warn('shouldAddAvatarDownloadJob did not corresponding conversation');
 
     return false;
   }
   if (!conversation.isPrivate()) {
-    window.log.warn('shouldAddAvatarDownloadJob can only be used for private convos currently');
+    console.warn('shouldAddAvatarDownloadJob can only be used for private convos currently');
     return false;
   }
   const prevPointer = conversation.get('avatarPointer');
@@ -52,7 +52,7 @@ async function addAvatarDownloadJob({ conversationId }: { conversationId: string
       conversationId,
       nextAttemptTimestamp: Date.now(),
     });
-    window.log.debug(`addAvatarDownloadJobIfNeeded: adding job download for ${conversationId} `);
+    console.debug(`addAvatarDownloadJobIfNeeded: adding job download for ${conversationId} `);
     await runners.avatarDownloadRunner.addJob(avatarDownloadJob);
   }
 }
@@ -95,7 +95,7 @@ class AvatarDownloadJob extends PersistedJob<AvatarDownloadPersistedData> {
   public async run(): Promise<RunJobResult> {
     const convoId = this.persistedData.conversationId;
 
-    window.log.warn(
+    console.warn(
       `running job ${this.persistedData.jobType} with conversationId:"${convoId}" id:"${this.persistedData.identifier}" `
     );
 
@@ -107,12 +107,12 @@ class AvatarDownloadJob extends PersistedJob<AvatarDownloadPersistedData> {
     let conversation = getConversationController().get(convoId);
     if (!conversation) {
       // return true so we do not retry this task.
-      window.log.warn('AvatarDownloadJob did not corresponding conversation');
+      console.warn('AvatarDownloadJob did not corresponding conversation');
 
       return RunJobResult.PermanentFailure;
     }
     if (!conversation.isPrivate()) {
-      window.log.warn('AvatarDownloadJob can only be used for private convos currently');
+      console.warn('AvatarDownloadJob can only be used for private convos currently');
       return RunJobResult.PermanentFailure;
     }
     let changes = false;
@@ -122,7 +122,7 @@ class AvatarDownloadJob extends PersistedJob<AvatarDownloadPersistedData> {
     // if there is an avatar and profileKey for that user ('', null and undefined excluded), download, decrypt and save the avatar locally.
     if (toDownloadPointer && toDownloadProfileKey) {
       try {
-        window.log.debug(`[profileupdate] starting downloading task for  ${conversation.id}`);
+        console.debug(`[profileupdate] starting downloading task for  ${conversation.id}`);
         const downloaded = await downloadAttachment({
           url: toDownloadPointer,
           isRaw: true,
@@ -130,7 +130,7 @@ class AvatarDownloadJob extends PersistedJob<AvatarDownloadPersistedData> {
         conversation = getConversationController().getOrThrow(convoId);
 
         if (!downloaded.data.byteLength) {
-          window.log.debug(`[profileupdate] downloaded data is empty for  ${conversation.id}`);
+          console.debug(`[profileupdate] downloaded data is empty for  ${conversation.id}`);
           return RunJobResult.RetryJobIfPossible; // so we retry this job
         }
 
@@ -143,14 +143,14 @@ class AvatarDownloadJob extends PersistedJob<AvatarDownloadPersistedData> {
           try {
             decryptedData = await decryptProfile(downloaded.data, profileKeyArrayBuffer);
           } catch (decryptError) {
-            window.log.info(
+            console.info(
               `[profileupdate] failed to decrypt downloaded data ${conversation.id} with provided profileKey`
             );
             // if we got content, but cannot decrypt it with the provided profileKey, there is no need to keep retrying.
             return RunJobResult.PermanentFailure;
           }
 
-          window.log.info(
+          console.info(
             `[profileupdate] about to auto scale avatar for convo ${conversation.id}`
           );
 
@@ -174,12 +174,12 @@ class AvatarDownloadJob extends PersistedJob<AvatarDownloadPersistedData> {
       } catch (e) {
         // TODO would be nice to throw a specific exception here instead of relying on the error string.
         if (isString(e.message) && (e.message as string).includes('404')) {
-          window.log.warn(
+          console.warn(
             `[profileupdate] Failed to download attachment at ${toDownloadPointer}. We got 404 error: "${e.message}"`
           );
           return RunJobResult.PermanentFailure;
         }
-        window.log.warn(
+        console.warn(
           `[profileupdate] Failed to download attachment at ${toDownloadPointer}. Maybe it expired? ${e.message}`
         );
         return RunJobResult.RetryJobIfPossible;

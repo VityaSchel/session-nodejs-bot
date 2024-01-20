@@ -173,7 +173,7 @@ const getBlindingValues = (
   let a = sodium.crypto_sign_ed25519_sk_to_curve25519(signingKeys.privKeyBytes); // this is the equivalent of ios generatePrivateKeyScalar
 
   if (a.length > 32) {
-    window.log.warn('length of signing key is too long, cutting to 32: oldlength', a.length);
+    console.warn('length of signing key is too long, cutting to 32: oldlength', a.length);
     a = a.slice(0, 32);
   }
 

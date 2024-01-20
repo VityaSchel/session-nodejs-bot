@@ -237,7 +237,7 @@ export class SwarmPolling {
         !isGroup
       );
     } catch (e) {
-      window.log.warn(
+      console.warn(
         `pollNodeForKey of ${pubkey} namespaces: ${namespaces} failed with: ${e.message}`
       );
       resultsFromAllNamespaces = null;
@@ -263,13 +263,13 @@ export class SwarmPolling {
       const userConfigMessagesMerged = flatten(compact(userConfigMessages));
 
       if (!isGroup && userConfigMessagesMerged.length) {
-        window.log.info(
+        console.info(
           `received userConfigMessages count: ${userConfigMessagesMerged.length} for key ${pubkey.key}`
         );
         try {
           await this.handleSharedConfigMessages(userConfigMessagesMerged);
         } catch (e) {
-          window.log.warn(
+          console.warn(
             `handleSharedConfigMessages of ${userConfigMessagesMerged.length} failed with ${e.message}`
           );
           // not rethrowing
@@ -283,7 +283,7 @@ export class SwarmPolling {
       );
     }
     if (allNamespacesWithoutUserConfigIfNeeded.length) {
-      window.log.debug(
+      console.debug(
         `received allNamespacesWithoutUserConfigIfNeeded: ${allNamespacesWithoutUserConfigIfNeeded.length}`
       );
     }
@@ -379,20 +379,20 @@ export class SwarmPolling {
           );
         }
       } catch (e) {
-        window.log.warn(
+        console.warn(
           `failed to decrypt message with hash "${userConfigMessage.messageHash}": ${e.message}`
         );
       }
     }
     if (allDecryptedConfigMessages.length) {
       try {
-        window.log.info(
+        console.info(
           `handleConfigMessagesViaLibSession of "${allDecryptedConfigMessages.length}" messages with libsession`
         );
         await ConfigMessageHandler.handleConfigMessagesViaLibSession(allDecryptedConfigMessages);
       } catch (e) {
         const allMessageHases = allDecryptedConfigMessages.map(m => m.messageHash).join(',');
-        window.log.warn(
+        console.warn(
           `failed to handle messages hashes "${allMessageHases}" with libsession. Error: "${e.message}"`
         );
       }
@@ -432,10 +432,10 @@ export class SwarmPolling {
                 configHashesToBump.push(...toBump);
               }
             } catch (e) {
-              window.log.warn(`failed to get currentHashes for user variant ${variant}`);
+              console.warn(`failed to get currentHashes for user variant ${variant}`);
             }
           }
-          window.log.debug(`configHashesToBump: ${configHashesToBump}`);
+          console.debug(`configHashesToBump: ${configHashesToBump}`);
         }
       }
 
@@ -457,7 +457,7 @@ export class SwarmPolling {
           const lastResult = results[results.length - 1];
           if (lastResult?.code !== 200) {
             // the update expiry of our config messages didn't work.
-            window.log.warn(
+            console.warn(
               `the update expiry of our tracked config hashes didn't work: ${JSON.stringify(
                 lastResult
               )}`

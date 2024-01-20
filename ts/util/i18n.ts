@@ -15,7 +15,7 @@ export const setupi18n = (locale: string, messages: LocaleMessagesType) => {
     if (!message) {
       // eslint:disable: no-console
       // eslint-disable-next-line no-console
-      (window.log.error || console.log)(
+      (console.error || console.log)(
         `i18n: Attempted to get translation for nonexistent key '${key}'`
       );
       return '';

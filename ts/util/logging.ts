@@ -125,7 +125,7 @@ function logAtLevel(level: string, prefix: string, ...args: any) {
   ipc.send(`log-${level}`, logText);
 }
 
-window.log = {
+console = {
   fatal: _.partial(logAtLevel, 'fatal', 'FATAL'),
   error: _.partial(logAtLevel, 'error', 'ERROR'),
   warn: _.partial(logAtLevel, 'warn', 'WARN '),
@@ -137,7 +137,7 @@ window.log = {
 window.onerror = (_message, _script, _line, _col, error) => {
   const errorInfo = JSON.stringify(error);
 
-  window.log.error(
+  console.error(
     `Top-level unhandled error: "${_message}";"${_script}";"${_line}";"${_col}" ${errorInfo}`,
     error
   );
@@ -146,5 +146,5 @@ window.onerror = (_message, _script, _line, _col, error) => {
 window.addEventListener('unhandledrejection', rejectionEvent => {
   const error = rejectionEvent.reason;
   const errorInfo = error && error.stack ? error.stack : error;
-  window.log.error('Top-level unhandled promise rejection:', errorInfo);
+  console.error('Top-level unhandled promise rejection:', errorInfo);
 });

@@ -158,7 +158,7 @@ export async function handleSwarmDataMessage(
   messageHash: string,
   senderConversationModel: ConversationModel
 ): Promise<void> {
-  window.log.info('handleSwarmDataMessage');
+  console.info('handleSwarmDataMessage');
 
   console.log(rawDataMessage)
 

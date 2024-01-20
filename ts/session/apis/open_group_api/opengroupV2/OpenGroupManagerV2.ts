@@ -201,7 +201,7 @@ export class OpenGroupManagerV2 {
       try {
         await SessionUtilUserGroups.removeCommunityFromWrapper(conversationId, fullUrl);
       } catch (e) {
-        window.log.warn('failed to removeCommunityFromWrapper', conversationId);
+        console.warn('failed to removeCommunityFromWrapper', conversationId);
       }
 
       const room: OpenGroupV2Room = {

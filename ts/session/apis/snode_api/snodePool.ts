@@ -192,7 +192,7 @@ export async function TEST_fetchFromSeedWithRetriesAndWriteToDb() {
   try {
     randomSnodePool = await SeedNodeAPI.fetchSnodePoolFromSeedNodeWithRetries(seedNodes);
     await Data.updateSnodePoolOnDb(JSON.stringify(randomSnodePool));
-    window.log.info(`fetchSnodePoolFromSeedNodeWithRetries took ${Date.now() - start}ms`);
+    console.info(`fetchSnodePoolFromSeedNodeWithRetries took ${Date.now() - start}ms`);
 
     OnionPaths.resetPathFailureCount();
     Onions.resetSnodeFailureCount();

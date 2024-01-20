@@ -22,7 +22,7 @@ export async function handleCallMessage(
     callMessage.type !== SignalService.CallMessage.Type.ANSWER &&
     callMessage.type !== SignalService.CallMessage.Type.END_CALL
   ) {
-    window.log.info('Dropping incoming call from ourself');
+    console.info('Dropping incoming call from ourself');
     await removeFromCache(envelope);
     return;
   }
@@ -30,21 +30,21 @@ export async function handleCallMessage(
   if (CallManager.isCallRejected(callMessage.uuid)) {
     await removeFromCache(envelope);
 
-    window.log.info(`Dropping already rejected call from this device ${callMessage.uuid}`);
+    console.info(`Dropping already rejected call from this device ${callMessage.uuid}`);
     return;
   }
 
   if (type === SignalService.CallMessage.Type.PROVISIONAL_ANSWER) {
     await removeFromCache(envelope);
 
-    window.log.info('Skipping callMessage PROVISIONAL_ANSWER');
+    console.info('Skipping callMessage PROVISIONAL_ANSWER');
     return;
   }
 
   if (type === SignalService.CallMessage.Type.PRE_OFFER) {
     await removeFromCache(envelope);
 
-    window.log.info('Skipping callMessage PRE_OFFER');
+    console.info('Skipping callMessage PRE_OFFER');
     return;
   }
 

@@ -17,7 +17,7 @@ function startRinging() {
     ringingAudio.loop = true;
     ringingAudio.volume = 0.6;
   }
-  void ringingAudio.play().catch(window.log.info);
+  void ringingAudio.play().catch(console.info);
 }
 
 export function getIsRinging() {

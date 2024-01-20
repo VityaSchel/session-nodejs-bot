@@ -34,7 +34,7 @@ export const clearSogsReactionByServerId = async (
   }
 
   if (!conversation) {
-    window.log.warn(`Conversation for ${reaction} not found in db`);
+    console.warn(`Conversation for ${reaction} not found in db`);
     return false;
   }
 

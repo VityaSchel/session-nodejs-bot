@@ -5,6 +5,8 @@ declare module globalThis {
     resetDatabase: () => any,
     passwordLogin: (passPhrase: string) => any,
     setPassword: (passPhrase: string, oldPhrase: string) => any,
-    ready: () => any
+    ready: () => any,
+    shutdown: () => any,
+    openInbox: () => any,
   }
 }

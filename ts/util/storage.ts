@@ -19,7 +19,7 @@ async function put(key: string, value: ValueType) {
     throw new Error('Tried to store undefined');
   }
   if (!ready) {
-    window.log.warn('Called storage.put before storage is ready. key:', key);
+    console.warn('Called storage.put before storage is ready. key:', key);
   }
 
   const data: InsertedValueType = { id: key, value };
@@ -34,7 +34,7 @@ async function put(key: string, value: ValueType) {
 
 function get(key: string, defaultValue?: ValueType) {
   if (!ready) {
-    window.log.warn('Called storage.get before storage is ready. key:', key);
+    console.warn('Called storage.get before storage is ready. key:', key);
   }
 
   const item = items[key];
@@ -47,7 +47,7 @@ function get(key: string, defaultValue?: ValueType) {
 
 async function remove(key: string) {
   if (!ready) {
-    window.log.warn('Called storage.get before storage is ready. key:', key);
+    console.warn('Called storage.get before storage is ready. key:', key);
   }
 
   delete items[key];

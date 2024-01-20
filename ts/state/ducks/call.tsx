@@ -25,7 +25,7 @@ const callSlice = createSlice({
     incomingCall(state: CallStateType, action: PayloadAction<{ pubkey: string }>) {
       const callerPubkey = action.payload.pubkey;
       if (state.ongoingWith && state.ongoingWith !== callerPubkey) {
-        window.log.warn(
+        console.warn(
           `Got an incoming call action for ${callerPubkey} but we are already in a call.`
         );
         return state;
@@ -48,7 +48,7 @@ const callSlice = createSlice({
       // to answer a call we need an incoming call form that specific pubkey
 
       if (state.ongoingWith !== callerPubkey || state.ongoingCallStatus !== 'incoming') {
-        window.log.info('cannot answer a call we are not displaying a dialog with');
+        console.info('cannot answer a call we are not displaying a dialog with');
         return state;
       }
       state.ongoingCallStatus = 'connecting';
@@ -59,13 +59,13 @@ const callSlice = createSlice({
     callConnected(state: CallStateType, action: PayloadAction<{ pubkey: string }>) {
       const callerPubkey = action.payload.pubkey;
       if (callerPubkey !== state.ongoingWith) {
-        window.log.info('cannot answer a call we did not start or receive first');
+        console.info('cannot answer a call we did not start or receive first');
         return state;
       }
       const existingCallState = state.ongoingCallStatus;
 
       if (existingCallState !== 'connecting' && existingCallState !== 'offering') {
-        window.log.info(
+        console.info(
           'cannot answer a call we are not connecting (and so answered) to or offering a call'
         );
         return state;
@@ -79,13 +79,13 @@ const callSlice = createSlice({
     callReconnecting(state: CallStateType, action: PayloadAction<{ pubkey: string }>) {
       const callerPubkey = action.payload.pubkey;
       if (callerPubkey !== state.ongoingWith) {
-        window.log.info('cannot reconnect a call we did not start or receive first');
+        console.info('cannot reconnect a call we did not start or receive first');
         return state;
       }
       const existingCallState = state.ongoingCallStatus;
 
       if (existingCallState !== 'ongoing') {
-        window.log.info('cannot reconnect a call we are not ongoing');
+        console.info('cannot reconnect a call we are not ongoing');
         return state;
       }
 
@@ -94,11 +94,11 @@ const callSlice = createSlice({
     },
     startingCallWith(state: CallStateType, action: PayloadAction<{ pubkey: string }>) {
       if (state.ongoingWith) {
-        window.log.warn('cannot start a call with an ongoing call already: ongoingWith');
+        console.warn('cannot start a call with an ongoing call already: ongoingWith');
         return state;
       }
       if (state.ongoingCallStatus) {
-        window.log.warn('cannot start a call with an ongoing call already: ongoingCallStatus');
+        console.warn('cannot start a call with an ongoing call already: ongoingCallStatus');
         return state;
       }
       setIsRinging(true);

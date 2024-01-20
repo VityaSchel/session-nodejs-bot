@@ -61,7 +61,7 @@ export const sendDataExtractionNotification = async (
     UserUtils.isUsFromCache(attachmentSender) ||
     !Storage.get(SettingsKey.settingsReadReceipt)
   ) {
-    window.log.warn('Not sending saving attachment notification for', attachmentSender);
+    console.warn('Not sending saving attachment notification for', attachmentSender);
     return;
   }
 
@@ -71,7 +71,7 @@ export const sendDataExtractionNotification = async (
     timestamp: Date.now(),
   });
   const pubkey = PubKey.cast(conversationId);
-  window.log.info(
+  console.info(
     `Sending DataExtractionNotification to ${conversationId} about attachment: ${referencedAttachmentTimestamp}`
   );
 
@@ -82,6 +82,6 @@ export const sendDataExtractionNotification = async (
       SnodeNamespaces.UserMessages
     );
   } catch (e) {
-    window.log.warn('failed to send data extraction notification', e);
+    console.warn('failed to send data extraction notification', e);
   }
 };

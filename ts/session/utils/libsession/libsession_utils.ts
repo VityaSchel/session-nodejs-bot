@@ -46,7 +46,7 @@ async function initializeLibSessionUtilWrappers() {
 
   // fetch the dumps we already have from the database
   const dumps = await ConfigDumpData.getAllDumpsWithData();
-  window.log.info(
+  console.info(
     'initializeLibSessionUtilWrappers alldumpsInDB already: ',
     JSON.stringify(dumps.map(m => omit(m, 'data')))
   );
@@ -56,7 +56,7 @@ async function initializeLibSessionUtilWrappers() {
   // load the dumps retrieved from the database into their corresponding wrappers
   for (let index = 0; index < dumps.length; index++) {
     const dump = dumps[index];
-    window.log.debug('initializeLibSessionUtilWrappers initing from dump', dump.variant);
+    console.debug('initializeLibSessionUtilWrappers initing from dump', dump.variant);
     try {
       await GenericWrapperActions.init(
         dump.variant,
@@ -66,7 +66,7 @@ async function initializeLibSessionUtilWrappers() {
 
       userVariantsBuildWithoutErrors.add(dump.variant);
     } catch (e) {
-      window.log.warn(`init of UserConfig failed with ${e.message} `);
+      console.warn(`init of UserConfig failed with ${e.message} `);
       throw new Error(`initializeLibSessionUtilWrappers failed with ${e.message}`);
     }
   }
@@ -78,7 +78,7 @@ async function initializeLibSessionUtilWrappers() {
 
   for (let index = 0; index < missingRequiredVariants.length; index++) {
     const missingVariant = missingRequiredVariants[index];
-    window.log.warn(
+    console.warn(
       `initializeLibSessionUtilWrappers: missingRequiredVariants "${missingVariant}"`
     );
     await GenericWrapperActions.init(missingVariant, privateKeyEd25519, null);
@@ -90,7 +90,7 @@ async function initializeLibSessionUtilWrappers() {
       publicKey: UserUtils.getOurPubKeyStrFromCache(),
       variant: missingVariant,
     });
-    window.log.debug(
+    console.debug(
       `initializeLibSessionUtilWrappers: missingRequiredVariants "${missingVariant}" created`
     );
   }
@@ -142,7 +142,7 @@ async function pendingChangesForPubkey(pubkey: string): Promise<Array<OutgoingCo
       namespace,
     });
   }
-  window.log.info(`those variants needs push: "${[...variantsNeedingPush]}"`);
+  console.info(`those variants needs push: "${[...variantsNeedingPush]}"`);
 
   return results;
 }

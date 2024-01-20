@@ -87,7 +87,7 @@ export const forceSyncConfigurationNowIfNeeded = async (waitForMessageSent = fal
 
     // the ConfigurationSync also handles dumping in to the DB if we do not need to push the data, but the dumping needs to be done even before the feature flag is true.
     void ConfigurationSync.queueNewJobIfNeeded().catch(e => {
-      window.log.warn(
+      console.warn(
         'forceSyncConfigurationNowIfNeeded scheduling of jobs ConfigurationSync.queueNewJobIfNeeded failed with: ',
         e.message
       );
@@ -227,7 +227,7 @@ const getValidContacts = (convos: Array<ConversationModel>) => {
           void c.setProfileKey(profileKeyForContact);
         }
       } else if (profileKey) {
-        window.log.warn(
+        console.warn(
           'Got a profileKey for a contact in another format than string. Contact: ',
           c.id
         );

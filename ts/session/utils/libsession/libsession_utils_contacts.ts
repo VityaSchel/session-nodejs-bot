@@ -77,10 +77,10 @@ async function insertContactFromDBIntoWrapperAndRefresh(id: string): Promise<voi
     // expirationTimerSeconds,
   });
   try {
-    window.log.debug('inserting into contact wrapper: ', JSON.stringify(wrapperContact));
+    console.debug('inserting into contact wrapper: ', JSON.stringify(wrapperContact));
     await ContactsWrapperActions.set(wrapperContact);
   } catch (e) {
-    window.log.warn(`ContactsWrapperActions.set of ${id} failed with ${e.message}`);
+    console.warn(`ContactsWrapperActions.set of ${id} failed with ${e.message}`);
     // we still let this go through
   }
 
@@ -122,7 +122,7 @@ async function removeContactFromWrapper(id: string) {
   try {
     await ContactsWrapperActions.erase(id);
   } catch (e) {
-    window.log.warn(`ContactsWrapperActions.erase of ${id} failed with ${e.message}`);
+    console.warn(`ContactsWrapperActions.erase of ${id} failed with ${e.message}`);
   }
   await refreshMappedValue(id);
 }

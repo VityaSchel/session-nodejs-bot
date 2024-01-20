@@ -50,18 +50,18 @@ import { assertUnreachable } from '../../../../types/sqlSharedTypes';
 function getSogsConvoOrReturnEarly(serverUrl: string, roomId: string): ConversationModel | null {
   const convoId = getOpenGroupV2ConversationId(serverUrl, roomId);
   if (!convoId) {
-    window.log.info(`getSogsConvoOrReturnEarly: convoId not built with ${serverUrl}: ${roomId}`);
+    console.info(`getSogsConvoOrReturnEarly: convoId not built with ${serverUrl}: ${roomId}`);
     return null;
   }
 
   const foundConvo = getConversationController().get(convoId);
   if (!foundConvo) {
-    window.log.info('getSogsConvoOrReturnEarly: convo not found: ', convoId);
+    console.info('getSogsConvoOrReturnEarly: convo not found: ', convoId);
     return null;
   }
 
   if (!foundConvo.isOpenGroupV2()) {
-    window.log.info('getSogsConvoOrReturnEarly: convo not an opengroup: ', convoId);
+    console.info('getSogsConvoOrReturnEarly: convo not an opengroup: ', convoId);
     return null;
   }
 
@@ -93,25 +93,25 @@ async function handlePollInfoResponse(
   serverUrl: string
 ) {
   if (statusCode !== 200) {
-    window.log.info('handlePollInfoResponse subRequest status code is not 200:', statusCode);
+    console.info('handlePollInfoResponse subRequest status code is not 200:', statusCode);
     return;
   }
 
   if (!isObject(pollInfoResponseBody)) {
-    window.log.info('handlePollInfoResponse pollInfoResponseBody is not object');
+    console.info('handlePollInfoResponse pollInfoResponseBody is not object');
     return;
   }
 
   const { active_users, read, upload, write, token, details } = pollInfoResponseBody;
 
   if (!token || !serverUrl) {
-    window.log.info('handlePollInfoResponse token and serverUrl must be set');
+    console.info('handlePollInfoResponse token and serverUrl must be set');
     return;
   }
   const stillPolledRooms = OpenGroupData.getV2OpenGroupRoomsByServerUrl(serverUrl);
 
   if (!stillPolledRooms?.some(r => r.roomId === token && r.serverUrl === serverUrl)) {
-    window.log.info('handlePollInfoResponse room is no longer polled: ', token);
+    console.info('handlePollInfoResponse room is no longer polled: ', token);
     return;
   }
 
@@ -211,7 +211,7 @@ const handleMessagesResponseV4 = async (
     const stillPolledRooms = OpenGroupData.getV2OpenGroupRoomsByServerUrl(serverUrl);
 
     if (!stillPolledRooms?.some(r => r.roomId === roomId && r.serverUrl === serverUrl)) {
-      window.log.info(`handleMessagesResponseV4: we are no longer polling for ${roomId}: skipping`);
+      console.info(`handleMessagesResponseV4: we are no longer polling for ${roomId}: skipping`);
       return;
     }
     const convoId = getOpenGroupV2ConversationId(serverUrl, roomId);
@@ -226,7 +226,7 @@ const handleMessagesResponseV4 = async (
     }
 
     if (!isArray(messages)) {
-      window.log.warn("handleMessagesResponseV4: didn't get an object from batch poll");
+      console.warn("handleMessagesResponseV4: didn't get an object from batch poll");
       return;
     }
 
@@ -305,7 +305,7 @@ const handleMessagesResponseV4 = async (
     // and writing it again
     const roomInfosRefreshed = OpenGroupData.getV2OpenGroupRoom(roomInfos.conversationId);
     if (!roomInfosRefreshed || !roomInfosRefreshed.serverUrl || !roomInfosRefreshed.roomId) {
-      window.log.warn(`No room for convo ${roomInfos.conversationId}`);
+      console.warn(`No room for convo ${roomInfos.conversationId}`);
       return;
     }
 
@@ -471,7 +471,7 @@ async function handleInboxOutboxMessages(
           });
           await findCachedBlindedMatchOrLookItUp(sender, serverPubkey, sodium);
         } catch (e) {
-          window.log.warn('tryMatchBlindWithStandardKey could not veriyfy');
+          console.warn('tryMatchBlindWithStandardKey could not veriyfy');
         }
 
         await innerHandleSwarmContentMessage(
@@ -482,7 +482,7 @@ async function handleInboxOutboxMessages(
         );
       }
     } catch (e) {
-      window.log.warn('handleOutboxMessages failed with:', e.message);
+      console.warn('handleOutboxMessages failed with:', e.message);
     }
   }
 

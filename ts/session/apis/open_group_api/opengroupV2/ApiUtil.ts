@@ -91,7 +91,7 @@ export function hasExistingOpenGroup(server: string, roomId: string) {
     try {
       serverUrl = new window.URL(`http://${serverLowerCase}`);
     } catch (err2) {
-      window.log.error(`hasExistingOpenGroup with ${serverNotLowerCased} with ${err2.message}`);
+      console.error(`hasExistingOpenGroup with ${serverNotLowerCased} with ${err2.message}`);
 
       return false;
     }

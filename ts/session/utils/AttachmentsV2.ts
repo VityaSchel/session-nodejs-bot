@@ -77,7 +77,7 @@ export async function uploadLinkPreviewsV3(
 ): Promise<PreviewWithAttachmentUrl | undefined> {
   // some links does not have an image associated, and it makes the whole message fail to send
   if (!preview?.image) {
-    window.log.warn('tried to upload preview to opengroupv2 without image.. skipping');
+    console.warn('tried to upload preview to opengroupv2 without image.. skipping');
 
     return undefined;
   }

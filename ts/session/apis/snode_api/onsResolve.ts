@@ -137,7 +137,7 @@ async function getSessionIDForOnsName(onsNameCase: string) {
     }
     return allResolvedSessionIds[0];
   } catch (e) {
-    window.log.warn('ONSresolve: error', e);
+    console.warn('ONSresolve: error', e);
     throw e;
   }
 }

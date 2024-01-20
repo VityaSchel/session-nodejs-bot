@@ -111,7 +111,7 @@ export const replaceUnicodeV2 = (fileName: string) => {
 
 // const removeSchemaVersion = ({ attachment }: any) => {
 //   if (!isValid(attachment)) {
-//     window.log.error('Attachment.removeSchemaVersion: Invalid input attachment:', attachment);
+//     console.error('Attachment.removeSchemaVersion: Invalid input attachment:', attachment);
 //     return attachment;
 //   }
 
@@ -228,7 +228,7 @@ export const captureDimensionsAndScreenshot = async (
         screenshot: null,
       };
     } catch (error) {
-      window.log.error(
+      console.error(
         'captureDimensionsAndScreenshot:',
         'error processing image; skipping screenshot generation',
         toLogFormat(error)
@@ -277,7 +277,7 @@ export const captureDimensionsAndScreenshot = async (
       height,
     };
   } catch (error) {
-    window.log.error(
+    console.error(
       'captureDimensionsAndScreenshot: error processing video; skipping screenshot generation',
       toLogFormat(error)
     );

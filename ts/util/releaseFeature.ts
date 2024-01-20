@@ -83,7 +83,7 @@ async function checkIsFeatureReleased(featureName: FeatureNameTracked): Promise<
     !featureAlreadyReleased &&
     GetNetworkTime.getNowWithNetworkOffset() >= getFeatureReleaseTimestamp(featureName)
   ) {
-    window.log.info(`[releaseFeature]: It is time to release ${featureName}. Releasing it now`);
+    console.info(`[releaseFeature]: It is time to release ${featureName}. Releasing it now`);
     await Storage.put(featureStorageItemId(featureName), true);
     setIsFeatureReleasedCached(featureName, true);
     // trigger a sync right away so our user data is online
@@ -91,7 +91,7 @@ async function checkIsFeatureReleased(featureName: FeatureNameTracked): Promise<
   }
 
   const isReleased = Boolean(getIsFeatureReleasedCached(featureName));
-  // window.log.debug(
+  // console.debug(
   //   `[releaseFeature]: "${featureName}" ${isReleased ? 'is released' : 'has not been released yet'}`
   // );
   return isReleased;

@@ -93,7 +93,7 @@ async function opengroupRoomsLoad() {
       try {
         cachedRooms?.push(r as any);
       } catch (e) {
-        window.log.warn(e.message);
+        console.warn(e.message);
       }
     });
     return;

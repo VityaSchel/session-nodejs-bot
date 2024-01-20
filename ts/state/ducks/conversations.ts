@@ -421,7 +421,7 @@ export const fetchTopMessagesForConversation = createAsyncThunk(
     const mostRecentMessage = await Data.getLastMessageInConversation(conversationKey);
 
     if (!oldestMessage || oldestMessage.id === oldTopMessageId) {
-      // window.log.debug('fetchTopMessagesForConversation: we are already at the top');
+      // console.debug('fetchTopMessagesForConversation: we are already at the top');
       return null;
     }
     const { messagesProps, quotesProps } = await getMessages({
@@ -460,7 +460,7 @@ export const fetchBottomMessagesForConversation = createAsyncThunk(
     const mostRecentMessage = await Data.getLastMessageInConversation(conversationKey);
 
     if (!mostRecentMessage || mostRecentMessage.id === oldBottomMessageId) {
-      // window.log.debug('fetchBottomMessagesForConversation: we are already at the bottom');
+      // console.debug('fetchBottomMessagesForConversation: we are already at the bottom');
       return null;
     }
     const { messagesProps, quotesProps } = await getMessages({
@@ -566,7 +566,7 @@ function handleMessageExpiredOrDeleted(
       const { timestamp, sender } = msgProps;
       if (timestamp && sender) {
         const message2Delete = lookupQuote(editedQuotes, editedMessages, timestamp, sender);
-        window.log.debug(
+        console.debug(
           `Deleting quote {${timestamp}-${sender}} ${JSON.stringify(message2Delete)}`
         );
 

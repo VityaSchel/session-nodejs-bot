@@ -21,7 +21,7 @@ function hitRateLimit(): boolean {
     const firstTimestamp = latestReactionTimestamps[0];
     if (now - firstTimestamp < rateTimeLimit) {
       latestReactionTimestamps.pop();
-      window.log.warn(`Only ${rateCountLimit} reactions are allowed per minute`);
+      console.warn(`Only ${rateCountLimit} reactions are allowed per minute`);
       return true;
     }
     latestReactionTimestamps.shift();
@@ -72,12 +72,12 @@ const sendMessageReaction = async (messageId: string, emoji: string) => {
   if (found) {
     const conversationModel = found?.getConversation();
     if (!conversationModel) {
-      window.log.warn(`Conversation for ${messageId} not found in db`);
+      console.warn(`Conversation for ${messageId} not found in db`);
       return undefined;
     }
 
     if (!conversationModel.hasReactions()) {
-      window.log.warn("This conversation doesn't have reaction support");
+      console.warn("This conversation doesn't have reaction support");
       return undefined;
     }
 
@@ -94,7 +94,7 @@ const sendMessageReaction = async (messageId: string, emoji: string) => {
         id = found.get('serverId') || id;
         me = conversationModel.getUsInThatConversation();
       } else {
-        window.log.warn(`Server Id was not found in message ${messageId} for opengroup reaction`);
+        console.warn(`Server Id was not found in message ${messageId} for opengroup reaction`);
         return undefined;
       }
     }
@@ -104,7 +104,7 @@ const sendMessageReaction = async (messageId: string, emoji: string) => {
 
     const reacts = found.get('reacts');
     if (reacts?.[emoji]?.senders?.includes(me)) {
-      window.log.info('Found matching reaction removing it');
+      console.info('Found matching reaction removing it');
       action = Action.REMOVE;
     } else {
       const reactions = getRecentReactions();
@@ -122,7 +122,7 @@ const sendMessageReaction = async (messageId: string, emoji: string) => {
 
     await conversationModel.sendReaction(messageId, reaction);
 
-    window.log.info(
+    console.info(
       `You ${action === Action.REACT ? 'added' : 'removed'} a`,
       emoji,
       'reaction for message',
@@ -131,7 +131,7 @@ const sendMessageReaction = async (messageId: string, emoji: string) => {
     );
     return reaction;
   }
-  window.log.warn(`Message ${messageId} not found in db`);
+  console.warn(`Message ${messageId} not found in db`);
   return undefined;
 };
 
@@ -168,7 +168,7 @@ const handleMessageReaction = async ({
 
   if (details.you && senders.includes(sender)) {
     if (reaction.action === Action.REACT) {
-      window.log.warn('Received duplicate message for your reaction. Ignoring it');
+      console.warn('Received duplicate message for your reaction. Ignoring it');
       return undefined;
     }
     details.you = false;
@@ -179,7 +179,7 @@ const handleMessageReaction = async ({
   switch (reaction.action) {
     case Action.REACT:
       if (senders.includes(sender)) {
-        window.log.warn('Received duplicate reaction message. Ignoring it', reaction, sender);
+        console.warn('Received duplicate reaction message. Ignoring it', reaction, sender);
         return undefined;
       }
       details.senders.push(sender);
@@ -216,7 +216,7 @@ const handleMessageReaction = async ({
   await originalMessage.commit();
 
   if (!you) {
-    window.log.info(
+    console.info(
       `${sender} ${reaction.action === Action.REACT ? 'added' : 'removed'} a ${
         reaction.emoji
       } reaction`
@@ -249,7 +249,7 @@ const handleClearReaction = async (conversationId: string, serverId: number, emo
 
   await originalMessage.commit();
 
-  window.log.info(`You cleared all ${emoji} reactions on message ${serverId}`);
+  console.info(`You cleared all ${emoji} reactions on message ${serverId}`);
   return originalMessage;
 };
 
@@ -271,7 +271,7 @@ const handleOpenGroupMessageReactions = async (
   }
 
   if (!originalMessage.get('isPublic')) {
-    window.log.warn('handleOpenGroupMessageReactions() should only be used in opengroups');
+    console.warn('handleOpenGroupMessageReactions() should only be used in opengroups');
     return undefined;
   }
 

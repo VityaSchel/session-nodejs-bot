@@ -68,13 +68,13 @@ export const downloadFileFromFileServer = async (
   }
 
   if (!fileId) {
-    window.log.info('downloadFileFromFileServer given empty fileId');
+    console.info('downloadFileFromFileServer given empty fileId');
     return null;
   }
 
   const urlToGet = `${POST_GET_FILE_ENDPOINT}/${fileId}`;
   if (window.sessionFeatureFlags?.debug.debugFileServerRequests) {
-    window.log.info(`about to try to download fsv2: "${urlToGet}"`);
+    console.info(`about to try to download fsv2: "${urlToGet}"`);
   }
 
   // this throws if we get a 404 from the file server
@@ -85,14 +85,14 @@ export const downloadFileFromFileServer = async (
     throwError: true,
   });
   if (window.sessionFeatureFlags?.debug.debugFileServerRequests) {
-    window.log.info(`download fsv2: "${urlToGet} got result:`, JSON.stringify(result));
+    console.info(`download fsv2: "${urlToGet} got result:`, JSON.stringify(result));
   }
   if (!result) {
     return null;
   }
 
   if (!batchGlobalIsSuccess(result)) {
-    window.log.info(
+    console.info(
       'download from fileserver failed with status ',
       parseBatchGlobalStatusCode(result)
     );
@@ -101,7 +101,7 @@ export const downloadFileFromFileServer = async (
 
   const { bodyBinary } = result;
   if (!bodyBinary || !bodyBinary.byteLength) {
-    window.log.info('download from fileserver failed with status, empty content downloaded ');
+    console.info('download from fileserver failed with status, empty content downloaded ');
     return null;
   }
 
