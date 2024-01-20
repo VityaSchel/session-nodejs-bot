@@ -23,7 +23,5 @@ export const isImage = (value: MIMEType): boolean =>
   value?.length > 0 && value.startsWith('image/');
 export const isVideo = (value: MIMEType): boolean =>
   value?.length > 0 && value.startsWith('video/');
-// As of 2020-04-16 aif files do not play in Electron nor Chrome. We should only
-// recognize them as file attachments.
 export const isAudio = (value: MIMEType): boolean =>
   value?.length > 0 && value.startsWith('audio/') && !value.endsWith('aiff');

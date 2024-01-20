@@ -6,7 +6,6 @@ export const isAudioNotificationSupported = () =>
   OS.isWindows(MIN_WINDOWS_VERSION) || OS.isMacOS() || OS.isLinux();
 
 // Using `Notification::tag` has a bug on Windows 7:
-// https://github.com/electron/electron/issues/11189
 export const isNotificationGroupingSupported = () =>
   !OS.isWindows() || OS.isWindows(MIN_WINDOWS_VERSION);
 

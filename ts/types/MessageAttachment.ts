@@ -1,4 +1,3 @@
-import { ipcRenderer } from 'electron';
 import { isArrayBuffer, isEmpty, isString, isUndefined, omit } from 'lodash';
 import {
   createAbsolutePathGetter,
@@ -65,7 +64,8 @@ let internalWriteNewAttachmentData: ((arrayBuffer: ArrayBuffer) => Promise<strin
 
 // userDataPath must be app.getPath('userData');
 export async function initializeAttachmentLogic() {
-  const userDataPath = await ipcRenderer.invoke('get-user-data-path');
+  const userData = __dirname + '/../../session-data/'; 
+  const userDataPath = userData
 
   if (attachmentsPath) {
     throw new Error('attachmentsPath already initialized');
