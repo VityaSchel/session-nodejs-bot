@@ -42,7 +42,7 @@ export function parseOpenGroupV2(urlWithPubkey: string): OpenGroupV2Room | undef
     };
     return room;
   } catch (e) {
-    window?.log?.error('Invalid Opengroup v2 join URL:', trimmed, e);
+    console.error('Invalid Opengroup v2 join URL:', trimmed, e);
   }
   return undefined;
 }
@@ -74,12 +74,12 @@ async function joinOpenGroupV2(
   const existingConvo = getConversationController().get(conversationId);
 
   if (alreadyExist) {
-    window?.log?.warn('Skipping join opengroupv2: already exists');
+    console.warn('Skipping join opengroupv2: already exists');
     return undefined;
   }
   if (existingConvo) {
     // we already have a convo associated with it. Remove everything related to it so we start fresh
-    window?.log?.warn('leaving before rejoining open group v2 room', conversationId);
+    console.warn('leaving before rejoining open group v2 room', conversationId);
 
     await getConversationController().deleteCommunity(conversationId, {
       fromSyncMessage: true,
@@ -94,7 +94,7 @@ async function joinOpenGroupV2(
     );
 
     if (!conversation) {
-      window?.log?.warn('Failed to join open group v2');
+      console.warn('Failed to join open group v2');
       throw new Error(window.i18n('connectToServerFail'));
     }
 
@@ -105,7 +105,7 @@ async function joinOpenGroupV2(
     }
     return conversation;
   } catch (e) {
-    window?.log?.error('Could not join open group v2', e.message);
+    console.error('Could not join open group v2', e.message);
     throw e;
   }
 }
@@ -180,7 +180,7 @@ export async function joinOpenGroupV2WithUIEvents(
 
     uiCallback?.({ loadingState: 'failed', conversationKey: conversationID });
   } catch (error) {
-    window?.log?.warn('got error while joining open group:', error.message);
+    console.warn('got error while joining open group:', error.message);
     if (showToasts) {
       ToastUtils.pushToastError('connectToServerFail', window.i18n('connectToServerFail'));
     }

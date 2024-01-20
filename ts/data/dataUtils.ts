@@ -46,7 +46,7 @@ export function cleanData(data: any): any {
       typeof value !== 'number' &&
       typeof value !== 'boolean'
     ) {
-      window?.log?.info(`cleanData: key ${key} had type ${typeof value}`);
+      console.info(`cleanData: key ${key} had type ${typeof value}`);
     }
   }
   return data;

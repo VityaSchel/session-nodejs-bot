@@ -190,7 +190,7 @@ const handleSogsV3DeletedMessages = async (
       );
     }
   } catch (e) {
-    window?.log?.warn('handleDeletions failed:', e);
+    console.warn('handleDeletions failed:', e);
   }
   return messagesWithoutDeleted;
 };
@@ -201,7 +201,7 @@ const handleMessagesResponseV4 = async (
   subrequestOption: SubRequestMessagesType
 ) => {
   if (!subrequestOption || !subrequestOption.messages) {
-    window?.log?.error('handleBatchPollResults - missing fields required for message subresponse');
+    console.error('handleBatchPollResults - missing fields required for message subresponse');
     return;
   }
 
@@ -297,7 +297,7 @@ const handleMessagesResponseV4 = async (
       try {
         await handleOpenGroupV4Message(msgToHandle, roomDetails);
       } catch (e) {
-        window?.log?.warn('handleOpenGroupV4Message', e);
+        console.warn('handleOpenGroupV4Message', e);
       }
     }
 
@@ -340,7 +340,7 @@ const handleMessagesResponseV4 = async (
       }
     }
   } catch (e) {
-    window?.log?.warn('handleNewMessages failed:', e.message);
+    console.warn('handleNewMessages failed:', e.message);
   }
 };
 
@@ -489,7 +489,7 @@ async function handleInboxOutboxMessages(
   const rooms = OpenGroupData.getV2OpenGroupRoomsByServerUrl(serverUrl);
 
   if (!rooms || !rooms.length) {
-    window?.log?.error('handleInboxOutboxMessages - Found no rooms with matching server url');
+    console.error('handleInboxOutboxMessages - Found no rooms with matching server url');
     return;
   }
 

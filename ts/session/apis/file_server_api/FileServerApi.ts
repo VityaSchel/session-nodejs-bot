@@ -55,7 +55,7 @@ export const downloadFileFromFileServer = async (
 ): Promise<ArrayBuffer | null> => {
   let fileId = fileIdOrCompleteUrl;
   if (!fileIdOrCompleteUrl) {
-    window?.log?.warn('Empty url to download for fileserver');
+    console.warn('Empty url to download for fileserver');
     return null;
   }
 

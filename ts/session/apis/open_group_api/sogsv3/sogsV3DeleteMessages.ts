@@ -29,7 +29,7 @@ export const deleteSogsMessageByServerIds = async (
   try {
     return batchGlobalIsSuccess(result) && batchFirstSubIsSuccess(result);
   } catch (e) {
-    window?.log?.error("deleteMessageByServerIds Can't decode JSON body");
+    console.error("deleteMessageByServerIds Can't decode JSON body");
   }
   return false;
 };

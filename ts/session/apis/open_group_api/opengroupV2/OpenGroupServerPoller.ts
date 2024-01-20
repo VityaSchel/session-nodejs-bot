@@ -103,10 +103,10 @@ export class OpenGroupServerPoller {
       throw new Error('All rooms must be for the same serverUrl');
     }
     // first verify the rooms we got are all from on the same server
-    window?.log?.info(`Creating a new OpenGroupServerPoller for url ${firstUrl}`);
+    console.info(`Creating a new OpenGroupServerPoller for url ${firstUrl}`);
     this.serverUrl = firstUrl;
     roomInfos.forEach(r => {
-      window?.log?.info(
+      console.info(
         `Adding room on construct for url serverUrl: ${firstUrl}, roomId:'${r.roomId}' to poller:${this.serverUrl}`
       );
       this.roomIdsToPoll.add(r.roomId);
@@ -130,10 +130,10 @@ export class OpenGroupServerPoller {
       throw new Error('All rooms must be for the same serverUrl');
     }
     if (this.roomIdsToPoll.has(room.roomId)) {
-      window?.log?.info('skipping addRoomToPoll of already polled room:', room);
+      console.info('skipping addRoomToPoll of already polled room:', room);
       return;
     }
-    window?.log?.info(
+    console.info(
       `Adding room on addRoomToPoll for url serverUrl: ${this.serverUrl}, roomId:'${room.roomId}' to poller:${this.serverUrl}`
     );
     this.roomIdsToPoll.add(room.roomId);
@@ -144,15 +144,15 @@ export class OpenGroupServerPoller {
 
   public removeRoomFromPoll(room: OpenGroupRequestCommonType) {
     if (room.serverUrl !== this.serverUrl) {
-      window?.log?.info('this is not the correct ServerPoller');
+      console.info('this is not the correct ServerPoller');
       return;
     }
     if (this.roomIdsToPoll.has(room.roomId) || this.roomIdsToPoll.has(room.roomId.toLowerCase())) {
-      window?.log?.info(`Removing ${room.roomId} from polling for ${this.serverUrl}`);
+      console.info(`Removing ${room.roomId} from polling for ${this.serverUrl}`);
       this.roomIdsToPoll.delete(room.roomId);
       this.roomIdsToPoll.delete(room.roomId.toLowerCase());
     } else {
-      window?.log?.info(
+      console.info(
         `Cannot remove polling of ${room.roomId} as it is not polled on ${this.serverUrl}`
       );
     }
@@ -185,7 +185,7 @@ export class OpenGroupServerPoller {
 
   private shouldPoll() {
     if (this.wasStopped) {
-      window?.log?.error('Serverpoller was stopped. CompactPoll should not happen');
+      console.error('Serverpoller was stopped. CompactPoll should not happen');
       return false;
     }
     if (!this.roomIdsToPoll.size) {
@@ -197,7 +197,7 @@ export class OpenGroupServerPoller {
     }
 
     if (!window.getGlobalOnlineStatus()) {
-      window?.log?.info('OpenGroupServerPoller: offline');
+      console.info('OpenGroupServerPoller: offline');
       return false;
     }
     return true;
@@ -369,7 +369,7 @@ export class OpenGroupServerPoller {
         }
       }
     } catch (e) {
-      window?.log?.warn('Got error while compact fetch:', e.message);
+      console.warn('Got error while compact fetch:', e.message);
     } finally {
       this.isPolling = false;
     }

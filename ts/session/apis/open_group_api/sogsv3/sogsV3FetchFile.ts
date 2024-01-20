@@ -109,7 +109,7 @@ export async function sogsV3FetchPreviewAndSaveIt(roomInfos: OpenGroupV2RoomWith
   );
 
   if (!oneAtAtimeResult || !oneAtAtimeResult?.byteLength) {
-    window?.log?.warn('sogsV3FetchPreviewAndSaveIt failed for room: ', roomId);
+    console.warn('sogsV3FetchPreviewAndSaveIt failed for room: ', roomId);
     return;
   }
   // refresh to make sure the convo was not deleted during the fetch above

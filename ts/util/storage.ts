@@ -28,7 +28,8 @@ async function put(key: string, value: ValueType) {
   await Data.createOrUpdateItem(data);
 
   if (isBoolean(value)) {
-    window?.inboxStore?.dispatch(updateSettingsBoolValue({ id: key, value }));
+    console.log('updateSettingsBoolValue', key, value)
+    // window?.inboxStore?.dispatch(updateSettingsBoolValue({ id: key, value }));
   }
 }
 
@@ -52,7 +53,8 @@ async function remove(key: string) {
 
   delete items[key];
 
-  window?.inboxStore?.dispatch(deleteSettingsBoolValue(key));
+  console.log('deleteSettingsBoolValue', key)
+  // window?.inboxStore?.dispatch(deleteSettingsBoolValue(key));
 
   await Data.removeItemById(key);
 }

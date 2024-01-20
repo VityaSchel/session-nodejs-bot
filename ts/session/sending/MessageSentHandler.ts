@@ -36,7 +36,7 @@ async function handlePublicMessageSentSuccess(
     await foundMessage.commit();
     foundMessage.getConversation()?.updateLastMessage();
   } catch (e) {
-    window?.log?.error('Error setting public on message');
+    console.error('Error setting public on message');
   }
 }
 
@@ -90,7 +90,7 @@ async function handleMessageSentSuccess(
   if (shouldNotifyPushServer) {
     // notify the push notification server if needed
     if (!wrappedEnvelope) {
-      window?.log?.warn('Should send PN notify but no wrapped envelope set.');
+      console.warn('Should send PN notify but no wrapped envelope set.');
     } else {
       // we do not really care about the result, neither of waiting for it
       void PnServer.notifyPnServer(wrappedEnvelope, sentMessage.device);
@@ -107,14 +107,14 @@ async function handleMessageSentSuccess(
         );
         const tempFetchMessage = await fetchHandleMessageSentData(sentMessage.identifier);
         if (!tempFetchMessage) {
-          window?.log?.warn(
+          console.warn(
             'Got an error while trying to sendSyncMessage(): fetchedMessage is null'
           );
           return;
         }
         fetchedMessage = tempFetchMessage;
       } catch (e) {
-        window?.log?.warn('Got an error while trying to sendSyncMessage():', e);
+        console.warn('Got an error while trying to sendSyncMessage():', e);
       }
     }
   } else if (shouldMarkMessageAsSynced) {

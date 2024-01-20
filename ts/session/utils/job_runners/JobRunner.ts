@@ -45,7 +45,7 @@ export class PersistedJobRunner<T extends TypeOfPersistedData> {
 
   constructor(jobRunnerType: JobRunnerType, _jobEventsListener: null) {
     this.jobRunnerType = jobRunnerType;
-    window?.log?.warn(`new runner of type ${jobRunnerType} built`);
+    console.warn(`new runner of type ${jobRunnerType} built`);
   }
 
   public async loadJobsFromDb() {

@@ -37,7 +37,7 @@ export async function downloadAttachment(attachment: {
       // try to get the fileId from the end of the URL
       attachmentId = attachment.url;
     }
-    window?.log?.info('Download v2 file server attachment', attachmentId);
+    console.info('Download v2 file server attachment', attachmentId);
     res = await downloadFileFromFileServer(attachmentId);
   } else {
     console.warn(
@@ -47,7 +47,7 @@ export async function downloadAttachment(attachment: {
   }
 
   if (!res?.byteLength) {
-    window?.log?.error('Failed to download attachment. Length is 0');
+    console.error('Failed to download attachment. Length is 0');
     throw new Error(`Failed to download attachment. Length is 0 for ${attachment.url}`);
   }
 
@@ -110,7 +110,7 @@ export async function downloadAttachmentSogsV3(
   const dataUint = await sogsV3FetchFileByFileID(roomDetails, `${attachment.id}`);
 
   if (!dataUint?.length) {
-    window?.log?.error('Failed to download attachment. Length is 0');
+    console.error('Failed to download attachment. Length is 0');
     throw new Error(`Failed to download attachment. Length is 0 for ${attachment.url}`);
   }
 
@@ -135,7 +135,7 @@ export async function downloadAttachmentSogsV3(
   } else {
     // nothing to do, the attachment has already the correct size.
     // There is just no padding included, which is what we agreed on
-    // window?.log?.info('Received opengroupv2 unpadded attachment size:', attachment.size);
+    // console.info('Received opengroupv2 unpadded attachment size:', attachment.size);
   }
 
   return {

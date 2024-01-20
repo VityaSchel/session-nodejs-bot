@@ -32,7 +32,7 @@ const stagedAttachmentsSlice = createSlice({
       const currentStagedAttachments = state.stagedAttachments[conversationKey] || [];
 
       if (newAttachments.some(a => a.isVoiceMessage) && currentStagedAttachments.length > 0) {
-        window?.log?.warn('A voice note cannot be sent with other attachments');
+        console.warn('A voice note cannot be sent with other attachments');
         return state;
       }
 

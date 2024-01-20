@@ -43,7 +43,7 @@ export const sendSogsReactionOnionV4 = async (
 ): Promise<boolean> => {
   const allValidRoomInfos = OpenGroupPollingUtils.getAllValidRoomInfos(serverUrl, new Set([room]));
   if (!allValidRoomInfos?.length) {
-    window?.log?.info('getSendReactionRequest: no valid roominfos got.');
+    console.info('getSendReactionRequest: no valid roominfos got.');
     throw new Error(`Could not find sogs pubkey of url:${serverUrl}`);
   }
 
@@ -98,7 +98,7 @@ export const sendSogsReactionOnionV4 = async (
   });
 
   if (!batchGlobalIsSuccess(result)) {
-    window?.log?.warn('sendSogsReactionWithOnionV4 Got unknown status code; res:', result);
+    console.warn('sendSogsReactionWithOnionV4 Got unknown status code; res:', result);
     throw new Error(
       `sendSogsReactionOnionV4: invalid status code: ${parseBatchGlobalStatusCode(result)}`
     );

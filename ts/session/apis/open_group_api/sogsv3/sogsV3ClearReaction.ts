@@ -89,7 +89,7 @@ export const clearSogsReactionByServerId = async (
     }
     return false;
   } catch (e) {
-    window?.log?.error("clearSogsReactionByServerId Can't decode JSON body");
+    console.error("clearSogsReactionByServerId Can't decode JSON body");
   }
   return false;
 };

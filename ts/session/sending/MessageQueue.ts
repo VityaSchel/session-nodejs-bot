@@ -117,7 +117,7 @@ export class MessageQueue {
         serverTimestamp: sentTimestamp,
       });
     } catch (e) {
-      window?.log?.warn(
+      console.warn(
         `Failed to send message to open group: ${roomInfos.serverUrl}:${roomInfos.roomId}:`,
         e
       );
@@ -157,7 +157,7 @@ export class MessageQueue {
         serverTimestamp,
       });
     } catch (e) {
-      window?.log?.warn(
+      console.warn(
         `Failed to send message to open group: ${roomInfos.serverUrl}:${roomInfos.roomId}:`,
         e.message
       );
@@ -334,10 +334,10 @@ export class MessageQueue {
       // or a message with a syncTarget set.
 
       if (MessageSender.isSyncMessage(message)) {
-        window?.log?.info('OutgoingMessageQueue: Processing sync message');
+        console.info('OutgoingMessageQueue: Processing sync message');
         isSyncMessage = true;
       } else {
-        window?.log?.warn('Dropping message in process() to be sent to ourself');
+        console.warn('Dropping message in process() to be sent to ourself');
         return;
       }
     }

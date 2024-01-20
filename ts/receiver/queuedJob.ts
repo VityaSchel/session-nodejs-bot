@@ -77,7 +77,7 @@ async function copyFromQuotedMessage(
   }
 
   if (!quotedMessage) {
-    window?.log?.warn(`We did not found quoted message ${id} with author ${author}.`);
+    console.warn(`We did not found quoted message ${id} with author ${author}.`);
     quoteLocal.referencedMessageNotFound = true;
     msg.set({ quote: quoteLocal });
     return;
@@ -85,7 +85,7 @@ async function copyFromQuotedMessage(
 
   const isMessageModelType = Boolean((quotedMessage as MessageModel).get !== undefined);
 
-  window?.log?.info(`Found quoted message id: ${id}`);
+  console.info(`Found quoted message id: ${id}`);
   quoteLocal.referencedMessageNotFound = false;
   // NOTE we send the entire body to be consistent with the other platforms
   quoteLocal.text =
@@ -152,7 +152,7 @@ function handleLinkPreviews(messageBody: string, messagePreview: any, message: M
     (item: any) => (item.image || item.title) && urls.includes(item.url)
   );
   if (preview.length < incomingPreview.length) {
-    window?.log?.info(
+    console.info(
       `${message.idForLogging()}: Eliminated ${preview.length -
         incomingPreview.length} previews with invalid urls'`
     );
@@ -378,7 +378,7 @@ export async function handleMessageJob(
   source: string,
   messageHash: string
 ) {
-  window?.log?.info(
+  console.info(
     `Starting handleMessageJob for message ${messageModel.idForLogging()}, ${messageModel.get(
       'serverTimestamp'
     ) || messageModel.get('timestamp')} in conversation ${conversation.idForLogging()}`
@@ -395,7 +395,7 @@ export async function handleMessageJob(
       const oldValue = conversation.get('expireTimer');
       if (expireTimer === oldValue) {
         confirm?.();
-        window?.log?.info(
+        console.info(
           'Dropping ExpireTimerUpdate message as we already have the same one set.'
         );
         return;
@@ -452,6 +452,6 @@ export async function handleMessageJob(
     confirm?.();
   } catch (error) {
     const errorForLog = error && error.stack ? error.stack : error;
-    window?.log?.error('handleMessageJob', messageModel.idForLogging(), 'error:', errorForLog);
+    console.error('handleMessageJob', messageModel.idForLogging(), 'error:', errorForLog);
   }
 }

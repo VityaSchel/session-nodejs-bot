@@ -21,7 +21,7 @@ const forceNetworkDeletion = async (): Promise<Array<string> | null> => {
   const userED25519KeyPair = await UserUtils.getUserED25519KeyPair();
 
   if (!userED25519KeyPair) {
-    window?.log?.warn('Cannot forceNetworkDeletion, did not find user ed25519 key.');
+    console.warn('Cannot forceNetworkDeletion, did not find user ed25519 key.');
     return null;
   }
   const method = 'delete_all' as const;
@@ -34,7 +34,7 @@ const forceNetworkDeletion = async (): Promise<Array<string> | null> => {
         const snodeToMakeRequestTo: Snode | undefined = sample(userSwarm);
 
         if (!snodeToMakeRequestTo) {
-          window?.log?.warn('Cannot forceNetworkDeletion, without a valid swarm node.');
+          console.warn('Cannot forceNetworkDeletion, without a valid swarm node.');
           return null;
         }
 
@@ -92,7 +92,7 @@ const forceNetworkDeletion = async (): Promise<Array<string> | null> => {
                     const reason = snodeJson.reason;
                     const statusCode = snodeJson.code;
                     if (reason && statusCode) {
-                      window?.log?.warn(
+                      console.warn(
                         `Could not ${method} from ${ed25519Str(
                           snodeToMakeRequestTo.pubkey_ed25519
                         )} due to error: ${reason}: ${statusCode}`
@@ -104,7 +104,7 @@ const forceNetworkDeletion = async (): Promise<Array<string> | null> => {
                         );
                       }
                     } else {
-                      window?.log?.warn(
+                      console.warn(
                         `Could not ${method} from ${ed25519Str(
                           snodeToMakeRequestTo.pubkey_ed25519
                         )}`
@@ -154,7 +154,7 @@ const forceNetworkDeletion = async (): Promise<Array<string> | null> => {
             retries: 3,
             minTimeout: SnodeAPI.TEST_getMinTimeout(),
             onFailedAttempt: e => {
-              window?.log?.warn(
+              console.warn(
                 `${method} INNER request attempt #${e.attemptNumber} failed. ${e.retriesLeft} retries left...`
               );
             },
@@ -165,7 +165,7 @@ const forceNetworkDeletion = async (): Promise<Array<string> | null> => {
         retries: 3,
         minTimeout: SnodeAPI.TEST_getMinTimeout(),
         onFailedAttempt: e => {
-          window?.log?.warn(
+          console.warn(
             `${method} OUTER request attempt #${e.attemptNumber} failed. ${e.retriesLeft} retries left... ${e.message}`
           );
         },
@@ -174,7 +174,7 @@ const forceNetworkDeletion = async (): Promise<Array<string> | null> => {
 
     return maliciousSnodes;
   } catch (e) {
-    window?.log?.warn(`failed to ${method} everything on network:`, e);
+    console.warn(`failed to ${method} everything on network:`, e);
     return null;
   }
 };
@@ -191,7 +191,7 @@ const networkDeleteMessages = async (hashes: Array<string>): Promise<Array<strin
   const userED25519KeyPair = await UserUtils.getUserED25519KeyPair();
 
   if (!userED25519KeyPair) {
-    window?.log?.warn('Cannot networkDeleteMessages, did not find user ed25519 key.');
+    console.warn('Cannot networkDeleteMessages, did not find user ed25519 key.');
     return null;
   }
   const method = 'delete' as const;
@@ -203,7 +203,7 @@ const networkDeleteMessages = async (hashes: Array<string>): Promise<Array<strin
         const snodeToMakeRequestTo: Snode | undefined = sample(userSwarm);
 
         if (!snodeToMakeRequestTo) {
-          window?.log?.warn('Cannot networkDeleteMessages, without a valid swarm node.');
+          console.warn('Cannot networkDeleteMessages, without a valid swarm node.');
           return null;
         }
 
@@ -261,7 +261,7 @@ const networkDeleteMessages = async (hashes: Array<string>): Promise<Array<strin
                     const reason = snodeJson.reason;
                     const statusCode = snodeJson.code;
                     if (reason && statusCode) {
-                      window?.log?.warn(
+                      console.warn(
                         `Could not ${method} from ${ed25519Str(
                           snodeToMakeRequestTo.pubkey_ed25519
                         )} due to error: ${reason}: ${statusCode}`
@@ -273,7 +273,7 @@ const networkDeleteMessages = async (hashes: Array<string>): Promise<Array<strin
                         );
                       }
                     } else {
-                      window?.log?.warn(
+                      console.warn(
                         `Could not ${method} from ${ed25519Str(
                           snodeToMakeRequestTo.pubkey_ed25519
                         )}`
@@ -314,7 +314,7 @@ const networkDeleteMessages = async (hashes: Array<string>): Promise<Array<strin
             retries: 3,
             minTimeout: SnodeAPI.TEST_getMinTimeout(),
             onFailedAttempt: e => {
-              window?.log?.warn(
+              console.warn(
                 `${method} INNER request attempt #${e.attemptNumber} failed. ${e.retriesLeft} retries left...`
               );
             },
@@ -325,7 +325,7 @@ const networkDeleteMessages = async (hashes: Array<string>): Promise<Array<strin
         retries: 3,
         minTimeout: SnodeAPI.TEST_getMinTimeout(),
         onFailedAttempt: e => {
-          window?.log?.warn(
+          console.warn(
             `${method} OUTER request attempt #${e.attemptNumber} failed. ${e.retriesLeft} retries left... ${e.message}`
           );
         },
@@ -334,7 +334,7 @@ const networkDeleteMessages = async (hashes: Array<string>): Promise<Array<strin
 
     return maliciousSnodes;
   } catch (e) {
-    window?.log?.warn(`failed to ${method} message on network:`, e);
+    console.warn(`failed to ${method} message on network:`, e);
     return null;
   }
 };

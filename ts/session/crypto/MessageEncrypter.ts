@@ -36,12 +36,12 @@ export async function encrypt(
   const plainText = addMessagePadding(plainTextBuffer);
 
   if (encryptForClosedGroup) {
-    // window?.log?.info(
+    // console.info(
     //   'Encrypting message with SessionProtocol and envelope type is CLOSED_GROUP_MESSAGE'
     // );
     const hexEncryptionKeyPair = await Data.getLatestClosedGroupEncryptionKeyPair(device.key);
     if (!hexEncryptionKeyPair) {
-      window?.log?.warn("Couldn't get key pair for closed group during encryption");
+      console.warn("Couldn't get key pair for closed group during encryption");
       throw new Error("Couldn't get key pair for closed group");
     }
 
@@ -76,7 +76,7 @@ export async function encryptUsingSessionProtocol(
   }
   const sodium = await getSodiumRenderer();
 
-  // window?.log?.info('encryptUsingSessionProtocol for ', recipientHexEncodedX25519PublicKey.key);
+  // console.info('encryptUsingSessionProtocol for ', recipientHexEncodedX25519PublicKey.key);
 
   const recipientX25519PublicKey = recipientHexEncodedX25519PublicKey.withoutPrefixToArray();
   const userED25519PubKeyBytes = fromHexToArray(userED25519KeyPairHex.pubKey);

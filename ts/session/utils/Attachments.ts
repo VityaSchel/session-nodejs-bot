@@ -85,7 +85,7 @@ async function uploadToFileServer(params: UploadParams): Promise<AttachmentPoint
     };
     return pointerWithUrl;
   }
-  window?.log?.warn('upload to file server v2 failed');
+  console.warn('upload to file server v2 failed');
   throw new Error(`upload to file server v2 of ${attachment.fileName} failed`);
 }
 

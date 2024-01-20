@@ -188,7 +188,7 @@ export async function handleSwarmDataMessage(
   const isMe = UserUtils.isUsFromCache(convoIdOfSender);
 
   if (isSyncedMessage && !isMe) {
-    window?.log?.warn('Got a sync message from someone else than me. Dropping it.');
+    console.warn('Got a sync message from someone else than me. Dropping it.');
     await removeFromCache(envelope);
     return;
   }
@@ -205,7 +205,7 @@ export async function handleSwarmDataMessage(
     typeOfConvo = ConversationTypeEnum.GROUP;
   }
 
-  window?.log?.info(
+  console.info(
     `Handle dataMessage about convo ${convoIdToAddTheMessageTo} from user: ${convoIdOfSender}`
   );
 
@@ -231,13 +231,13 @@ export async function handleSwarmDataMessage(
   }
 
   if (!messageHasVisibleContent(cleanDataMessage)) {
-    window?.log?.warn(`Message ${getEnvelopeId(envelope)} ignored; it was empty`);
+    console.warn(`Message ${getEnvelopeId(envelope)} ignored; it was empty`);
     await removeFromCache(envelope);
     return;
   }
 
   if (!convoIdToAddTheMessageTo) {
-    window?.log?.error('We cannot handle a message without a conversationId');
+    console.error('We cannot handle a message without a conversationId');
     await removeFromCache(envelope);
     return;
   }
@@ -286,7 +286,7 @@ export async function isSwarmMessageDuplicate({
 
     return Boolean(result);
   } catch (error) {
-    window?.log?.error('isSwarmMessageDuplicate error:', toLogFormat(error));
+    console.error('isSwarmMessageDuplicate error:', toLogFormat(error));
     return false;
   }
 }
@@ -317,7 +317,7 @@ async function handleSwarmMessage(
   confirm: () => void
 ): Promise<void> {
   if (!rawDataMessage || !msgModel) {
-    window?.log?.warn('Invalid data passed to handleSwarmMessage.');
+    console.warn('Invalid data passed to handleSwarmMessage.');
     confirm();
     return;
   }
@@ -349,7 +349,7 @@ async function handleSwarmMessage(
     });
 
     if (isDuplicate) {
-      window?.log?.info('Received duplicate message. Dropping it.');
+      console.info('Received duplicate message. Dropping it.');
       confirm();
       return;
     }

@@ -19,14 +19,14 @@ const getNetworkTime = async (snode: Snode): Promise<string | number> => {
   const subRequests = getNetworkTimeSubRequests();
   const result = await doSnodeBatchRequest(subRequests, snode, 4000, null);
   if (!result || !result.length) {
-    window?.log?.warn(`getNetworkTime on ${snode.ip}:${snode.port} returned falsish value`, result);
+    console.warn(`getNetworkTime on ${snode.ip}:${snode.port} returned falsish value`, result);
     throw new Error('getNetworkTime: Invalid result');
   }
 
   const firstResult = result[0];
 
   if (firstResult.code !== 200) {
-    window?.log?.warn('Status is not 200 for getNetworkTime but: ', firstResult.code);
+    console.warn('Status is not 200 for getNetworkTime but: ', firstResult.code);
     throw new Error('getNetworkTime: Invalid status code');
   }
 
@@ -45,7 +45,7 @@ function handleTimestampOffsetFromNetwork(_request: string, snodeTimestamp: numb
     // first january 2021. Arbitrary, just want to make sure the return timestamp is somehow valid and not some crazy low value
     const now = Date.now();
     if (latestTimestampOffset === Number.MAX_SAFE_INTEGER) {
-      window?.log?.info(`first timestamp offset received:  ${now - snodeTimestamp}ms`);
+      console.info(`first timestamp offset received:  ${now - snodeTimestamp}ms`);
     }
     latestTimestampOffset = now - snodeTimestamp;
   }

@@ -166,7 +166,7 @@ const loadDefaultRoomsSingle = (): Promise<Array<OpenGroupV2InfoJoinable>> =>
           })
         );
       } catch (e) {
-        window?.log?.warn('loadDefaultRoomloadDefaultRoomssIfNeeded failed', e);
+        console.warn('loadDefaultRoomloadDefaultRoomssIfNeeded failed', e);
       }
       return [];
     }

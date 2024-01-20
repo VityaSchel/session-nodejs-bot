@@ -65,10 +65,10 @@ const getOnionPathForSending = async () => {
   try {
     pathNodes = await OnionPaths.getOnionPath({});
   } catch (e) {
-    window?.log?.error(`sendViaOnion - getOnionPath Error ${e.code} ${e.message}`);
+    console.error(`sendViaOnion - getOnionPath Error ${e.code} ${e.message}`);
   }
   if (!pathNodes?.length) {
-    window?.log?.warn('sendViaOnion - failing, no path available');
+    console.warn('sendViaOnion - failing, no path available');
     // should we retry?
     return null;
   }
@@ -178,14 +178,14 @@ const sendViaOnionV4ToNonSnodeWithRetries = async (
 
         if (abortSignal?.aborted) {
           // if the request was aborted, we just want to stop retries.
-          window?.log?.warn('sendViaOnionV4ToNonSnodeRetryable request aborted.');
+          console.warn('sendViaOnionV4ToNonSnodeRetryable request aborted.');
 
           throw new pRetry.AbortError('Request Aborted');
         }
 
         if (!onionV4Response) {
           // v4 failed responses result is undefined
-          window?.log?.warn('sendViaOnionV4ToNonSnodeRetryable failed during V4 request (in)');
+          console.warn('sendViaOnionV4ToNonSnodeRetryable failed during V4 request (in)');
           throw new Error(
             'sendViaOnionV4ToNonSnodeRetryable failed during V4 request. Retrying...'
           );
@@ -238,14 +238,14 @@ const sendViaOnionV4ToNonSnodeWithRetries = async (
         retries: 2, // retry 3 (2+1) times at most
         minTimeout: 100,
         onFailedAttempt: e => {
-          window?.log?.warn(
+          console.warn(
             `sendViaOnionV4ToNonSnodeRetryable attempt #${e.attemptNumber} failed. ${e.retriesLeft} retries left...: ${e.message}`
           );
         },
       }
     );
   } catch (e) {
-    window?.log?.warn('sendViaOnionV4ToNonSnodeRetryable failed ', e.message, throwErrors);
+    console.warn('sendViaOnionV4ToNonSnodeRetryable failed ', e.message, throwErrors);
     if (throwErrors) {
       throw e;
     }
@@ -253,14 +253,14 @@ const sendViaOnionV4ToNonSnodeWithRetries = async (
   }
 
   if (abortSignal?.aborted) {
-    window?.log?.warn('sendViaOnionV4ToNonSnodeRetryable request aborted.');
+    console.warn('sendViaOnionV4ToNonSnodeRetryable request aborted.');
 
     return null;
   }
 
   if (!result) {
     // v4 failed responses result is undefined
-    window?.log?.warn('sendViaOnionV4ToNonSnodeRetryable failed during V4 request (out)');
+    console.warn('sendViaOnionV4ToNonSnodeRetryable failed during V4 request (out)');
     return null;
   }
 

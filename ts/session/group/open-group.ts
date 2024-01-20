@@ -38,7 +38,7 @@ export async function initiateOpenGroupUpdate(
     );
 
     if (!uploadedFileDetails || !uploadedFileDetails.fileUrl) {
-      window?.log?.warn('File opengroupv2 upload failed');
+      console.warn('File opengroupv2 upload failed');
       return false;
     }
     try {
@@ -56,7 +56,7 @@ export async function initiateOpenGroupUpdate(
       }
       const data = downloaded.data;
       if (!downloaded.data?.byteLength) {
-        window?.log?.error('Failed to download attachment. Length is 0');
+        console.error('Failed to download attachment. Length is 0');
         throw new Error(
           `Failed to download attachment. Length is 0 for ${uploadedFileDetails.fileUrl}`
         );
@@ -73,7 +73,7 @@ export async function initiateOpenGroupUpdate(
         avatarImageId,
       });
     } catch (e) {
-      window?.log?.error(`Could not decrypt profile image: ${e}`);
+      console.error(`Could not decrypt profile image: ${e}`);
       return false;
     }
   }

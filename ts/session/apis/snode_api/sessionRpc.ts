@@ -73,7 +73,7 @@ async function doRequest({
       'Content-Type': APPLICATION_JSON,
     };
 
-    window?.log?.warn(`insecureNodeFetch => doRequest of ${url}`);
+    console.warn(`insecureNodeFetch => doRequest of ${url}`);
 
     const response = await insecureNodeFetch(url, {
       ...fetchOptions,

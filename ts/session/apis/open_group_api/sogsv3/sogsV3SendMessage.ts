@@ -34,7 +34,7 @@ export const sendSogsMessageOnionV4 = async (
 ): Promise<OpenGroupMessageV2> => {
   const allValidRoomInfos = OpenGroupPollingUtils.getAllValidRoomInfos(serverUrl, new Set([room]));
   if (!allValidRoomInfos?.length) {
-    window?.log?.info('getSendMessageRequest: no valid roominfos got.');
+    console.info('getSendMessageRequest: no valid roominfos got.');
     throw new Error(`Could not find sogs pubkey of url:${serverUrl}`);
   }
   const endpoint = `/room/${room}/message`;
@@ -64,7 +64,7 @@ export const sendSogsMessageOnionV4 = async (
   });
 
   if (!batchGlobalIsSuccess(result)) {
-    window?.log?.warn('sendSogsMessageWithOnionV4 Got unknown status code; res:', result);
+    console.warn('sendSogsMessageWithOnionV4 Got unknown status code; res:', result);
     throw new Error(
       `sendSogsMessageOnionV4: invalid status code: ${parseBatchGlobalStatusCode(result)}`
     );
@@ -100,7 +100,7 @@ export const sendMessageOnionV4BlindedRequest = async (
 ): Promise<{ serverId: number; serverTimestamp: number }> => {
   const allValidRoomInfos = OpenGroupPollingUtils.getAllValidRoomInfos(serverUrl, new Set([room]));
   if (!allValidRoomInfos?.length) {
-    window?.log?.info('getSendMessageRequest: no valid roominfos got.');
+    console.info('getSendMessageRequest: no valid roominfos got.');
     throw new Error(`Could not find sogs pubkey of url:${serverUrl}`);
   }
   const endpoint = `/inbox/${recipientBlindedId}`;
@@ -126,7 +126,7 @@ export const sendMessageOnionV4BlindedRequest = async (
   });
 
   if (!batchGlobalIsSuccess(result)) {
-    window?.log?.warn('sendMessageOnionV4BlindedRequest Got unknown status code; res:', result);
+    console.warn('sendMessageOnionV4BlindedRequest Got unknown status code; res:', result);
     throw new Error(
       `sendMessageOnionV4BlindedRequest: invalid status code: ${parseBatchGlobalStatusCode(result)}`
     );

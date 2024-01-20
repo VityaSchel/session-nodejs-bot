@@ -227,7 +227,7 @@ const encryptBlindedMessage = async (options: {
   }
 
   if (!kB) {
-    window?.log?.error('No recipient-side data provided for encryption');
+    console.error('No recipient-side data provided for encryption');
     return null;
   }
 

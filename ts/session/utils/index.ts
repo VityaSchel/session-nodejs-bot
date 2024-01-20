@@ -2,7 +2,6 @@ import * as MessageUtils from './Messages';
 import * as GroupUtils from './Groups';
 import * as StringUtils from './String';
 import * as PromiseUtils from './Promise';
-import * as ToastUtils from './Toast';
 import * as UserUtils from './User';
 import * as SyncUtils from './sync/syncUtils';
 import * as AttachmentsV2Utils from './AttachmentsV2';
@@ -17,7 +16,6 @@ export {
   GroupUtils,
   StringUtils,
   PromiseUtils,
-  ToastUtils,
   UserUtils,
   SyncUtils,
   AttachmentsV2Utils,

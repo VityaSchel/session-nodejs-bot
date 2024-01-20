@@ -27,7 +27,7 @@ export const getAllRoomInfos = async (roomInfos: OpenGroupV2Room) => {
 
   const statusCode = parseBatchGlobalStatusCode(result);
 
-  window?.log?.warn('getAllRoomInfos failed invalid status code:', statusCode);
+  console.warn('getAllRoomInfos failed invalid status code:', statusCode);
   return undefined;
 };
 
@@ -38,7 +38,7 @@ const parseRooms = (jsonResult?: Record<string, any>): undefined | Array<OpenGro
   const rooms = jsonResult?.body as Array<any>;
 
   if (!rooms || !rooms.length) {
-    window?.log?.warn('getAllRoomInfos failed invalid infos');
+    console.warn('getAllRoomInfos failed invalid infos');
     return [];
   }
   return compact(
@@ -46,7 +46,7 @@ const parseRooms = (jsonResult?: Record<string, any>): undefined | Array<OpenGro
       // check that the room is correctly filled
       const { token: id, name, image_id: imageId } = room;
       if (!id || !name) {
-        window?.log?.info('getAllRoomInfos: Got invalid room details, skipping');
+        console.info('getAllRoomInfos: Got invalid room details, skipping');
         return null;
       }
 
@@ -72,12 +72,12 @@ export async function openGroupV2GetRoomInfoViaOnionV4({
   const caps = await fetchCapabilitiesAndUpdateRelatedRoomsOfServerUrl(serverUrl);
 
   if (!caps || caps.length === 0) {
-    window?.log?.warn('getInfo failed because capabilities failed');
+    console.warn('getInfo failed because capabilities failed');
     return null;
   }
 
   const hasBlindingEnabled = capabilitiesListHasBlindEnabled(caps);
-  window?.log?.info(`openGroupV2GetRoomInfoViaOnionV4 capabilities for  ${serverUrl}: ${caps}`);
+  console.info(`openGroupV2GetRoomInfoViaOnionV4 capabilities for  ${serverUrl}: ${caps}`);
 
   const result = await OnionSending.sendJsonViaOnionV4ToSogs({
     blinded: hasBlindingEnabled,
@@ -95,7 +95,7 @@ export async function openGroupV2GetRoomInfoViaOnionV4({
     const { token: id, name, image_id: imageId } = room;
 
     if (!id || !name) {
-      window?.log?.warn('getRoominfo Parsing failed');
+      console.warn('getRoominfo Parsing failed');
       return null;
     }
 
@@ -107,6 +107,6 @@ export async function openGroupV2GetRoomInfoViaOnionV4({
     };
     return info;
   }
-  window?.log?.warn('openGroupV2GetRoomInfoViaOnionV4 failed');
+  console.warn('openGroupV2GetRoomInfoViaOnionV4 failed');
   return null;
 }

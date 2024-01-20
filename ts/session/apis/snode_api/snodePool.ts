@@ -53,7 +53,7 @@ export async function dropSnodeFromSnodePool(snodeEd25519: string) {
   const exists = _.some(randomSnodePool, x => x.pubkey_ed25519 === snodeEd25519);
   if (exists) {
     _.remove(randomSnodePool, x => x.pubkey_ed25519 === snodeEd25519);
-    window?.log?.warn(
+    console.warn(
       `Droppping ${ed25519Str(snodeEd25519)} from snode pool. ${
         randomSnodePool.length
       } snodes remaining in randomPool`
@@ -74,7 +74,7 @@ export async function getRandomSnode(excludingEd25519Snode?: Array<string>): Pro
     await getSnodePoolFromDBOrFetchFromSeed(excludingEd25519Snode?.length);
 
     if (randomSnodePool.length < requiredCount) {
-      window?.log?.warn(
+      console.warn(
         `getRandomSnode: failed to fetch snodes from seed. Current pool: ${randomSnodePool.length}`
       );
 
@@ -107,7 +107,7 @@ export async function forceRefreshRandomSnodePool(): Promise<Array<Snode>> {
   try {
     await getSnodePoolFromDBOrFetchFromSeed();
 
-    window?.log?.info(
+    console.info(
       `forceRefreshRandomSnodePool: enough snodes to fetch from them, so we try using them ${randomSnodePool.length}`
     );
 
@@ -117,7 +117,7 @@ export async function forceRefreshRandomSnodePool(): Promise<Array<Snode>> {
       throw new Error('forceRefreshRandomSnodePool still too small after refetching from snodes');
     }
   } catch (e) {
-    window?.log?.warn(
+    console.warn(
       'forceRefreshRandomSnodePool: Failed to fetch snode pool from snodes. Fetching from seed node instead:',
       e.message
     );
@@ -126,7 +126,7 @@ export async function forceRefreshRandomSnodePool(): Promise<Array<Snode>> {
     try {
       await SnodePool.TEST_fetchFromSeedWithRetriesAndWriteToDb();
     } catch (err2) {
-      window?.log?.warn(
+      console.warn(
         'forceRefreshRandomSnodePool: Failed to fetch snode pool from seed. Fetching from seed node instead:',
         err2.message
       );
@@ -149,7 +149,7 @@ export async function getSnodePoolFromDBOrFetchFromSeed(
   const fetchedFromDb = await Data.getSnodePoolFromDb();
 
   if (!fetchedFromDb || fetchedFromDb.length <= minSnodePoolCount + countToAddToRequirement) {
-    window?.log?.warn(
+    console.warn(
       `getSnodePoolFromDBOrFetchFromSeed: not enough snodes in db (${fetchedFromDb?.length}), Fetching from seed node instead... `
     );
     // if that fails to get enough snodes, even after retries, well we just have to retry later.
@@ -182,7 +182,7 @@ export async function TEST_fetchFromSeedWithRetriesAndWriteToDb() {
   const seedNodes = window.getSeedNodeList();
 
   if (!seedNodes || !seedNodes.length) {
-    window?.log?.error(
+    console.error(
       'SessionSnodeAPI:::fetchFromSeedWithRetriesAndWriteToDb - getSeedNodeList has not been loaded yet'
     );
 
@@ -197,7 +197,7 @@ export async function TEST_fetchFromSeedWithRetriesAndWriteToDb() {
     OnionPaths.resetPathFailureCount();
     Onions.resetSnodeFailureCount();
   } catch (e) {
-    window?.log?.error(
+    console.error(
       'SessionSnodeAPI:::fetchFromSeedWithRetriesAndWriteToDb - Failed to fetch snode poll from seed node with retries. Error:',
       e
     );
@@ -219,12 +219,12 @@ async function tryToGetConsensusWithSnodesWithRetries() {
 
       if (!commonNodes || commonNodes.length < requiredSnodesForAgreement) {
         // throwing makes trigger a retry if we have some left.
-        window?.log?.info(
+        console.info(
           `tryToGetConsensusWithSnodesWithRetries: Not enough common nodes ${commonNodes?.length}`
         );
         throw new Error('Not enough common nodes.');
       }
-      window?.log?.info(
+      console.info(
         'Got consensus: updating snode list with snode pool length:',
         commonNodes.length
       );
@@ -239,7 +239,7 @@ async function tryToGetConsensusWithSnodesWithRetries() {
       factor: 1,
       minTimeout: 1000,
       onFailedAttempt: e => {
-        window?.log?.warn(
+        console.warn(
           `tryToGetConsensusWithSnodesWithRetries attempt #${e.attemptNumber} failed. ${e.retriesLeft} retries left...`
         );
       },
@@ -257,7 +257,7 @@ export async function dropSnodeFromSwarmIfNeeded(
   snodeToDropEd25519: string
 ): Promise<void> {
   // this call either used the cache or fetch the swarm from the db
-  window?.log?.warn(
+  console.warn(
     `Dropping ${ed25519Str(snodeToDropEd25519)} from swarm of ${ed25519Str(pubkey)}`
   );
 

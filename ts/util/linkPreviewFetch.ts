@@ -68,7 +68,7 @@ async function fetchWithRedirects(
   let nextHrefToLoad = href;
   for (let i = 0; i < MAX_REQUEST_COUNT_WITH_REDIRECTS; i += 1) {
     if (urlsSeen.has(nextHrefToLoad)) {
-      window?.log?.warn('fetchWithRedirects: found a redirect loop');
+      console.warn('fetchWithRedirects: found a redirect loop');
       throw new Error('redirect loop');
     }
     urlsSeen.add(nextHrefToLoad);
@@ -86,7 +86,7 @@ async function fetchWithRedirects(
 
     const location = response.headers.get('location');
     if (!location) {
-      window?.log?.warn(
+      console.warn(
         'fetchWithRedirects: got a redirect status code but no Location header; bailing'
       );
       throw new Error('no location with redirect');
@@ -94,7 +94,7 @@ async function fetchWithRedirects(
 
     const newUrl = maybeParseUrl(location, nextHrefToLoad);
     if (newUrl?.protocol !== 'https:') {
-      window?.log?.warn(
+      console.warn(
         'fetchWithRedirects: got a redirect status code and an invalid Location header'
       );
       throw new Error('invalid location');
@@ -103,7 +103,7 @@ async function fetchWithRedirects(
     nextHrefToLoad = newUrl.href;
   }
 
-  window?.log?.warn('fetchWithRedirects: too many redirects');
+  console.warn('fetchWithRedirects: too many redirects');
   throw new Error('too many redirects');
 }
 
@@ -270,7 +270,7 @@ const getHtmlDocument = async (
     }
     /* eslint-enable no-restricted-syntax */
   } catch (err) {
-    window?.log?.warn('getHtmlDocument: error when reading body; continuing with what we got');
+    console.warn('getHtmlDocument: error when reading body; continuing with what we got');
   }
 
   return result;
@@ -313,7 +313,7 @@ const getLinkHrefAttribute = (
 const parseMetadata = (document: HTMLDocument, href: string): LinkPreviewMetadata | null => {
   const title = getOpenGraphContent(document, ['og:title']) || document.title.trim();
   if (!title) {
-    window?.log?.warn("parseMetadata: HTML document doesn't have a title; bailing");
+    console.warn("parseMetadata: HTML document doesn't have a title; bailing");
     return null;
   }
 
@@ -376,22 +376,22 @@ export async function fetchLinkPreviewMetadata(
       signal: abortSignal as AbortSignalNode,
     });
   } catch (err) {
-    window?.log?.warn('fetchLinkPreviewMetadata: failed to fetch link preview HTML; bailing');
+    console.warn('fetchLinkPreviewMetadata: failed to fetch link preview HTML; bailing');
     return null;
   }
 
   if (!response.ok) {
-    window?.log?.warn(`fetchLinkPreviewMetadata: got a ${response.status} status code; bailing`);
+    console.warn(`fetchLinkPreviewMetadata: got a ${response.status} status code; bailing`);
     return null;
   }
 
   if (!response.body) {
-    window?.log?.warn('fetchLinkPreviewMetadata: no response body; bailing');
+    console.warn('fetchLinkPreviewMetadata: no response body; bailing');
     return null;
   }
 
   if (!isInlineContentDisposition(response.headers.get('Content-Disposition'))) {
-    window?.log?.warn(
+    console.warn(
       'fetchLinkPreviewMetadata: Content-Disposition header is not inline; bailing'
     );
     return null;
@@ -403,13 +403,13 @@ export async function fetchLinkPreviewMetadata(
 
   const contentLength = parseContentLength(response.headers.get('Content-Length'));
   if (contentLength < MIN_HTML_CONTENT_LENGTH) {
-    window?.log?.warn('fetchLinkPreviewMetadata: Content-Length is too short; bailing');
+    console.warn('fetchLinkPreviewMetadata: Content-Length is too short; bailing');
     return null;
   }
 
   const contentType = parseContentType(response.headers.get('Content-Type'));
   if (contentType.type !== 'text/html') {
-    window?.log?.warn('fetchLinkPreviewMetadata: Content-Type is not HTML; bailing');
+    console.warn('fetchLinkPreviewMetadata: Content-Type is not HTML; bailing');
     return null;
   }
 
@@ -461,7 +461,7 @@ export async function fetchLinkPreviewImage(
       signal: abortSignal as AbortSignalNode,
     });
   } catch (err) {
-    window?.log?.warn('fetchLinkPreviewImage: failed to fetch image; bailing');
+    console.warn('fetchLinkPreviewImage: failed to fetch image; bailing');
     return null;
   }
 
@@ -470,23 +470,23 @@ export async function fetchLinkPreviewImage(
   }
 
   if (!response.ok) {
-    window?.log?.warn(`fetchLinkPreviewImage: got a ${response.status} status code; bailing`);
+    console.warn(`fetchLinkPreviewImage: got a ${response.status} status code; bailing`);
     return null;
   }
 
   const contentLength = parseContentLength(response.headers.get('Content-Length'));
   if (contentLength < MIN_IMAGE_CONTENT_LENGTH) {
-    window?.log?.warn('fetchLinkPreviewImage: Content-Length is too short; bailing');
+    console.warn('fetchLinkPreviewImage: Content-Length is too short; bailing');
     return null;
   }
   if (contentLength > MAX_IMAGE_CONTENT_LENGTH) {
-    window?.log?.warn('fetchLinkPreviewImage: Content-Length is too large or is unset; bailing');
+    console.warn('fetchLinkPreviewImage: Content-Length is too large or is unset; bailing');
     return null;
   }
 
   const { type: contentType } = parseContentType(response.headers.get('Content-Type'));
   if (!contentType || !VALID_IMAGE_MIME_TYPES.has(contentType)) {
-    window?.log?.warn('fetchLinkPreviewImage: Content-Type is not an image; bailing');
+    console.warn('fetchLinkPreviewImage: Content-Type is not an image; bailing');
     return null;
   }
 
@@ -494,7 +494,7 @@ export async function fetchLinkPreviewImage(
   try {
     data = await response.arrayBuffer();
   } catch (err) {
-    window?.log?.warn('fetchLinkPreviewImage: failed to read body; bailing');
+    console.warn('fetchLinkPreviewImage: failed to read body; bailing');
     return null;
   }
 

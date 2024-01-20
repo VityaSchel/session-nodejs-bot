@@ -36,7 +36,7 @@ export const handleCapabilities = async (
   const capabilities = getCapabilitiesFromBatch(subrequestOptionsLookup, batchPollResults.body);
 
   if (!capabilities) {
-    window?.log?.error(
+    console.error(
       'Failed capabilities subrequest - cancelling capabilities response handling'
     );
     return null;
@@ -48,7 +48,7 @@ export const handleCapabilities = async (
   const rooms = OpenGroupData.getV2OpenGroupRoomsByServerUrl(serverUrl);
 
   if (!rooms || !rooms.length) {
-    window?.log?.error('handleCapabilities - Found no groups with matching server url');
+    console.error('handleCapabilities - Found no groups with matching server url');
     return null;
   }
 

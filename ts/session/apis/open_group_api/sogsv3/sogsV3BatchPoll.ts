@@ -64,7 +64,7 @@ export const sogsBatchSend = async (
     roomId,
   });
   if (!fetchedRoomInfo || !fetchedRoomInfo?.serverPublicKey) {
-    window?.log?.warn('Couldnt get fetched info or server public key -- aborting batch request');
+    console.warn('Couldnt get fetched info or server public key -- aborting batch request');
     return null;
   }
   const { serverPublicKey } = fetchedRoomInfo;
@@ -79,7 +79,7 @@ export const sogsBatchSend = async (
     batchType
   );
   if (!batchRequest) {
-    window?.log?.error('Could not generate batch request. Aborting request');
+    console.error('Could not generate batch request. Aborting request');
     return null;
   }
 
@@ -366,7 +366,7 @@ const getBatchRequest = async (
   );
 
   if (!headers) {
-    window?.log?.error('Unable to create headers for batch request - aborting');
+    console.error('Unable to create headers for batch request - aborting');
     return undefined;
   }
 
@@ -409,13 +409,13 @@ const sendSogsBatchRequestOnionV4 = async (
   }
 
   if (!batchResponse) {
-    window?.log?.error('sogsbatch: Undefined batch response - cancelling batch request');
+    console.error('sogsbatch: Undefined batch response - cancelling batch request');
     return null;
   }
   if (isObject(batchResponse.body)) {
     return batchResponse as BatchSogsReponse;
   }
 
-  window?.log?.warn('sogsbatch: batch response decoded body is not object. Returning null');
+  console.warn('sogsbatch: batch response decoded body is not object. Returning null');
   return null;
 };

@@ -62,7 +62,7 @@ const decodeV4Response = (snodeResponse: SnodeResponseV4): DecodedResponseV4 | u
       binary[binary.byteLength - 1] === eAscii
     )
   ) {
-    window?.log?.error(
+    console.error(
       'decodeV4Response: response is missing prefix and suffix characters - Dropping response'
     );
     return undefined;
@@ -94,18 +94,18 @@ const decodeV4Response = (snodeResponse: SnodeResponseV4): DecodedResponseV4 | u
         break;
       case 'text/html; charset=utf-8':
         try {
-          window?.log?.warn(
+          console.warn(
             'decodeV4Response - received raw body of type "text/html; charset=utf-8": ',
             to_string(bodyBinary)
           );
         } catch (e) {
-          window?.log?.warn(
+          console.warn(
             'decodeV4Response - received raw body of type "text/html; charset=utf-8" but not a string'
           );
         }
         break;
       default:
-        window?.log?.warn(
+        console.warn(
           'decodeV4Response - No or unknown content-type information for response: ',
           bodyContentType
         );

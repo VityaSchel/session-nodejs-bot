@@ -34,7 +34,7 @@ export const cleanUpOldDecryptedMedias = () => {
   let countKept = 0;
   let keptAsAvatars = 0;
 
-  window?.log?.info('Starting cleaning of medias blobs...');
+  console.info('Starting cleaning of medias blobs...');
   for (const iterator of urlToDecryptedBlobMap) {
     if (
       iterator[1].forceRetain &&
@@ -52,7 +52,7 @@ export const cleanUpOldDecryptedMedias = () => {
       countKept++;
     }
   }
-  window?.log?.info(
+  console.info(
     `Clean medias blobs: cleaned/kept/keptAsAvatars: ${countCleaned}:${countKept}:${keptAsAvatars}`
   );
 };

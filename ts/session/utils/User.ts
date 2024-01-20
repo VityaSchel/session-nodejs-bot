@@ -114,7 +114,7 @@ export function getOurProfile(): LokiProfile | undefined {
       profileKey: profileKeyAsBytes?.length ? profileKeyAsBytes : null,
     };
   } catch (e) {
-    window?.log?.error(`Failed to get our profile: ${e}`);
+    console.error(`Failed to get our profile: ${e}`);
     return undefined;
   }
 }

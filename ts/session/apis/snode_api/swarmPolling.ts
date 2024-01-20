@@ -51,7 +51,7 @@ export function extractWebSocketContent(
     }
     return null;
   } catch (error) {
-    window?.log?.warn('extractWebSocketContent from message failed with:', error.message);
+    console.warn('extractWebSocketContent from message failed with:', error.message);
     return null;
   }
 }
@@ -112,7 +112,7 @@ export class SwarmPolling {
 
   public addGroupId(pubkey: PubKey) {
     if (this.groupPolling.findIndex(m => m.pubkey.key === pubkey.key) === -1) {
-      window?.log?.info('Swarm addGroupId: adding pubkey to polling', pubkey.key);
+      console.info('Swarm addGroupId: adding pubkey to polling', pubkey.key);
       this.groupPolling.push({ pubkey, lastPolledTimestamp: 0 });
     }
   }
@@ -120,7 +120,7 @@ export class SwarmPolling {
   public removePubkey(pk: PubKey | string) {
     const pubkey = PubKey.cast(pk);
     if (this.groupPolling.some(group => pubkey.key === group.pubkey.key)) {
-      window?.log?.info('Swarm removePubkey: removing pubkey from polling', pubkey.key);
+      console.info('Swarm removePubkey: removing pubkey from polling', pubkey.key);
       this.groupPolling = this.groupPolling.filter(group => !pubkey.isEqual(group.pubkey));
     }
   }
@@ -161,7 +161,7 @@ export class SwarmPolling {
    */
   public async pollForAllKeys() {
     if (!window.getGlobalOnlineStatus()) {
-      window?.log?.error('pollForAllKeys: offline');
+      console.error('pollForAllKeys: offline');
       // Very important to set up a new polling call so we do retry at some point
       setTimeout(this.pollForAllKeys.bind(this), SWARM_POLLING_TIMEOUT.ACTIVE);
       return;
@@ -184,13 +184,13 @@ export class SwarmPolling {
           .get(group.pubkey.key)
           ?.idForLogging() || group.pubkey.key;
       if (diff >= convoPollingTimeout) {
-        window?.log?.debug(
+        console.debug(
           `Polling for ${loggingId}; timeout: ${convoPollingTimeout}; diff: ${diff} `
         );
 
         return this.pollOnceForKey(group.pubkey, true, [SnodeNamespaces.ClosedGroupMessage]);
       }
-      window?.log?.debug(
+      console.debug(
         `Not polling for ${loggingId}; timeout: ${convoPollingTimeout} ; diff: ${diff}`
       );
 
@@ -199,7 +199,7 @@ export class SwarmPolling {
     try {
       await Promise.all(concat([directPromise], groupPromises));
     } catch (e) {
-      window?.log?.warn('pollForAllKeys exception: ', e);
+      console.warn('pollForAllKeys exception: ', e);
       throw e;
     } finally {
       setTimeout(this.pollForAllKeys.bind(this), SWARM_POLLING_TIMEOUT.ACTIVE);
@@ -293,7 +293,7 @@ export class SwarmPolling {
 
     // if all snodes returned an error (null), no need to update the lastPolledTimestamp
     if (isGroup) {
-      window?.log?.debug(
+      console.debug(
         `Polled for group(${ed25519Str(pubkey.key)}):, got ${messages.length} messages back.`
       );
       let lastPolledTimestamp = Date.now();
@@ -497,7 +497,7 @@ export class SwarmPolling {
       } else if (!window.inboxStore?.getState().onionPaths.isOnline) {
         window.inboxStore?.dispatch(updateIsOnline(true));
       }
-      window?.log?.info('pollNodeForKey failed with:', e.message);
+      console.info('pollNodeForKey failed with:', e.message);
       return null;
     }
   }

@@ -57,7 +57,7 @@ const getMessageByReaction = async (
   }
 
   if (!originalMessage) {
-    window?.log?.debug(`Cannot find the original reacted message ${originalMessageId}.`);
+    console.debug(`Cannot find the original reacted message ${originalMessageId}.`);
     return null;
   }
 
@@ -151,7 +151,7 @@ const handleMessageReaction = async ({
   openGroupConversationId?: string;
 }) => {
   if (!reaction.emoji) {
-    window?.log?.warn(`There is no emoji for the reaction ${reaction}.`);
+    console.warn(`There is no emoji for the reaction ${reaction}.`);
     return undefined;
   }
 
@@ -232,7 +232,7 @@ const handleMessageReaction = async ({
 const handleClearReaction = async (conversationId: string, serverId: number, emoji: string) => {
   const originalMessage = await Data.getMessageByServerId(conversationId, serverId);
   if (!originalMessage) {
-    window?.log?.debug(
+    console.debug(
       `Cannot find the original reacted message ${serverId} in conversation ${conversationId}.`
     );
     return undefined;
@@ -264,7 +264,7 @@ const handleOpenGroupMessageReactions = async (
 ) => {
   const originalMessage = await Data.getMessageByServerId(conversationId, serverId);
   if (!originalMessage) {
-    window?.log?.debug(
+    console.debug(
       `Cannot find the original reacted message ${serverId} in conversation ${conversationId}.`
     );
     return undefined;
@@ -335,7 +335,7 @@ const handleOpenGroupMessageReactions = async (
 };
 
 const updateRecentReactions = async (reactions: Array<string>, newReaction: string) => {
-  window?.log?.info('updating recent reactions with', newReaction);
+  console.info('updating recent reactions with', newReaction);
   const recentReactions = new RecentReactions(reactions);
   const foundIndex = recentReactions.items.indexOf(newReaction);
   if (foundIndex === 0) {

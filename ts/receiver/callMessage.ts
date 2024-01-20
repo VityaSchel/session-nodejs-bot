@@ -52,7 +52,7 @@ export async function handleCallMessage(
     if (
       Math.max(sentTimestamp - GetNetworkTime.getNowWithNetworkOffset()) > TTL_DEFAULT.CALL_MESSAGE
     ) {
-      window?.log?.info('Dropping incoming OFFER callMessage sent a while ago: ', sentTimestamp);
+      console.info('Dropping incoming OFFER callMessage sent a while ago: ', sentTimestamp);
       await removeFromCache(envelope);
 
       return;

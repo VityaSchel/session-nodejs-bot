@@ -14,7 +14,7 @@ const PADDING_BYTE = 0x00;
  */
 export function removeMessagePadding(paddedData: ArrayBuffer): ArrayBuffer {
   const paddedPlaintext = new Uint8Array(paddedData);
-  // window?.log?.info('Removing message padding...');
+  // console.info('Removing message padding...');
   for (let i = paddedPlaintext.length - 1; i >= 0; i -= 1) {
     if (paddedPlaintext[i] === 0x80) {
       const plaintext = new Uint8Array(i);
@@ -22,7 +22,7 @@ export function removeMessagePadding(paddedData: ArrayBuffer): ArrayBuffer {
       return plaintext.buffer;
     }
     if (paddedPlaintext[i] !== PADDING_BYTE) {
-      // window?.log?.warn('got a message without padding... Letting it through for now');
+      // console.warn('got a message without padding... Letting it through for now');
       return paddedPlaintext;
     }
   }
@@ -35,7 +35,7 @@ export function removeMessagePadding(paddedData: ArrayBuffer): ArrayBuffer {
  * @param messageBuffer The buffer to add padding to.
  */
 export function addMessagePadding(messageBuffer: Uint8Array): Uint8Array {
-  // window?.log?.info('Adding message padding...');
+  // console.info('Adding message padding...');
 
   const plaintext = new Uint8Array(getPaddedMessageLength(messageBuffer.byteLength + 1) - 1);
   plaintext.set(new Uint8Array(messageBuffer));
@@ -62,7 +62,7 @@ export function getUnpaddedAttachment(
   data: ArrayBuffer,
   unpaddedExpectedSize: number
 ): ArrayBuffer | null {
-  // window?.log?.debug('Removing attachment padding...');
+  // console.debug('Removing attachment padding...');
 
   // to have a padding we must have a strictly longer length expected
   if (data.byteLength <= unpaddedExpectedSize) {
@@ -74,7 +74,7 @@ export function getUnpaddedAttachment(
 
 export function addAttachmentPadding(data: ArrayBuffer): ArrayBuffer {
   const originalUInt = new Uint8Array(data);
-  window?.log?.info('Adding attachment padding...');
+  console.info('Adding attachment padding...');
 
   let paddedSize = Math.max(
     541,

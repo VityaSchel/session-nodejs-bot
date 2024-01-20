@@ -39,7 +39,7 @@ const capabilitiesFetchForServer = async (
   });
   // not a batch call yet as we need to exclude headers for this call for now
   if (!batchGlobalIsSuccess(result)) {
-    window?.log?.warn('Capabilities Request Got unknown status code; res:', result);
+    console.warn('Capabilities Request Got unknown status code; res:', result);
     return null;
   }
 

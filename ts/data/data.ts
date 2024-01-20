@@ -1,7 +1,6 @@
 // eslint:disable: no-require-imports no-var-requires one-variable-per-declaration no-void-expression function-name
 
 import _ from 'lodash';
-import { MessageResultProps } from '../components/search/MessageSearchResults';
 import { ConversationModel } from '../models/conversation';
 import { ConversationAttributes } from '../models/conversationAttributes';
 import { MessageCollection, MessageModel } from '../models/message';
@@ -195,8 +194,8 @@ async function searchConversations(query: string): Promise<Array<any>> {
   return conversations;
 }
 
-async function searchMessages(query: string, limit: number): Promise<Array<MessageResultProps>> {
-  const messages = (await channels.searchMessages(query, limit)) as Array<MessageResultProps>;
+async function searchMessages(query: string, limit: number): Promise<Array<any>> {
+  const messages = (await channels.searchMessages(query, limit)) as Array<any>;
   return _.uniqWith(messages, (left: { id: string }, right: { id: string }) => {
     return left.id === right.id;
   });

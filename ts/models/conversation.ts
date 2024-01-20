@@ -715,7 +715,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
     const pubkeyForSending = new PubKey(this.id);
     await getMessageQueue()
       .sendToPubKey(pubkeyForSending, messageRequestResponse, SnodeNamespaces.UserMessages)
-      .catch(window?.log?.error);
+      .catch(console.error);
   }
 
   public async sendMessage(msg: SendMessageType) {
@@ -724,7 +724,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
     const expireTimer = this.get('expireTimer');
     const networkTimestamp = GetNetworkTime.getNowWithNetworkOffset();
 
-    window?.log?.info(
+    console.info(
       'Sending message to conversation',
       this.idForLogging(),
       'with networkTimestamp: ',
@@ -798,7 +798,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
       return;
     }
 
-    window?.log?.info("Update conversation 'expireTimer'", {
+    console.info("Update conversation 'expireTimer'", {
       id: this.idForLogging(),
       expireTimer,
       source,
@@ -877,7 +877,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
         SnodeNamespaces.UserMessages
       );
     } else {
-      window?.log?.warn('TODO: Expiration update for closed groups are to be updated');
+      console.warn('TODO: Expiration update for closed groups are to be updated');
       const expireUpdateForGroup = {
         ...expireUpdate,
         groupId: this.get('id'),
@@ -1024,7 +1024,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
       settingsReadReceiptEnabled && !this.isBlocked() && !this.isIncomingRequest();
 
     if (sendReceipt) {
-      window?.log?.info(`Sending ${timestamps.length} read receipts.`);
+      console.info(`Sending ${timestamps.length} read receipts.`);
       // we should probably stack read receipts and send them every 5 seconds for instance per conversation
 
       const receiptMessage = new ReadReceiptMessage({
@@ -1291,7 +1291,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
     }
 
     if (valueForced !== Boolean(this.isApproved())) {
-      window?.log?.info(`Setting ${ed25519Str(this.id)} isApproved to: ${value}`);
+      console.info(`Setting ${ed25519Str(this.id)} isApproved to: ${value}`);
       this.set({
         isApproved: valueForced,
       });
@@ -1312,7 +1312,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
     }
     const valueForced = Boolean(value);
     if (valueForced !== Boolean(this.didApproveMe())) {
-      window?.log?.info(`Setting ${ed25519Str(this.id)} didApproveMe to: ${value}`);
+      console.info(`Setting ${ed25519Str(this.id)} didApproveMe to: ${value}`);
       this.set({
         didApproveMe: valueForced,
       });
@@ -1543,7 +1543,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
 
     let friendRequestText;
     if (!this.isApproved()) {
-      window?.log?.info('notification cancelled for unapproved convo', this.idForLogging());
+      console.info('notification cancelled for unapproved convo', this.idForLogging());
       const hadNoRequestsPrior =
         getConversationController()
           .getConversations()
@@ -1560,7 +1560,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
       if (hadNoRequestsPrior && isFirstMessageOfConvo) {
         friendRequestText = window.i18n('youHaveANewFriendRequest');
       } else {
-        window?.log?.info(
+        console.info(
           'notification cancelled for as pending requests already exist',
           this.idForLogging()
         );
@@ -1571,7 +1571,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
     // make sure the notifications are not muted for this convo (and not the source convo)
     const convNotif = this.get('triggerNotificationsFor');
     if (convNotif === 'disabled') {
-      window?.log?.info('notifications disabled for convo', this.idForLogging());
+      console.info('notifications disabled for convo', this.idForLogging());
       return;
     }
     if (convNotif === 'mentions_only') {
@@ -1586,7 +1586,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
       const isReplyToOurMessage =
         quotedMessageAuthor && UserUtils.isUsFromCache(quotedMessageAuthor);
       if (!mentionMe && !isReplyToOurMessage) {
-        window?.log?.info(
+        console.info(
           'notifications disabled for non mentions or reply for convo',
           conversationId
         );
@@ -1620,7 +1620,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
 
   public async notifyIncomingCall() {
     if (!this.isPrivate()) {
-      window?.log?.info('notifyIncomingCall: not a private convo', this.idForLogging());
+      console.info('notifyIncomingCall: not a private convo', this.idForLogging());
       return;
     }
     const conversationId = this.id;
@@ -1628,7 +1628,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
     // make sure the notifications are not muted for this convo (and not the source convo)
     const convNotif = this.get('triggerNotificationsFor');
     if (convNotif === 'disabled') {
-      window?.log?.info(
+      console.info(
         'notifyIncomingCall: notifications disabled for convo',
         this.idForLogging()
       );
@@ -1817,12 +1817,12 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
     const groupUrl = this.getSogsOriginMessage();
 
     if (!PubKey.isBlinded(this.id)) {
-      window?.log?.warn('sendBlindedMessageRequest - convo is not a blinded one');
+      console.warn('sendBlindedMessageRequest - convo is not a blinded one');
       return;
     }
 
     if (!messageParams.body) {
-      window?.log?.warn('sendBlindedMessageRequest - needs a body');
+      console.warn('sendBlindedMessageRequest - needs a body');
       return;
     }
 
@@ -1831,7 +1831,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
     messageParams.lokiProfile = getOurProfile();
 
     if (!ourSignKeyBytes || !groupUrl) {
-      window?.log?.error(
+      console.error(
         'sendBlindedMessageRequest - Cannot get required information for encrypting blinded message.'
       );
       return;
@@ -1841,7 +1841,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
 
     if (!roomInfo || !roomInfo.serverPublicKey) {
       ToastUtils.pushToastError('no-sogs-matching', window.i18n('couldntFindServerMatching'));
-      window?.log?.error('Could not find room with matching server url', groupUrl);
+      console.error('Could not find room with matching server url', groupUrl);
       throw new Error(`Could not find room with matching server url: ${groupUrl}`);
     }
 
@@ -2110,7 +2110,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
     const device = new PubKey(recipientId);
     void getMessageQueue()
       .sendToPubKey(device, typingMessage, SnodeNamespaces.UserMessages)
-      .catch(window?.log?.error);
+      .catch(console.error);
   }
 
   private async replaceWithOurRealSessionId(toReplace: Array<string>) {

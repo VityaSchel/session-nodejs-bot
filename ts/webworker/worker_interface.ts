@@ -45,7 +45,7 @@ export class WorkerInterface {
       if (errorForDisplay) {
         // eslint:disable: no-console
 
-        window?.log?.error(`Error received from worker job ${jobId} (${fnName}):`, errorForDisplay);
+        console.error(`Error received from worker job ${jobId} (${fnName}):`, errorForDisplay);
         return reject(
           new Error(`Error received from worker job ${jobId} (${fnName}): ${errorForDisplay}`)
         );

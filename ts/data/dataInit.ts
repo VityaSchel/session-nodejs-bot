@@ -110,11 +110,11 @@ export async function shutdown() {
   _shuttingDown = true;
 
   const jobKeys = Object.keys(jobs);
-  window?.log?.info(`data.shutdown: starting process. ${jobKeys.length} jobs outstanding`);
+  console.info(`data.shutdown: starting process. ${jobKeys.length} jobs outstanding`);
 
   // No outstanding jobs, return immediately
   if (jobKeys.length === 0) {
-    window?.log?.info('data.shutdown: No outstanding jobs');
+    console.info('data.shutdown: No outstanding jobs');
 
     return null;
   }
@@ -122,7 +122,7 @@ export async function shutdown() {
   // Outstanding jobs; we need to wait until the last one is done
   _shutdownPromise = new Promise((resolve, reject) => {
     _shutdownCallback = (error: any) => {
-      window?.log?.info('data.shutdown: process complete');
+      console.info('data.shutdown: process complete');
       if (error) {
         return reject(error);
       }
@@ -217,7 +217,7 @@ function updateJob(id: number, data: any) {
         const end = Date.now();
         const delta = end - start;
         if (delta > 10) {
-          window?.log?.debug(`SQL channel job ${id} (${fnName}) succeeded in ${end - start}ms`);
+          console.debug(`SQL channel job ${id} (${fnName}) succeeded in ${end - start}ms`);
         }
       }
       return resolve(value);
@@ -225,7 +225,7 @@ function updateJob(id: number, data: any) {
     reject: (error: any) => {
       removeJob(id);
       const end = Date.now();
-      window?.log?.warn(`SQL channel job ${id} (${fnName}) failed in ${end - start}ms`);
+      console.warn(`SQL channel job ${id} (${fnName}) failed in ${end - start}ms`);
       return reject(error);
     },
   };
@@ -246,7 +246,7 @@ function removeJob(id: number) {
 
   if (_shutdownCallback) {
     const keys = Object.keys(jobs);
-    window?.log?.info(`removeJob: _shutdownCallback and we still have ${keys.length} jobs to run`);
+    console.info(`removeJob: _shutdownCallback and we still have ${keys.length} jobs to run`);
 
     if (keys.length === 0) {
       _shutdownCallback();
@@ -263,7 +263,7 @@ function makeJob(fnName: string) {
   const id = _jobCounter;
 
   if (_DEBUG) {
-    window?.log?.debug(`SQL channel job ${id} (${fnName}) started`);
+    console.debug(`SQL channel job ${id} (${fnName}) started`);
   }
   jobs[id] = {
     fnName,

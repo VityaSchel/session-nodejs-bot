@@ -18,7 +18,7 @@ export function banUser(userToBan: string, conversationId: string) {
   try {
     pubKeyToBan = PubKey.cast(userToBan);
   } catch (e) {
-    window?.log?.warn(e.message);
+    console.warn(e.message);
     ToastUtils.pushUserBanFailure();
     return;
   }
@@ -43,7 +43,7 @@ export function unbanUser(userToUnBan: string, conversationId: string) {
   try {
     pubKeyToUnban = PubKey.cast(userToUnBan);
   } catch (e) {
-    window?.log?.warn(e.message);
+    console.warn(e.message);
     ToastUtils.pushUserBanFailure();
     return;
   }
@@ -72,15 +72,15 @@ export async function removeSenderFromModerator(sender: string, convoId: string)
     const roomInfo = convo.toOpenGroupV2();
     const res = await sogsV3RemoveAdmins([pubKeyToRemove], roomInfo);
     if (!res) {
-      window?.log?.warn('failed to remove moderator:', res);
+      console.warn('failed to remove moderator:', res);
 
       ToastUtils.pushFailedToRemoveFromModerator();
     } else {
-      window?.log?.info(`${pubKeyToRemove.key} removed from moderators...`);
+      console.info(`${pubKeyToRemove.key} removed from moderators...`);
       ToastUtils.pushUserRemovedFromModerators();
     }
   } catch (e) {
-    window?.log?.error('Got error while removing moderator:', e);
+    console.error('Got error while removing moderator:', e);
   }
 }
 
@@ -92,15 +92,15 @@ export async function addSenderAsModerator(sender: string, convoId: string) {
     const roomInfo = convo.toOpenGroupV2();
     const res = await sogsV3AddAdmin([pubKeyToAdd], roomInfo);
     if (!res) {
-      window?.log?.warn('failed to add moderator:', res);
+      console.warn('failed to add moderator:', res);
 
       ToastUtils.pushFailedToAddAsModerator();
     } else {
-      window?.log?.info(`${pubKeyToAdd.key} added to moderators...`);
+      console.info(`${pubKeyToAdd.key} added to moderators...`);
       ToastUtils.pushUserAddedToModerators();
     }
   } catch (e) {
-    window?.log?.error('Got error while adding moderator:', e);
+    console.error('Got error while adding moderator:', e);
   }
 }
 
@@ -134,6 +134,6 @@ export const acceptOpenGroupInvitation = (completeUrl: string, roomName?: string
   if (completeUrl.match(openGroupV2CompleteURLRegex)) {
     acceptOpenGroupInvitationV2(completeUrl, roomName);
   } else {
-    window?.log?.warn('Invalid opengroup url:', completeUrl);
+    console.warn('Invalid opengroup url:', completeUrl);
   }
 };

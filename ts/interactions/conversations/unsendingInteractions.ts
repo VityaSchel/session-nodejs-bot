@@ -22,7 +22,7 @@ async function unsendMessagesForEveryone(
   conversation: ConversationModel,
   msgsToDelete: Array<MessageModel>
 ) {
-  window?.log?.info('Deleting messages for all users in this conversation');
+  console.info('Deleting messages for all users in this conversation');
   const destinationId = conversation.id;
   if (!destinationId) {
     return;
@@ -40,14 +40,14 @@ async function unsendMessagesForEveryone(
       unsendMsgObjects.map(unsendObject =>
         getMessageQueue()
           .sendToPubKey(new PubKey(destinationId), unsendObject, SnodeNamespaces.UserMessages)
-          .catch(window?.log?.error)
+          .catch(console.error)
       )
     );
     await Promise.all(
       unsendMsgObjects.map(unsendObject =>
         getMessageQueue()
           .sendSyncMessage({ namespace: SnodeNamespaces.UserMessages, message: unsendObject })
-          .catch(window?.log?.error)
+          .catch(console.error)
       )
     );
   } else if (conversation.isClosedGroup()) {
@@ -60,7 +60,7 @@ async function unsendMessagesForEveryone(
             namespace: SnodeNamespaces.ClosedGroupMessage,
             groupPubKey: new PubKey(destinationId),
           })
-          .catch(window?.log?.error);
+          .catch(console.error);
       })
     );
   }
@@ -79,7 +79,7 @@ function getUnsendMessagesObjects(messages: Array<MessageModel>) {
       // call getPropsForMessage here so we get the received_at or sent_at timestamp in timestamp
       const timestamp = message.getPropsForMessage().timestamp;
       if (!timestamp) {
-        window?.log?.error('cannot find timestamp - aborting unsend request');
+        console.error('cannot find timestamp - aborting unsend request');
         return undefined;
       }
 
@@ -219,7 +219,7 @@ async function unsendMessageJustForThisUser(
   conversation: ConversationModel,
   msgsToDelete: Array<MessageModel>
 ) {
-  window?.log?.warn('Deleting messages just for this user');
+  console.warn('Deleting messages just for this user');
 
   const unsendMsgObjects = getUnsendMessagesObjects(msgsToDelete);
 
@@ -228,7 +228,7 @@ async function unsendMessageJustForThisUser(
     unsendMsgObjects.map(unsendObject =>
       getMessageQueue()
         .sendSyncMessage({ namespace: SnodeNamespaces.UserMessages, message: unsendObject })
-        .catch(window?.log?.error)
+        .catch(console.error)
     )
   );
   await deleteMessagesFromSwarmAndCompletelyLocally(conversation, msgsToDelete);
@@ -434,10 +434,10 @@ async function deleteOpenGroupMessages(
   }
   // remove only the messages we managed to remove on the server
   if (allMessagesAreDeleted) {
-    window?.log?.info('Removed all those serverIds messages successfully');
+    console.info('Removed all those serverIds messages successfully');
     return validMessageModelsToRemove.map(m => m.id as string);
   }
-  window?.log?.info(
+  console.info(
     'failed to remove all those serverIds message. not removing them locally neither'
   );
   return [];

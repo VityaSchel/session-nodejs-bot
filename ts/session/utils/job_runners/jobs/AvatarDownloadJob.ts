@@ -164,7 +164,7 @@ class AvatarDownloadJob extends PersistedJob<AvatarDownloadPersistedData> {
           conversation = getConversationController().getOrThrow(convoId);
           ({ path } = upgraded);
         } catch (e) {
-          window?.log?.error(`[profileupdate] Could not decrypt profile image: ${e}`);
+          console.error(`[profileupdate] Could not decrypt profile image: ${e}`);
           return RunJobResult.RetryJobIfPossible; // so we retry this job
         }
 

@@ -105,7 +105,7 @@ async function getSessionIDForOnsName(onsNameCase: string) {
         throw new Error('ONSresolve: Hashing failed');
       }
     } catch (e) {
-      window?.log?.warn('ONSresolve: hashing failed', e);
+      console.warn('ONSresolve: hashing failed', e);
       throw new Error('ONSresolve: Hashing failed');
     }
 

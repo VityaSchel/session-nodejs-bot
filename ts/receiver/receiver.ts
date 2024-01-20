@@ -61,7 +61,7 @@ function queueSwarmEnvelope(envelope: EnvelopePlus, messageHash: string) {
   try {
     envelopeQueue.add(taskWithTimeout);
   } catch (error) {
-    window?.log?.error(
+    console.error(
       'queueSwarmEnvelope error handling envelope',
       id,
       ':',
@@ -117,7 +117,7 @@ async function handleRequestDetail(
 
     queueSwarmEnvelope(envelope, messageHash);
   } catch (error) {
-    window?.log?.error(
+    console.error(
       'handleRequest error trying to add message to cache:',
       error && error.stack ? error.stack : error
     );
@@ -137,7 +137,7 @@ export function handleRequest(
 
   const promise = handleRequestDetail(plaintext, inConversation, lastPromise, messageHash).catch(
     e => {
-      window?.log?.error('Error handling incoming message:', e && e.stack ? e.stack : e);
+      console.error('Error handling incoming message:', e && e.stack ? e.stack : e);
     }
   );
 
@@ -188,7 +188,7 @@ async function queueCached(item: UnprocessedParameter) {
       queueSwarmEnvelope(envelope, envelope.messageHash);
     }
   } catch (error) {
-    window?.log?.error(
+    console.error(
       'queueCached error handling item',
       item.id,
       'removing it. Error:',
@@ -198,7 +198,7 @@ async function queueCached(item: UnprocessedParameter) {
     try {
       await Data.removeUnprocessed(item.id);
     } catch (deleteError) {
-      window?.log?.error(
+      console.error(
         'queueCached error deleting item',
         item.id,
         'Error:',
@@ -210,14 +210,14 @@ async function queueCached(item: UnprocessedParameter) {
 
 function queueDecryptedEnvelope(envelope: any, plaintext: ArrayBuffer, messageHash: string) {
   const id = getEnvelopeId(envelope);
-  window?.log?.info('queueing decrypted envelope', id);
+  console.info('queueing decrypted envelope', id);
 
   const task = handleDecryptedEnvelope.bind(null, envelope, plaintext, messageHash);
   const taskWithTimeout = createTaskWithTimeout(task, `queueEncryptedEnvelope ${id}`);
   try {
     envelopeQueue.add(taskWithTimeout);
   } catch (error) {
-    window?.log?.error(
+    console.error(
       `queueDecryptedEnvelope error handling envelope ${id}:`,
       error && error.stack ? error.stack : error
     );

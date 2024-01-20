@@ -247,7 +247,7 @@ export async function updateOrCreateClosedGroup(details: GroupInfo) {
 
 async function sendNewName(convo: ConversationModel, name: string, messageId: string) {
   if (name.length === 0) {
-    window?.log?.warn('No name given for group update. Skipping');
+    console.warn('No name given for group update. Skipping');
     return;
   }
 
@@ -273,7 +273,7 @@ async function sendAddedMembers(
   groupUpdate: GroupInfo
 ) {
   if (!addedMembers?.length) {
-    window?.log?.warn('No addedMembers given for group update. Skipping');
+    console.warn('No addedMembers given for group update. Skipping');
     return;
   }
 
@@ -331,7 +331,7 @@ export async function sendRemovedMembers(
   messageId?: string
 ) {
   if (!removedMembers?.length) {
-    window?.log?.warn('No removedMembers given for group update. Skipping');
+    console.warn('No removedMembers given for group update. Skipping');
     return;
   }
   const ourNumber = UserUtils.getOurPubKeyFromCache();
@@ -360,7 +360,7 @@ export async function sendRemovedMembers(
     sentCb: async () => {
       if (isCurrentUserAdmin) {
         // we send the new encryption key only to members already here before the update
-        window?.log?.info(
+        console.info(
           `Sending group update: A user was removed from ${groupId} and we are the admin. Generating and sending a new EncryptionKeyPair`
         );
 
@@ -378,14 +378,14 @@ async function generateAndSendNewEncryptionKeyPair(
   const groupId = fromHexToArray(groupPublicKey);
 
   if (!groupConvo) {
-    window?.log?.warn(
+    console.warn(
       'generateAndSendNewEncryptionKeyPair: conversation not found',
       groupPublicKey
     );
     return;
   }
   if (!groupConvo.isClosedGroup()) {
-    window?.log?.warn(
+    console.warn(
       'generateAndSendNewEncryptionKeyPair: conversation not a closed group',
       groupPublicKey
     );
@@ -394,7 +394,7 @@ async function generateAndSendNewEncryptionKeyPair(
 
   const ourNumber = UserUtils.getOurPubKeyStrFromCache();
   if (!groupConvo.get('groupAdmins')?.includes(ourNumber)) {
-    window?.log?.warn('generateAndSendNewEncryptionKeyPair: cannot send it as a non admin');
+    console.warn('generateAndSendNewEncryptionKeyPair: cannot send it as a non admin');
     return;
   }
 
@@ -402,7 +402,7 @@ async function generateAndSendNewEncryptionKeyPair(
   const newKeyPair = await generateCurve25519KeyPairWithoutPrefix();
 
   if (!newKeyPair) {
-    window?.log?.warn('generateAndSendNewEncryptionKeyPair: failed to generate new keypair');
+    console.warn('generateAndSendNewEncryptionKeyPair: failed to generate new keypair');
     return;
   }
   // Distribute it
@@ -417,7 +417,7 @@ async function generateAndSendNewEncryptionKeyPair(
   distributingClosedGroupEncryptionKeyPairs.set(toHex(groupId), newKeyPair);
 
   const messageSentCallback = async () => {
-    window?.log?.info(
+    console.info(
       `KeyPairMessage for ClosedGroup ${groupPublicKey} is sent. Saving the new encryptionKeyPair.`
     );
 

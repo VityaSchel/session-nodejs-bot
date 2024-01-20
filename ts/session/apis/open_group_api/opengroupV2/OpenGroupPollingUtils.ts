@@ -36,7 +36,7 @@ const getOurOpenGroupHeaders = async (
   // this value is cached
   const signingKeys = await UserUtils.getUserED25519KeyPairBytes();
   if (!signingKeys) {
-    window?.log?.error('getOurOpenGroupHeaders - Unable to get our signing keys');
+    console.error('getOurOpenGroupHeaders - Unable to get our signing keys');
     return undefined;
   }
 
@@ -75,14 +75,14 @@ const getAllValidRoomInfos = (
           roomId,
         });
         if (!fetchedInfo) {
-          window?.log?.warn('Could not find this room getMessages');
+          console.warn('Could not find this room getMessages');
           return null;
         }
         allServerPubKeys.push(fetchedInfo.serverPublicKey);
 
         return fetchedInfo;
       } catch (e) {
-        window?.log?.warn('failed to fetch roominfos for room', roomId);
+        console.warn('failed to fetch roominfos for room', roomId);
         return null;
       }
     })
@@ -96,11 +96,11 @@ const getAllValidRoomInfos = (
     firstPubkey = allServerPubKeys[0];
     const allMatch = allServerPubKeys.every(p => p === firstPubkey);
     if (!allMatch) {
-      window?.log?.warn('All pubkeys do not match:', allServerPubKeys);
+      console.warn('All pubkeys do not match:', allServerPubKeys);
       return null;
     }
   } else {
-    window?.log?.warn('No pubkeys found:', allServerPubKeys);
+    console.warn('No pubkeys found:', allServerPubKeys);
     return null;
   }
   return validRoomInfos;

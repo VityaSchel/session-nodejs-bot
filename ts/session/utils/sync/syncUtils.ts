@@ -61,14 +61,14 @@ export const syncConfigurationIfNeeded = async () => {
 
     const configMessage = await getCurrentConfigurationMessage(allConvos);
     try {
-      // window?.log?.info('syncConfigurationIfNeeded with', configMessage);
+      // console.info('syncConfigurationIfNeeded with', configMessage);
 
       await getMessageQueue().sendSyncMessage({
         namespace: SnodeNamespaces.UserMessages,
         message: configMessage,
       });
     } catch (e) {
-      window?.log?.warn('Caught an error while sending our ConfigurationMessage:', e);
+      console.warn('Caught an error while sending our ConfigurationMessage:', e);
       // we do return early so that next time we use the old timestamp again
       // and so try again to trigger a sync
       return;
@@ -127,7 +127,7 @@ export const forceSyncConfigurationNowIfNeeded = async (waitForMessageSent = fal
         }
       })
       .catch(e => {
-        window?.log?.warn('Caught an error while building our ConfigurationMessage:', e);
+        console.warn('Caught an error while building our ConfigurationMessage:', e);
         resolve(false);
       });
   });
@@ -244,7 +244,7 @@ const getValidContacts = (convos: Array<ConversationModel>) => {
         didApproveMe: c.didApproveMe(),
       });
     } catch (e) {
-      window?.log.warn('getValidContacts', e);
+      console.warn('getValidContacts', e);
       return null;
     }
   });
@@ -262,7 +262,7 @@ export const getCurrentConfigurationMessage = async (
   const validContacts = getValidContacts(convos);
 
   if (!ourConvo) {
-    window?.log?.error('Could not find our convo while building a configuration message.');
+    console.error('Could not find our convo while building a configuration message.');
   }
 
   const ourProfileKeyHex =
@@ -366,7 +366,7 @@ export const buildSyncMessage = (
     (dataMessage as any).constructor.name !== 'DataMessage' &&
     !(dataMessage instanceof SignalService.DataMessage)
   ) {
-    window?.log?.warn('buildSyncMessage with something else than a DataMessage');
+    console.warn('buildSyncMessage with something else than a DataMessage');
   }
 
   if (!sentTimestamp || !_.isNumber(sentTimestamp)) {

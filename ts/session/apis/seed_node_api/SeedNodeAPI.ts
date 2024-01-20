@@ -22,7 +22,7 @@ export async function fetchSnodePoolFromSeedNodeWithRetries(
   seedNodes: Array<string>
 ): Promise<Array<Snode>> {
   try {
-    window?.log?.info(`fetchSnodePoolFromSeedNode with seedNodes.length ${seedNodes.length}`);
+    console.info(`fetchSnodePoolFromSeedNode with seedNodes.length ${seedNodes.length}`);
 
     let snodes = await getSnodeListFromSeednodeOneAtAtime(seedNodes);
     // make sure order of the list is random, so we get version in a non-deterministic way
@@ -35,7 +35,7 @@ export async function fetchSnodePoolFromSeedNodeWithRetries(
       pubkey_x25519: snode.pubkey_x25519,
       pubkey_ed25519: snode.pubkey_ed25519,
     }));
-    window?.log?.info(
+    console.info(
       'SeedNodeAPI::fetchSnodePoolFromSeedNodeWithRetries - Refreshed random snode pool with',
       snodes.length,
       'snodes'
@@ -43,7 +43,7 @@ export async function fetchSnodePoolFromSeedNodeWithRetries(
 
     return fetchSnodePool;
   } catch (e) {
-    window?.log?.warn(
+    console.warn(
       'SessionSnodeAPI::fetchSnodePoolFromSeedNodeWithRetries - error',
       e.code,
       e.message
@@ -154,9 +154,9 @@ async function getSnodeListFromSeednode(seedNodes: Array<string>): Promise<Array
 
   return pRetry(
     async () => {
-      window?.log?.info('getSnodeListFromSeednode starting...');
+      console.info('getSnodeListFromSeednode starting...');
       if (!seedNodes.length) {
-        window?.log?.info('loki_snode_api::getSnodeListFromSeednode - seedNodes are empty');
+        console.info('loki_snode_api::getSnodeListFromSeednode - seedNodes are empty');
         throw new Error('getSnodeListFromSeednode - seedNodes are empty');
       }
       // do not try/catch, we do want exception to bubble up so pRetry, well, retries
@@ -169,7 +169,7 @@ async function getSnodeListFromSeednode(seedNodes: Array<string>): Promise<Array
       factor: 2,
       minTimeout: SeedNodeAPI.getMinTimeout(),
       onFailedAttempt: e => {
-        window?.log?.warn(
+        console.warn(
           `fetchSnodePoolFromSeedNodeRetryable attempt #${e.attemptNumber} failed. ${e.retriesLeft} retries left... Error: ${e.message}`
         );
       },
@@ -188,16 +188,16 @@ export function getMinTimeout() {
 export async function TEST_fetchSnodePoolFromSeedNodeRetryable(
   seedNodes: Array<string>
 ): Promise<Array<SnodeFromSeed>> {
-  window?.log?.info('fetchSnodePoolFromSeedNodeRetryable starting...');
+  console.info('fetchSnodePoolFromSeedNodeRetryable starting...');
 
   if (!seedNodes.length) {
-    window?.log?.info('loki_snode_api::fetchSnodePoolFromSeedNodeRetryable - seedNodes are empty');
+    console.info('loki_snode_api::fetchSnodePoolFromSeedNodeRetryable - seedNodes are empty');
     throw new Error('fetchSnodePoolFromSeedNodeRetryable: Seed nodes are empty');
   }
 
   const seedNodeUrl = _.sample(seedNodes);
   if (!seedNodeUrl) {
-    window?.log?.warn(
+    console.warn(
       'loki_snode_api::fetchSnodePoolFromSeedNodeRetryable - Could not select random snodes from',
       seedNodes
     );
@@ -208,7 +208,7 @@ export async function TEST_fetchSnodePoolFromSeedNodeRetryable(
 
   const snodes = await getSnodesFromSeedUrl(tryUrl);
   if (snodes.length === 0) {
-    window?.log?.warn(
+    console.warn(
       `loki_snode_api::fetchSnodePoolFromSeedNodeRetryable - ${seedNodeUrl} did not return any snodes`
     );
     throw new Error(`Failed to contact seed node: ${seedNodeUrl}`);
@@ -226,7 +226,7 @@ async function getSnodesFromSeedUrl(urlObj: URL): Promise<Array<any>> {
   // Removed limit until there is a way to get snode info
   // for individual nodes (needed for guard nodes);  this way
   // we get all active nodes
-  window?.log?.info(`getSnodesFromSeedUrl starting with ${urlObj.href}`);
+  console.info(`getSnodesFromSeedUrl starting with ${urlObj.href}`);
 
   const params = {
     active_only: true,
@@ -261,12 +261,12 @@ async function getSnodesFromSeedUrl(urlObj: URL): Promise<Array<any>> {
     },
     agent: sslAgent,
   };
-  window?.log?.info(`insecureNodeFetch => plaintext for getSnodesFromSeedUrl  ${url}`);
+  console.info(`insecureNodeFetch => plaintext for getSnodesFromSeedUrl  ${url}`);
 
   const response = await insecureNodeFetch(url, fetchOptions);
 
   if (response.status !== 200) {
-    window?.log?.error(
+    console.error(
       `loki_snode_api:::getSnodesFromSeedUrl - invalid response from seed ${urlObj.toString()}:`,
       response
     );
@@ -276,7 +276,7 @@ async function getSnodesFromSeedUrl(urlObj: URL): Promise<Array<any>> {
   }
 
   if (response.headers.get('Content-Type') !== APPLICATION_JSON) {
-    window?.log?.error('Response is not json');
+    console.error('Response is not json');
     throw new Error(`getSnodesFromSeedUrl: response is not json Content-Type from ${urlObj.href}`);
   }
 
@@ -285,7 +285,7 @@ async function getSnodesFromSeedUrl(urlObj: URL): Promise<Array<any>> {
     const result = json.result;
 
     if (!result) {
-      window?.log?.error(
+      console.error(
         `loki_snode_api:::getSnodesFromSeedUrl - invalid result from seed ${urlObj.toString()}:`,
         response
       );
@@ -301,7 +301,7 @@ async function getSnodesFromSeedUrl(urlObj: URL): Promise<Array<any>> {
     }
     return validNodes;
   } catch (e) {
-    window?.log?.error('Invalid json response. error:', e.message);
+    console.error('Invalid json response. error:', e.message);
     throw new Error(`getSnodesFromSeedUrl: cannot parse content as JSON from ${urlObj.href}`);
   }
 }

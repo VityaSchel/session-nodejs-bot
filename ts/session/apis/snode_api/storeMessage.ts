@@ -60,7 +60,7 @@ async function storeOnNode(
     );
 
     if (!result || !result.length) {
-      window?.log?.warn(
+      console.warn(
         `SessionSnodeAPI::requestSnodesForPubkeyWithTargetNodeRetryable - sessionRpc on ${targetNode.ip}:${targetNode.port} returned falsish value`,
         result
       );
@@ -70,7 +70,7 @@ async function storeOnNode(
     const firstResult = result[0];
 
     if (firstResult.code !== 200) {
-      window?.log?.warn('first result status is not 200 for storeOnNode but: ', firstResult.code);
+      console.warn('first result status is not 200 for storeOnNode but: ', firstResult.code);
       throw new Error('storeOnNode: Invalid status code');
     }
 
@@ -78,7 +78,7 @@ async function storeOnNode(
 
     return result;
   } catch (e) {
-    window?.log?.warn('store - send error:', e, `destination ${targetNode.ip}:${targetNode.port}`);
+    console.warn('store - send error:', e, `destination ${targetNode.ip}:${targetNode.port}`);
     throw e;
   }
 }

@@ -158,7 +158,7 @@ async function send(
         if (foundMessage) {
           await foundMessage.updateMessageHash(messageSendHash);
           await foundMessage.commit();
-          window?.log?.info(
+          console.info(
             `updated message ${foundMessage.get('id')} with hash: ${foundMessage.get(
               'messageHash'
             )}`
@@ -236,7 +236,7 @@ async function sendMessagesDataToSnode(
     );
 
     if (!isEmpty(storeResults)) {
-      window?.log?.info(
+      console.info(
         `sendMessagesToSnode - Successfully stored messages to ${ed25519Str(destination)} via ${
           snode.ip
         }:${snode.port} on namespaces: ${rightDestination.map(m => m.namespace).join(',')}`
@@ -246,7 +246,7 @@ async function sendMessagesDataToSnode(
     return storeResults;
   } catch (e) {
     const snodeStr = snode ? `${snode.ip}:${snode.port}` : 'null';
-    window?.log?.warn(
+    console.warn(
       `sendMessagesToSnode - "${e.code}:${e.message}" to ${destination} via snode:${snodeStr}`
     );
     throw e;
@@ -429,7 +429,7 @@ async function sendMessagesToSnode(
           if (foundMessage) {
             await foundMessage.updateMessageHash(hashFoundInResponse);
             await foundMessage.commit();
-            window?.log?.info(
+            console.info(
               `updated message ${foundMessage.get('id')} with hash: ${foundMessage.get(
                 'messageHash'
               )}`

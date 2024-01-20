@@ -1,22 +1,16 @@
 import _ from 'lodash';
-import ReactDOM from 'react-dom';
-import Backbone from 'backbone';
-import React from 'react';
 import nativeEmojiData from '@emoji-mart/data';
 
 import { MessageModel } from '../models/message';
-import { isMacOS } from '../OS';
 import { queueAllCached } from '../receiver/receiver';
 import { getConversationController } from '../session/conversations';
-import { AttachmentDownloads, ToastUtils } from '../session/utils';
+import { AttachmentDownloads } from '../session/utils';
 import { getOurPubKeyStrFromCache } from '../session/utils/User';
 import { BlockedNumberController } from '../util';
 import { ExpirationTimerOptions } from '../util/expiringMessages';
-import { Notifications } from '../util/notifications';
 import { Registration } from '../util/registration';
 import { isSignInByLinking, Storage } from '../util/storage';
 import { Data } from '../data/data';
-import { deleteAllLogs } from '../node/logs';
 import { OpenGroupData } from '../data/opengroups';
 import { loadKnownBlindedKeys } from '../session/apis/open_group_api/sogsv3/knownBlindedkeys';
 import { initialiseEmojiData } from '../util/emoji';
@@ -193,10 +187,6 @@ async function connect() {
   }
 
   connectCount += 1;
-  Notifications.disable(); // avoid notification flood until empty
-  setTimeout(() => {
-    Notifications.enable();
-  }, 10 * 1000); // 10 sec
 
   setTimeout(() => {
     void queueAllCached();
@@ -207,8 +197,10 @@ async function connect() {
 
 }
 
+// @ts-ignore
 global.Session = global.Session || {};
 
+// @ts-ignore
 global.Session.setNewSessionID = (sessionID: string) => {
   console.log(sessionID)
 };

@@ -39,7 +39,7 @@ const handleOpenGroupMessage = async (
 ) => {
   const { serverUrl, roomId } = roomInfos;
   if (!base64EncodedData || !sentTimestamp || !sender || !serverId) {
-    window?.log?.warn('Invalid data passed to handleOpenGroupV2Message.');
+    console.warn('Invalid data passed to handleOpenGroupV2Message.');
     return;
   }
 
@@ -54,12 +54,12 @@ const handleOpenGroupMessage = async (
 
   const conversationId = getOpenGroupV2ConversationId(serverUrl, roomId);
   if (!conversationId) {
-    window?.log?.error('We cannot handle a message without a conversationId');
+    console.error('We cannot handle a message without a conversationId');
     return;
   }
   const idataMessage = decodedContent?.dataMessage;
   if (!idataMessage) {
-    window?.log?.error('Invalid decoded opengroup message: no dataMessage');
+    console.error('Invalid decoded opengroup message: no dataMessage');
     return;
   }
 
@@ -73,14 +73,14 @@ const handleOpenGroupMessage = async (
       .get(conversationId)
       ?.isOpenGroupV2()
   ) {
-    window?.log?.error('Received a message for an unknown convo or not an v2. Skipping');
+    console.error('Received a message for an unknown convo or not an v2. Skipping');
     return;
   }
 
   const groupConvo = getConversationController().get(conversationId);
 
   if (!groupConvo) {
-    window?.log?.warn('Skipping handleJob for unknown convo: ', conversationId);
+    console.warn('Skipping handleJob for unknown convo: ', conversationId);
     return;
   }
 

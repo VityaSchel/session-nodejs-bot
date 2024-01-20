@@ -34,7 +34,7 @@ export async function allowOnlyOneAtATime<T>(
       let timeoutTimer = null;
       if (timeoutMs) {
         timeoutTimer = setTimeout(() => {
-          window?.log?.warn(`allowOnlyOneAtATime - TIMEDOUT after ${timeoutMs}ms`);
+          console.warn(`allowOnlyOneAtATime - TIMEDOUT after ${timeoutMs}ms`);
 
           delete oneAtaTimeRecord[name]; // clear lock
           reject();
@@ -46,9 +46,9 @@ export async function allowOnlyOneAtATime<T>(
         innerRetVal = await process();
       } catch (e) {
         if (typeof e === 'string') {
-          window?.log?.error(`allowOnlyOneAtATime - error ${e}`);
+          console.error(`allowOnlyOneAtATime - error ${e}`);
         } else {
-          window?.log?.error(`allowOnlyOneAtATime - error ${e.code} ${e.message}`);
+          console.error(`allowOnlyOneAtATime - error ${e.code} ${e.message}`);
         }
 
         // clear timeout timer

@@ -161,7 +161,7 @@ async function _runJob(job: any) {
     }
 
     if (isOpenGroupV2 && (!openGroupV2Details?.serverUrl || !openGroupV2Details.roomId)) {
-      window?.log?.warn(
+      console.warn(
         'isOpenGroupV2 download attachment, but no valid openGroupV2Details given:',
         openGroupV2Details
       );

@@ -34,7 +34,7 @@ export async function doSnodeBatchRequest(
     timeout,
   });
   if (!result) {
-    window?.log?.warn(
+    console.warn(
       `doSnodeBatchRequest - sessionRpc could not talk to ${targetNode.ip}:${targetNode.port}`
     );
     throw new Error(

@@ -58,7 +58,7 @@ export const loadEmojiPanelI18n = async () => {
       return langData;
     } catch (err) {
       if (!langNotSupportedMessageShown) {
-        window?.log?.warn(
+        console.warn(
           'Language is not supported by emoji-mart package. See https://github.com/missive/emoji-mart/tree/main/packages/emoji-mart-data/i18n'
         );
         langNotSupportedMessageShown = true;

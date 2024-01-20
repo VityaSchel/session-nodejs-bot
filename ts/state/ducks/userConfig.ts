@@ -44,5 +44,6 @@ export const {
 export const userConfigReducer = reducer;
 
 export function showMessageRequestBannerOutsideRedux() {
-  window.inboxStore?.dispatch(actions.showMessageRequestBanner());
+  console.log('showMessageRequestBannerOutsideRedux')
+  // window.inboxStore?.dispatch(actions.showMessageRequestBanner());
 }

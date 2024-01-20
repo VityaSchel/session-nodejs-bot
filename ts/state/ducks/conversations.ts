@@ -349,7 +349,7 @@ async function getMessages({
   const conversation = getConversationController().get(conversationKey);
   if (!conversation) {
     // no valid conversation, early return
-    window?.log?.error('Failed to get convo on reducer.');
+    console.error('Failed to get convo on reducer.');
     return { messagesProps: [], quotesProps: {} };
   }
 
@@ -365,7 +365,7 @@ async function getMessages({
     m => m.getMessageModelProps()
   );
   const time = Date.now() - beforeTimestamp;
-  window?.log?.info(`Loading ${messagesProps.length} messages took ${time}ms to load.`);
+  console.info(`Loading ${messagesProps.length} messages took ${time}ms to load.`);
 
   const quotesProps: QuoteLookupType = {};
 
@@ -915,7 +915,7 @@ const conversationsSlice = createSlice({
       state: ConversationsStateType,
       action: PayloadAction<MentionsMembersType>
     ) {
-      window?.log?.info('updating mentions input members length', action.payload?.length);
+      console.info('updating mentions input members length', action.payload?.length);
       state.mentionMembers = action.payload;
       return state;
     },
@@ -923,7 +923,7 @@ const conversationsSlice = createSlice({
       state: ConversationsStateType,
       action: PayloadAction<{ conversationKey: string; isInitialFetchingInProgress: boolean }>
     ) {
-      window?.log?.info(
+      console.info(
         `mark conversation initialLoading ${action.payload.conversationKey}: ${action.payload.isInitialFetchingInProgress}`
       );
       if (state.conversationLookup[action.payload.conversationKey]) {

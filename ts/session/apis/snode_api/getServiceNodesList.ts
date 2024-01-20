@@ -44,7 +44,7 @@ async function getSnodePoolFromSnode(targetNode: Snode): Promise<Array<Snode>> {
     const json = firstResult.body;
 
     if (!json || !json.result || !json.result.service_node_states?.length) {
-      window?.log?.error('getSnodePoolFromSnode - invalid result from snode', firstResult);
+      console.error('getSnodePoolFromSnode - invalid result from snode', firstResult);
       return [];
     }
 
@@ -62,7 +62,7 @@ async function getSnodePoolFromSnode(targetNode: Snode): Promise<Array<Snode>> {
     // we the return list by the snode is already made of uniq snodes
     return _.compact(snodes);
   } catch (e) {
-    window?.log?.error('Invalid json response');
+    console.error('Invalid json response');
     return [];
   }
 }
@@ -77,7 +77,7 @@ async function getSnodePoolFromSnode(targetNode: Snode): Promise<Array<Snode>> {
 async function getSnodePoolFromSnodes() {
   const existingSnodePool = await SnodePool.getSnodePoolFromDBOrFetchFromSeed();
   if (existingSnodePool.length <= minSnodePoolCount) {
-    window?.log?.warn(
+    console.warn(
       'getSnodePoolFromSnodes: Cannot get snodes list from snodes; not enough snodes',
       existingSnodePool.length
     );

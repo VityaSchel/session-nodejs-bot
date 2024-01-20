@@ -827,7 +827,7 @@ async function handleConfigMessagesViaLibSession(
     return;
   }
 
-  window?.log?.debug(
+  console.debug(
     `Handling our sharedConfig message via libsession_util ${JSON.stringify(
       configMessages.map(m => ({
         variant: LibSessionUtil.kindToVariant(m.message.kind),
@@ -855,7 +855,7 @@ async function updateOurProfileLegacyOrViaLibSession(
   if (!isEmpty(displayName)) {
     trigger(configurationMessageReceived, displayName);
   } else {
-    window?.log?.warn('Got a configuration message but the display name is empty');
+    console.warn('Got a configuration message but the display name is empty');
   }
 }
 
@@ -870,7 +870,7 @@ async function handleOurProfileUpdateLegacy(
   }
   const latestProfileUpdateTimestamp = getLastProfileUpdateTimestamp();
   if (!latestProfileUpdateTimestamp || sentAt > latestProfileUpdateTimestamp) {
-    window?.log?.info(
+    console.info(
       `Handling our profileUdpate ourLastUpdate:${latestProfileUpdateTimestamp}, envelope sent at: ${sentAt}`
     );
     const { profileKey, profilePicture, displayName } = configMessage;
@@ -912,7 +912,7 @@ async function handleGroupsAndContactsFromConfigMessageLegacy(
     !lastConfigTimestamp || (lastConfigTimestamp && lastConfigTimestamp < envelopeTimestamp);
 
   if (!isNewerConfig) {
-    window?.log?.info('Received outdated configuration message... Dropping message.');
+    console.info('Received outdated configuration message... Dropping message.');
     return;
   }
 
@@ -952,7 +952,7 @@ const handleOpenGroupsFromConfigLegacy = async (openGroups: Array<string>) => {
     }
     const roomConvoId = getOpenGroupV2ConversationId(parsedRoom.serverUrl, parsedRoom.roomId);
     if (!getConversationController().get(roomConvoId)) {
-      window?.log?.info(
+      console.info(
         `triggering join of public chat '${currentOpenGroupUrl}' from ConfigurationMessage`
       );
       void joinOpenGroupV2WithUIEvents(currentOpenGroupUrl, false, true);
@@ -975,7 +975,7 @@ const handleClosedGroupsFromConfigLegacy = async (
   }
   const numberClosedGroup = closedGroups?.length || 0;
 
-  window?.log?.info(
+  console.info(
     `Received ${numberClosedGroup} closed group on configuration. Creating them... `
   );
   await Promise.all(
@@ -991,7 +991,7 @@ const handleClosedGroupsFromConfigLegacy = async (
       try {
         await handleNewClosedGroup(envelope, groupUpdate, true);
       } catch (e) {
-        window?.log?.warn('failed to handle a new closed group from configuration message');
+        console.warn('failed to handle a new closed group from configuration message');
       }
     })
   );
@@ -1059,7 +1059,7 @@ const handleContactFromConfigLegacy = async (
       contactReceived.profileKey || null
     );
   } catch (e) {
-    window?.log?.warn('failed to handle  a new closed group from configuration message');
+    console.warn('failed to handle  a new closed group from configuration message');
   }
 };
 
@@ -1077,7 +1077,7 @@ async function handleConfigurationMessageLegacy(
   const userConfigLibsession = await ReleasedFeatures.checkIsUserConfigFeatureReleased();
 
   if (userConfigLibsession && !isSignInByLinking()) {
-    window?.log?.info(
+    console.info(
       'useSharedUtilForUserConfig is set, not handling config messages with "handleConfigurationMessageLegacy()"'
     );
     await window.setSettingValue(SettingsKey.someDeviceOutdatedSyncing, true);
@@ -1085,14 +1085,14 @@ async function handleConfigurationMessageLegacy(
     return;
   }
 
-  window?.log?.info('Handling legacy configuration message');
+  console.info('Handling legacy configuration message');
   const ourPubkey = UserUtils.getOurPubKeyStrFromCache();
   if (!ourPubkey) {
     return;
   }
 
   if (envelope.source !== ourPubkey) {
-    window?.log?.info('Dropping configuration change from someone else than us.');
+    console.info('Dropping configuration change from someone else than us.');
     await removeFromCache(envelope);
     return;
   }

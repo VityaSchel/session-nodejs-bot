@@ -310,7 +310,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
       const url = new URL(invitation.url);
       serverAddress = url.origin;
     } catch (e) {
-      window?.log?.warn('failed to get hostname from opengroupv2 invitation', invitation);
+      console.warn('failed to get hostname from opengroupv2 invitation', invitation);
     }
 
     return {
@@ -550,7 +550,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
           image = this.getPropsForAttachment(preview.image);
         }
       } catch (e) {
-        window?.log?.info('Failed to show preview');
+        console.info('Failed to show preview');
       }
 
       return {
@@ -771,7 +771,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
   // One caller today: event handler for the 'Retry Send' entry on right click of a failed send message
   public async retrySend() {
     if (!window.isOnline) {
-      window?.log?.error('retrySend: Cannot retry since we are offline!');
+      console.error('retrySend: Cannot retry since we are offline!');
       return null;
     }
 
@@ -780,7 +780,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
     try {
       const conversation: ConversationModel | undefined = this.getConversation();
       if (!conversation) {
-        window?.log?.info(
+        console.info(
           'cannot retry send message, the corresponding conversation was not found.'
         );
         return null;
@@ -915,7 +915,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
 
   public async updateMessageHash(messageHash: string) {
     if (!messageHash) {
-      window?.log?.error('Message hash not provided to update message hash');
+      console.error('Message hash not provided to update message hash');
     }
     this.set({
       messageHash,
@@ -970,7 +970,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
       errors = [errors];
     }
     errors.forEach((e: any) => {
-      window?.log?.error(
+      console.error(
         'Message.saveErrors:',
         e && e.reason ? e.reason : null,
         e && e.stack ? e.stack : e
@@ -1081,7 +1081,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
         await this.commit();
       }
 
-      window?.log?.info('Set message expiration', {
+      console.info('Set message expiration', {
         expiresAt,
         sentAt: this.get('sent_at'),
       });

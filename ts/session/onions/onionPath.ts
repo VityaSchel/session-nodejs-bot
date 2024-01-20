@@ -71,7 +71,7 @@ export async function buildNewOnionPathsOneAtATime() {
     try {
       await buildNewOnionPathsWorker();
     } catch (e) {
-      window?.log?.warn(`buildNewOnionPathsWorker failed with ${e.message}`);
+      console.warn(`buildNewOnionPathsWorker failed with ${e.message}`);
     }
   });
 }
@@ -94,13 +94,13 @@ export async function dropSnodeFromPath(snodeEd25519: string) {
   );
 
   if (pathWithSnodeIndex === -1) {
-    window?.log?.warn(`Could not drop ${ed25519Str(snodeEd25519)} as it is not in any paths`);
+    console.warn(`Could not drop ${ed25519Str(snodeEd25519)} as it is not in any paths`);
     // this can happen for instance if the snode given is the destination snode.
     // like a `retrieve` request returns node not found being the request the snode is made to.
     // in this case, nothing bad is happening for the path. We just have to use another snode to do the request
     return;
   }
-  window?.log?.info(
+  console.info(
     `dropping snode ${ed25519Str(snodeEd25519)} from path index: ${pathWithSnodeIndex}`
   );
   // make a copy now so we don't alter the real one while doing stuff here
@@ -130,14 +130,14 @@ export async function getOnionPath({ toExclude }: { toExclude?: Snode }): Promis
 
   // the buildNewOnionPathsOneAtATime will try to fetch from seed if it needs more snodes
   while (onionPaths.length < minimumGuardCount) {
-    window?.log?.info(
+    console.info(
       `getOnionPath: Must have at least ${minimumGuardCount} good onion paths, actual: ${onionPaths.length}, attempt #${attemptNumber}`
     );
     try {
       // eslint-disable-next-line no-await-in-loop
       await buildNewOnionPathsOneAtATime();
     } catch (e) {
-      window?.log?.warn(`buildNewOnionPathsOneAtATime failed with ${e.message}`);
+      console.warn(`buildNewOnionPathsOneAtATime failed with ${e.message}`);
     }
     // should we add a delay? buildNewOnionPathsOneA  tATime should act as one
 
@@ -145,7 +145,7 @@ export async function getOnionPath({ toExclude }: { toExclude?: Snode }): Promis
     attemptNumber += 1;
 
     if (attemptNumber >= 10) {
-      window?.log?.error('Failed to get an onion path after 10 attempts');
+      console.error('Failed to get an onion path after 10 attempts');
       throw new Error(`Failed to build enough onion paths, current count: ${onionPaths.length}`);
     }
   }
@@ -202,7 +202,7 @@ export async function incrementBadPathCountOrDrop(snodeEd25519: string) {
   );
 
   if (pathWithSnodeIndex === -1) {
-    window?.log?.info('incrementBadPathCountOrDrop: Did not find any path containing this snode');
+    console.info('incrementBadPathCountOrDrop: Did not find any path containing this snode');
     // this might happen if the snodeEd25519 is the one of the target snode, just increment the target snode count by 1
     await Onions.incrementBadSnodeCountOrDrop({ snodeEd25519 });
 
@@ -211,13 +211,13 @@ export async function incrementBadPathCountOrDrop(snodeEd25519: string) {
 
   const guardNodeEd25519 = onionPaths[pathWithSnodeIndex][0].pubkey_ed25519;
 
-  window?.log?.info(
+  console.info(
     `incrementBadPathCountOrDrop starting with guard ${ed25519Str(guardNodeEd25519)}`
   );
 
   const pathWithIssues = onionPaths[pathWithSnodeIndex];
 
-  window?.log?.info('handling bad path for path index', pathWithSnodeIndex);
+  console.info('handling bad path for path index', pathWithSnodeIndex);
   const oldPathFailureCount = pathFailureCount[guardNodeEd25519] || 0;
 
   const newPathFailureCount = oldPathFailureCount + 1;
@@ -246,9 +246,9 @@ async function dropPathStartingWithGuardNode(guardNodeEd25519: string) {
 
   const failingPathIndex = onionPaths.findIndex(p => p[0].pubkey_ed25519 === guardNodeEd25519);
   if (failingPathIndex === -1) {
-    window?.log?.warn('No such path starts with this guard node ');
+    console.warn('No such path starts with this guard node ');
   } else {
-    window?.log?.info(
+    console.info(
       `Dropping path starting with guard node ${ed25519Str(
         guardNodeEd25519
       )}; index:${failingPathIndex}`
@@ -274,7 +274,7 @@ async function internalUpdateGuardNodes(updatedGuardNodes: Array<Snode>) {
 }
 
 export async function testGuardNode(snode: Snode) {
-  window?.log?.info(`Testing a candidate guard node ${ed25519Str(snode.pubkey_ed25519)}`);
+  console.info(`Testing a candidate guard node ${ed25519Str(snode.pubkey_ed25519)}`);
 
   // Send a post request and make sure it is OK
   const endpoint = '/storage_rpc/v1';
@@ -308,15 +308,15 @@ export async function testGuardNode(snode: Snode) {
   try {
     // Log this line for testing
     // curl -k -X POST -H 'Content-Type: application/json' -d '"+fetchOptions.body.replace(/"/g, "\\'")+"'", url
-    window?.log?.info('insecureNodeFetch => plaintext for testGuardNode');
+    console.info('insecureNodeFetch => plaintext for testGuardNode');
 
     response = await insecureNodeFetch(url, fetchOptions);
   } catch (e) {
     if (e.type === 'request-timeout') {
-      window?.log?.warn('test :,', ed25519Str(snode.pubkey_ed25519));
+      console.warn('test :,', ed25519Str(snode.pubkey_ed25519));
     }
     if (e.code === 'ENETUNREACH') {
-      window?.log?.warn('no network on node,', snode);
+      console.warn('no network on node,', snode);
       throw new pRetry.AbortError(ERROR_CODE_NO_CONNECT);
     }
     return false;
@@ -324,7 +324,7 @@ export async function testGuardNode(snode: Snode) {
 
   if (!response.ok) {
     await response.text();
-    window?.log?.info('Node failed the guard test:', snode);
+    console.info('Node failed the guard test:', snode);
   }
 
   return response.ok;
@@ -341,7 +341,7 @@ export async function selectGuardNodes(): Promise<Array<Snode>> {
 
   console.info(`selectGuardNodes snodePool length: ${nodePool.length}`);
   if (nodePool.length < SnodePool.minSnodePoolCount) {
-    window?.log?.error(
+    console.error(
       `Could not select guard nodes. Not enough nodes in the pool: ${nodePool.length}`
     );
     throw new Error(
@@ -360,7 +360,7 @@ export async function selectGuardNodes(): Promise<Array<Snode>> {
   // eslint-disable-next-line-no-await-in-loop
   while (selectedGuardNodes.length < desiredGuardCount) {
     if (!window.getGlobalOnlineStatus()) {
-      window?.log?.error('selectedGuardNodes: offline');
+      console.error('selectedGuardNodes: offline');
       throw new Error('selectedGuardNodes: offline');
     }
 
@@ -389,7 +389,7 @@ export async function selectGuardNodes(): Promise<Array<Snode>> {
 
   guardNodes = selectedGuardNodes.slice(0, desiredGuardCount);
   if (guardNodes.length < desiredGuardCount) {
-    window?.log?.error(`Cound't get enough guard nodes, only have: ${guardNodes.length}`);
+    console.error(`Cound't get enough guard nodes, only have: ${guardNodes.length}`);
     throw new Error(`Cound't get enough guard nodes, only have: ${guardNodes.length}`);
   }
 
@@ -414,7 +414,7 @@ export async function getGuardNodeOrSelectNewOnes() {
     const guardNodesFromDb = await Data.getGuardNodes();
 
     if (guardNodesFromDb.length === 0) {
-      window?.log?.warn(
+      console.warn(
         'SessionSnodeAPI::getGuardNodeOrSelectNewOnes - no guard nodes in DB. Will be selecting new guards nodes...'
       );
     } else {
@@ -423,7 +423,7 @@ export async function getGuardNodeOrSelectNewOnes() {
       const edKeys = guardNodesFromDb.map(x => x.ed25519PubKey);
       guardNodes = allNodes.filter(x => edKeys.indexOf(x.pubkey_ed25519) !== -1);
       if (guardNodes.length < edKeys.length) {
-        window?.log?.warn(
+        console.warn(
           `SessionSnodeAPI::getGuardNodeOrSelectNewOnes - could not find some guard nodes: ${guardNodes.length}/${edKeys.length} left`
         );
       }
@@ -441,7 +441,7 @@ export async function getGuardNodeOrSelectNewOnes() {
 async function buildNewOnionPathsWorker() {
   return pRetry(
     async () => {
-      window?.log?.info('SessionSnodeAPI::buildNewOnionPaths - building new onion paths...');
+      console.info('SessionSnodeAPI::buildNewOnionPaths - building new onion paths...');
 
       // get an up to date list of snodes from cache, from db, or from the a seed node.
       let allNodes = await SnodePool.getSnodePoolFromDBOrFetchFromSeed();
@@ -456,7 +456,7 @@ async function buildNewOnionPathsWorker() {
 
       // be sure to fetch again as that list might have been refreshed by selectGuardNodes
       allNodes = await SnodePool.getSnodePoolFromDBOrFetchFromSeed();
-      window?.log?.info(
+      console.info(
         `SessionSnodeAPI::buildNewOnionPaths, snodePool length: ${allNodes.length}`
       );
       // get all snodes minus the selected guardNodes
@@ -491,7 +491,7 @@ async function buildNewOnionPathsWorker() {
 
       // Each path needs nodesNeededPerPaths nodes in addition to the guard node:
       const maxPath = Math.floor(Math.min(guards.length, otherNodes.length / nodesNeededPerPaths));
-      window?.log?.info(
+      console.info(
         `Building ${maxPath} onion paths based on guard nodes length: ${guards.length}, other nodes length ${otherNodes.length} `
       );
 
@@ -512,14 +512,14 @@ async function buildNewOnionPathsWorker() {
         onionPaths.push(path);
       }
 
-      window?.log?.info(`Built ${onionPaths.length} onion paths`);
+      console.info(`Built ${onionPaths.length} onion paths`);
     },
     {
       retries: 3, // 4 total
       factor: 1,
       minTimeout: 1000,
       onFailedAttempt: e => {
-        window?.log?.warn(
+        console.warn(
           `buildNewOnionPathsWorker attempt #${e.attemptNumber} failed. ${e.retriesLeft} retries left... Error: ${e.message}`
         );
       },

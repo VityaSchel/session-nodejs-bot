@@ -132,7 +132,7 @@ async function retrieveNextMessages(
   );
 
   if (!results || !results.length) {
-    window?.log?.warn(
+    console.warn(
       `_retrieveNextMessages - sessionRpc could not talk to ${targetNode.ip}:${targetNode.port}`
     );
     throw new Error(
@@ -151,7 +151,7 @@ async function retrieveNextMessages(
   const firstResult = results[0];
 
   if (firstResult.code !== 200) {
-    window?.log?.warn(`retrieveNextMessages result is not 200 but ${firstResult.code}`);
+    console.warn(`retrieveNextMessages result is not 200 but ${firstResult.code}`);
     throw new Error(
       `_retrieveNextMessages - retrieve result is not 200 with ${targetNode.ip}:${targetNode.port} but ${firstResult.code}`
     );
@@ -173,7 +173,7 @@ async function retrieveNextMessages(
       namespace: namespaces[index],
     }));
   } catch (e) {
-    window?.log?.warn('exception while parsing json of nextMessage:', e);
+    console.warn('exception while parsing json of nextMessage:', e);
     if (!window.inboxStore?.getState().onionPaths.isOnline) {
       window.inboxStore?.dispatch(updateIsOnline(true));
     }

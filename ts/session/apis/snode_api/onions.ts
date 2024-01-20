@@ -119,7 +119,7 @@ async function encryptForRelayV2(
   ctx: DestinationContext
 ) {
   if (!destination.host && !destination.destination) {
-    window?.log?.warn('loki_rpc::encryptForRelayV2 - no destination', destination);
+    console.warn('loki_rpc::encryptForRelayV2 - no destination', destination);
   }
 
   const reqObj = {
@@ -191,7 +191,7 @@ async function buildOnionCtxs(
       if (!relayingToFinalDestination) {
         pubkeyHex = nodePath[i + 1].pubkey_ed25519;
         if (!pubkeyHex) {
-          window?.log?.error(
+          console.error(
             'loki_rpc:::buildOnionGuardNodePayload - no ed25519 for',
             nodePath[i + 1],
             'path node',
@@ -209,7 +209,7 @@ async function buildOnionCtxs(
       const ctx = await encryptForRelayV2(nodePath[i].pubkey_x25519, dest, ctxes[ctxes.length - 1]);
       ctxes.push(ctx);
     } catch (e) {
-      window?.log?.error(
+      console.error(
         'loki_rpc:::buildOnionGuardNodePayload - encryptForRelayV2 failure',
         e.code,
         e.message
@@ -259,7 +259,7 @@ function process406Or425Error(statusCode: number) {
 
 function processOxenServerError(_statusCode: number, body?: string) {
   if (body === OXEN_SERVER_ERROR) {
-    window?.log?.warn('[path] Got Oxen server Error. Not much to do if the server has troubles.');
+    console.warn('[path] Got Oxen server Error. Not much to do if the server has troubles.');
     throw new pRetry.AbortError(OXEN_SERVER_ERROR);
   }
 }
@@ -302,7 +302,7 @@ export async function processOnionRequestErrorAtDestination({
   if (statusCode === 200) {
     return;
   }
-  window?.log?.info(
+  console.info(
     `processOnionRequestErrorAtDestination. statusCode nok: ${statusCode}: "${body}"`
   );
   process406Or425Error(statusCode);
@@ -326,7 +326,7 @@ async function handleNodeNotFound({
   associatedWith?: string;
 }) {
   const shortNodeNotFound = ed25519Str(ed25519NotFound);
-  window?.log?.warn('Handling NODE NOT FOUND with: ', shortNodeNotFound);
+  console.warn('Handling NODE NOT FOUND with: ', shortNodeNotFound);
 
   if (associatedWith) {
     await dropSnodeFromSwarmIfNeeded(associatedWith, ed25519NotFound);
@@ -347,10 +347,10 @@ async function processAnyOtherErrorOnPath(
 ) {
   // this test checks for an error in your path.
   if (status !== 200) {
-    window?.log?.warn(`[path] Got status: ${status}`);
+    console.warn(`[path] Got status: ${status}`);
 
     if (status === 404 || status === 400) {
-      window?.log?.warn(
+      console.warn(
         'processAnyOtherErrorOnPathgot 404 or 400, probably a dead sogs. Skipping bad path update'
       );
       return;
@@ -386,7 +386,7 @@ async function processAnyOtherErrorAtDestination(
     status !== 406 && // handled in process406Error
     status !== 421 // handled in process421Error
   ) {
-    window?.log?.warn(`[path] Got status at destination: ${status}`);
+    console.warn(`[path] Got status at destination: ${status}`);
 
     if (body?.startsWith(NEXT_NODE_NOT_FOUND_PREFIX)) {
       const nodeNotFound = body.substr(NEXT_NODE_NOT_FOUND_PREFIX.length);
@@ -432,7 +432,7 @@ async function processOnionRequestErrorOnPath(
     }
   }
   if (httpStatusCode !== 200) {
-    window?.log?.warn('processOnionRequestErrorOnPath:', ciphertext);
+    console.warn('processOnionRequestErrorOnPath:', ciphertext);
   }
   process406Or425Error(httpStatusCode);
   await process421Error(httpStatusCode, cipherAsString, associatedWith, destinationEd25519Key);
@@ -446,7 +446,7 @@ async function processOnionRequestErrorOnPath(
 
 function processAbortedRequest(abortSignal?: AbortSignal) {
   if (abortSignal?.aborted) {
-    window?.log?.warn('[path] Call aborted');
+    console.warn('[path] Call aborted');
     // this will make the pRetry stop
     throw new pRetry.AbortError('Request got aborted');
   }
@@ -518,7 +518,7 @@ async function processOnionResponse({
   try {
     ciphertext = (await response?.text()) || '';
   } catch (e) {
-    window?.log?.warn(e);
+    console.warn(e);
   }
 
   await processOnionRequestErrorOnPath(
@@ -530,7 +530,7 @@ async function processOnionResponse({
   );
 
   if (!ciphertext) {
-    window?.log?.warn(
+    console.warn(
       '[path] sessionRpc::processingOnionResponse - Target node return empty ciphertext'
     );
     throw new Error('Target node return empty ciphertext');
@@ -548,15 +548,15 @@ async function processOnionResponse({
     plaintext = decoded.plaintext;
     ciphertextBuffer = decoded.ciphertextBuffer;
   } catch (e) {
-    window?.log?.error('[path] sessionRpc::processingOnionResponse - decode error', e);
+    console.error('[path] sessionRpc::processingOnionResponse - decode error', e);
     if (symmetricKey) {
-      window?.log?.error(
+      console.error(
         '[path] sessionRpc::processingOnionResponse - symmetricKey',
         toHex(symmetricKey)
       );
     }
     if (ciphertextBuffer) {
-      window?.log?.error(
+      console.error(
         '[path] sessionRpc::processingOnionResponse - ciphertextBuffer',
         toHex(ciphertextBuffer)
       );
@@ -565,13 +565,13 @@ async function processOnionResponse({
   }
 
   if (debug) {
-    window?.log?.debug('sessionRpc::processingOnionResponse - plaintext', plaintext);
+    console.debug('sessionRpc::processingOnionResponse - plaintext', plaintext);
   }
 
   try {
     const jsonRes = JSON.parse(plaintext, (_key, value) => {
       if (typeof value === 'number' && value > Number.MAX_SAFE_INTEGER) {
-        window?.log?.warn('Received an out of bounds js number');
+        console.warn('Received an out of bounds js number');
       }
       return value;
     }) as Record<string, any>;
@@ -587,7 +587,7 @@ async function processOnionResponse({
 
     return jsonRes as SnodeResponse;
   } catch (e) {
-    window?.log?.error(
+    console.error(
       `[path] sessionRpc::processingOnionResponse - Rethrowing error ${e.message}'`
     );
     throw e;
@@ -602,7 +602,7 @@ async function processNoSymmetricKeyError(
     const errorMsg =
       'No symmetric key to decode response, probably a time out on the onion request itself';
 
-    window?.log?.error(errorMsg);
+    console.error(errorMsg);
 
     await incrementBadPathCountOrDrop(guardNode.pubkey_ed25519);
 
@@ -632,7 +632,7 @@ async function processOnionResponseV4({
   const cipherText = (await response?.arrayBuffer()) || new ArrayBuffer(0);
 
   if (!cipherText) {
-    window?.log?.warn(
+    console.warn(
       '[path] sessionRpc::processOnionResponseV4 - Target node/path return empty ciphertext'
     );
     throw new Error('Target node return empty ciphertext');
@@ -708,7 +708,7 @@ async function handle421InvalidSwarm({
     // this does not make much sense to have a 421 without a publicKey set.
     throw new Error('status 421 without a final destination or no associatedWith makes no sense');
   }
-  window?.log?.info(`Invalidating swarm for ${ed25519Str(associatedWith)}`);
+  console.info(`Invalidating swarm for ${ed25519Str(associatedWith)}`);
 
   try {
     const parsedBody = JSON.parse(body);
@@ -716,7 +716,7 @@ async function handle421InvalidSwarm({
     // The snode isn't associated with the given public key anymore
     if (parsedBody?.snodes?.length) {
       // the snode gave us the new swarm. Save it for the next retry
-      window?.log?.warn(
+      console.warn(
         `Wrong swarm, now looking for pk ${ed25519Str(associatedWith)} at snodes: `,
         parsedBody.snodes.map((s: any) => ed25519Str(s.pubkey_ed25519))
       );
@@ -728,7 +728,7 @@ async function handle421InvalidSwarm({
     await dropSnodeFromSwarmIfNeeded(associatedWith, destinationSnodeEd25519);
   } catch (e) {
     if (e.message !== ERROR_421_HANDLED_RETRY_REQUEST) {
-      window?.log?.warn(
+      console.warn(
         'Got error while parsing 421 result. Dropping this snode from the swarm of this pubkey',
         e
       );
@@ -769,7 +769,7 @@ async function incrementBadSnodeCountOrDrop({
   const newFailureCount = oldFailureCount + 1;
   snodeFailureCount[snodeEd25519] = newFailureCount;
   if (newFailureCount >= snodeFailureThreshold) {
-    window?.log?.warn(
+    console.warn(
       `Failure threshold reached for snode: ${ed25519Str(snodeEd25519)}; dropping it.`
     );
 
@@ -781,7 +781,7 @@ async function incrementBadSnodeCountOrDrop({
 
     await OnionPaths.dropSnodeFromPath(snodeEd25519);
   } else {
-    window?.log?.warn(
+    console.warn(
       `Couldn't reach snode at: ${ed25519Str(
         snodeEd25519
       )}; setting his failure count to ${newFailureCount}`
@@ -847,7 +847,7 @@ async function sendOnionRequestHandlingSnodeEject({
     }
     decodingSymmetricKey = result.decodingSymmetricKey;
   } catch (e) {
-    window?.log?.warn('sendOnionRequestNoRetries error message: ', e.message);
+    console.warn('sendOnionRequestNoRetries error message: ', e.message);
     if (e.code === 'ENETUNREACH' || e.message === 'ENETUNREACH' || throwErrors) {
       throw e;
     }
@@ -975,7 +975,7 @@ const sendOnionRequestNoRetries = async ({
   // we want to forward the destination_ed25519_hex explicitly so remove it from the copy directly
   const finalDestOptions = cloneDeep(omit(finalDestOptionsOri, ['destination_ed25519_hex']));
   if (typeof destX25519hex !== 'string') {
-    window?.log?.warn('destX25519hex was not a string');
+    console.warn('destX25519hex was not a string');
     throw new Error('sendOnionRequestNoRetries: destX25519hex was not a string');
   }
 
@@ -1030,7 +1030,7 @@ const sendOnionRequestNoRetries = async ({
         : await encryptForPubKey(destX25519hex, finalDestOptions);
     }
   } catch (e) {
-    window?.log?.error(
+    console.error(
       'sendOnionRequestNoRetries - encryptForPubKey failure [',
       e.code,
       e.message,
@@ -1075,7 +1075,7 @@ const sendOnionRequestNoRetries = async ({
 
   const guardUrl = `https://${guardNode.ip}:${guardNode.port}/onion_req/v2`;
   // no logs for that one insecureNodeFetch as we do need to call insecureNodeFetch to our guardNodes
-  // window?.log?.info('insecureNodeFetch => plaintext for sendOnionRequestNoRetries');
+  // console.info('insecureNodeFetch => plaintext for sendOnionRequestNoRetries');
 
   const response = await insecureNodeFetch(guardUrl, guardFetchOptions);
   return { response, decodingSymmetricKey: destCtx.symmetricKey };
@@ -1140,7 +1140,7 @@ async function lokiOnionFetch({
         factor: 1,
         minTimeout: 100,
         onFailedAttempt: e => {
-          window?.log?.warn(
+          console.warn(
             `onionFetchRetryable attempt #${e.attemptNumber} failed. ${e.retriesLeft} retries left...`
           );
         },
@@ -1149,13 +1149,13 @@ async function lokiOnionFetch({
 
     return retriedResult as SnodeResponse | undefined;
   } catch (e) {
-    window?.log?.warn('onionFetchRetryable failed ', e.message);
+    console.warn('onionFetchRetryable failed ', e.message);
     if (e?.errno === 'ENETUNREACH') {
       // better handle the no connection state
       throw new Error(ERROR_CODE_NO_CONNECT);
     }
     if (e?.message === CLOCK_OUT_OF_SYNC_MESSAGE_ERROR) {
-      window?.log?.warn('Its a clock out of sync error ');
+      console.warn('Its a clock out of sync error ');
       throw new pRetry.AbortError(CLOCK_OUT_OF_SYNC_MESSAGE_ERROR);
     }
     throw e;

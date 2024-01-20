@@ -120,7 +120,7 @@ export class ConversationController {
         // this saves to DB and to the required wrapper
         await conversation.commit();
       } catch (error) {
-        window?.log?.error(
+        console.error(
           'Conversation save failed! ',
           id,
           type,
@@ -239,7 +239,7 @@ export class ConversationController {
       return;
     }
 
-    window?.log?.info('leaving community: ', conversation.id);
+    console.info('leaving community: ', conversation.id);
     const roomInfos = OpenGroupData.getV2OpenGroupRoom(conversation.id);
     if (roomInfos) {
       getOpenGroupManager().removeRoomFromPolledRooms(roomInfos);
@@ -358,11 +358,11 @@ export class ConversationController {
         console.info(`refreshAllWrappersMappedValues took ${Date.now() - start}ms`);
 
         this._initialFetchComplete = true;
-        window?.log?.info(
+        console.info(
           `ConversationController: done with initial fetch in ${Date.now() - startLoad}ms.`
         );
       } catch (error) {
-        window?.log?.error(
+        console.error(
           'ConversationController: initial fetch failed',
           error && error.stack ? error.stack : error
         );
@@ -420,7 +420,7 @@ export class ConversationController {
       try {
         await OpenGroupData.removeV2OpenGroupRoom(convoId);
       } catch (e) {
-        window?.log?.info('removeV2OpenGroupRoom failed:', e);
+        console.info('removeV2OpenGroupRoom failed:', e);
       }
     }
 
@@ -450,7 +450,7 @@ async function leaveClosedGroup(groupId: string, fromSyncMessage: boolean) {
   const convo = getConversationController().get(groupId);
 
   if (!convo || !convo.isClosedGroup()) {
-    window?.log?.error('Cannot leave non-existing group');
+    console.error('Cannot leave non-existing group');
     return;
   }
 
@@ -462,7 +462,7 @@ async function leaveClosedGroup(groupId: string, fromSyncMessage: boolean) {
 
   // if we are the admin, the group must be destroyed for every members
   if (isCurrentUserAdmin) {
-    window?.log?.info('Admin left a closed group. We need to destroy it');
+    console.info('Admin left a closed group. We need to destroy it');
     convo.set({ left: true });
     members = [];
     admins = [];
@@ -498,7 +498,7 @@ async function leaveClosedGroup(groupId: string, fromSyncMessage: boolean) {
     groupId,
   });
 
-  window?.log?.info(`We are leaving the group ${groupId}. Sending our leaving message.`);
+  console.info(`We are leaving the group ${groupId}. Sending our leaving message.`);
 
   // if we do not have a keypair for that group, we can't send our leave message, so just skip the message sending part
   const wasSent = await getMessageQueue().sendToPubKeyNonDurably({
@@ -509,11 +509,11 @@ async function leaveClosedGroup(groupId: string, fromSyncMessage: boolean) {
   // TODO our leaving message might fail to be sent for some specific reason we want to still delete the group.
   // for instance, if we do not have the encryption keypair anymore, we cannot send our left message, but we should still delete it's content
   if (wasSent) {
-    window?.log?.info(
+    console.info(
       `Leaving message sent ${groupId}. Removing everything related to this group.`
     );
   } else {
-    window?.log?.info(
+    console.info(
       `Leaving message failed to be sent for ${groupId}. But still removing everything related to this group....`
     );
   }
@@ -541,13 +541,13 @@ async function removeCommunityFromWrappers(conversationId: string) {
       );
     }
   } catch (e) {
-    window?.log?.info('SessionUtilConvoInfoVolatile.removeCommunityFromWrapper failed:', e.message);
+    console.info('SessionUtilConvoInfoVolatile.removeCommunityFromWrapper failed:', e.message);
   }
 
   // remove from the wrapper the entries before we remove the roomInfos, as we won't have the required community pubkey afterwards
   try {
     await SessionUtilUserGroups.removeCommunityFromWrapper(conversationId, conversationId);
   } catch (e) {
-    window?.log?.info('SessionUtilUserGroups.removeCommunityFromWrapper failed:', e.message);
+    console.info('SessionUtilUserGroups.removeCommunityFromWrapper failed:', e.message);
   }
 }

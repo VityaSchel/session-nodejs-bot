@@ -52,17 +52,17 @@ export async function handleSwarmContentMessage(envelope: EnvelopePlus, messageH
     // the sogs messages do not come as milliseconds but just seconds, so we override it
     await innerHandleSwarmContentMessage(envelope, sentAtTimestamp, plaintext, messageHash);
   } catch (e) {
-    window?.log?.warn(e.message);
+    console.warn(e.message);
   }
 }
 
 async function decryptForClosedGroup(envelope: EnvelopePlus) {
   // case .closedGroupCiphertext: for ios
-  window?.log?.info('received closed group message');
+  console.info('received closed group message');
   try {
     const hexEncodedGroupPublicKey = envelope.source;
     if (!GroupUtils.isClosedGroup(PubKey.cast(hexEncodedGroupPublicKey))) {
-      window?.log?.warn('received medium group message but not for an existing medium group');
+      console.warn('received medium group message but not for an existing medium group');
       throw new Error('Invalid group public key'); // invalidGroupPublicKey
     }
     const encryptionKeyPairs = await getAllCachedECKeyPair(hexEncodedGroupPublicKey);
@@ -100,7 +100,7 @@ async function decryptForClosedGroup(envelope: EnvelopePlus) {
         }
         keyIndex++;
       } catch (e) {
-        window?.log?.info(
+        console.info(
           `Failed to decrypt closed group with key index ${keyIndex}. We have ${encryptionKeyPairs.length} keys to try left.`
         );
       }
@@ -112,11 +112,11 @@ async function decryptForClosedGroup(envelope: EnvelopePlus) {
       );
     }
     if (keyIndex !== 0) {
-      window?.log?.warn(
+      console.warn(
         'Decrypted a closed group message with not the latest encryptionkeypair we have'
       );
     }
-    window?.log?.info('ClosedGroup Message decrypted successfully with keyIndex:', keyIndex);
+    console.info('ClosedGroup Message decrypted successfully with keyIndex:', keyIndex);
 
     return removeMessagePadding(decryptedContent);
   } catch (e) {
@@ -127,7 +127,7 @@ async function decryptForClosedGroup(envelope: EnvelopePlus) {
      *
      */
 
-    window?.log?.warn('decryptWithSessionProtocol for medium group message throw:', e.message);
+    console.warn('decryptWithSessionProtocol for medium group message throw:', e.message);
     const groupPubKey = PubKey.cast(envelope.source);
 
     // IMPORTANT do not remove the message from the cache just yet.
@@ -251,7 +251,7 @@ export async function decryptEnvelopeWithOurKey(
 
     return ret;
   } catch (e) {
-    window?.log?.warn('decryptWithSessionProtocol for unidentified message throw:', e);
+    console.warn('decryptWithSessionProtocol for unidentified message throw:', e);
     return null;
   }
 }
@@ -283,7 +283,7 @@ async function decrypt(envelope: EnvelopePlus): Promise<any> {
   perfStart(`updateCacheWithDecryptedContent-${envelope.id}`);
 
   await updateCacheWithDecryptedContent(envelope, plaintext).catch((error: any) => {
-    window?.log?.error(
+    console.error(
       'decrypt failed to save decrypted message contents to cache:',
       error && error.stack ? error.stack : error
     );
@@ -414,10 +414,10 @@ export async function innerHandleSwarmContentMessage(
       const envelopeSource = envelope.source;
       // We want to allow a blocked user message if that's a control message for a known group and the group is not blocked
       if (shouldDropBlockedUserMessage(content, envelopeSource)) {
-        window?.log?.info('Dropping blocked user message');
+        console.info('Dropping blocked user message');
         return;
       }
-      window?.log?.info('Allowing group-control message only from blocked user');
+      console.info('Allowing group-control message only from blocked user');
     }
 
     // if this is a direct message, envelope.senderIdentity is undefined
@@ -524,12 +524,12 @@ export async function innerHandleSwarmContentMessage(
       );
     }
   } catch (e) {
-    window?.log?.warn(e.message);
+    console.warn(e.message);
   }
 }
 
 async function onReadReceipt(readAt: number, timestamp: number, source: string) {
-  window?.log?.info('read receipt', source, timestamp);
+  console.info('read receipt', source, timestamp);
 
   if (!Storage.get(SettingsKey.settingsReadReceipt)) {
     return;
@@ -583,7 +583,7 @@ async function handleTypingMessage(
     const typingTimestamp = toNumber(timestamp);
 
     if (typingTimestamp !== envelopeTimestamp) {
-      window?.log?.warn(
+      console.warn(
         `Typing message envelope timestamp (${envelopeTimestamp}) did not match typing timestamp (${typingTimestamp})`
       );
       return;
@@ -613,7 +613,7 @@ async function handleUnsendMessage(envelope: EnvelopePlus, unsendMessage: Signal
   const { author: messageAuthor, timestamp } = unsendMessage;
   console.info(`handleUnsendMessage from ${messageAuthor}: of timestamp: ${timestamp}`);
   if (messageAuthor !== (envelope.senderIdentity || envelope.source)) {
-    window?.log?.error(
+    console.error(
       'handleUnsendMessage: Dropping request as the author and the sender differs.'
     );
     await removeFromCache(envelope);
@@ -621,13 +621,13 @@ async function handleUnsendMessage(envelope: EnvelopePlus, unsendMessage: Signal
     return;
   }
   if (!unsendMessage) {
-    window?.log?.error('handleUnsendMessage: Invalid parameters -- dropping message.');
+    console.error('handleUnsendMessage: Invalid parameters -- dropping message.');
     await removeFromCache(envelope);
 
     return;
   }
   if (!timestamp) {
-    window?.log?.error('handleUnsendMessage: Invalid timestamp -- dropping message');
+    console.error('handleUnsendMessage: Invalid timestamp -- dropping message');
     await removeFromCache(envelope);
 
     return;
@@ -682,7 +682,7 @@ async function handleMessageRequestResponse(
     return;
   }
   if (!messageRequestResponse) {
-    window?.log?.error('handleMessageRequestResponse: Invalid parameters -- dropping message.');
+    console.error('handleMessageRequestResponse: Invalid parameters -- dropping message.');
     await removeFromCache(envelope);
     return;
   }
@@ -765,7 +765,7 @@ async function handleMessageRequestResponse(
 
   if (!conversationToApprove || conversationToApprove.didApproveMe()) {
     await conversationToApprove?.commit();
-    window?.log?.info(
+    console.info(
       'Conversation already contains the correct value for the didApproveMe field.'
     );
     await removeFromCache(envelope);
@@ -800,14 +800,14 @@ export async function handleDataExtractionNotification(
 
   const convo = getConversationController().get(source);
   if (!convo || !convo.isPrivate() || !Storage.get(SettingsKey.settingsReadReceipt)) {
-    window?.log?.info(
+    console.info(
       'Got DataNotification for unknown or non private convo or read receipt not enabled'
     );
     return;
   }
 
   if (!type || !source) {
-    window?.log?.info('DataNotification pre check failed');
+    console.info('DataNotification pre check failed');
 
     return;
   }

@@ -22,7 +22,7 @@ async function requestSnodesForPubkeyWithTargetNodeRetryable(
   const result = await doSnodeBatchRequest(subRequests, targetNode, 4000, pubkey);
 
   if (!result || !result.length) {
-    window?.log?.warn(
+    console.warn(
       `SessionSnodeAPI::requestSnodesForPubkeyWithTargetNodeRetryable - sessionRpc on ${targetNode.ip}:${targetNode.port} returned falsish value`,
       result
     );
@@ -32,14 +32,14 @@ async function requestSnodesForPubkeyWithTargetNodeRetryable(
   const firstResult = result[0];
 
   if (firstResult.code !== 200) {
-    window?.log?.warn('Status is not 200 for get_swarm but: ', firstResult.code);
+    console.warn('Status is not 200 for get_swarm but: ', firstResult.code);
     throw new Error('requestSnodesForPubkeyWithTargetNodeRetryable: Invalid status code');
   }
 
   try {
     const body = firstResult.body;
     if (!body.snodes || !isArray(body.snodes) || !body.snodes.length) {
-      window?.log?.warn(
+      console.warn(
         `SessionSnodeAPI::requestSnodesForPubkeyRetryable - sessionRpc on ${targetNode.ip}:${targetNode.port} returned falsish value for snodes`,
         result
       );
@@ -72,7 +72,7 @@ async function requestSnodesForPubkeyWithTargetNode(
       minTimeout: 100,
       maxTimeout: 2000,
       onFailedAttempt: e => {
-        window?.log?.warn(
+        console.warn(
           `requestSnodesForPubkeyWithTargetNode attempt #${e.attemptNumber} failed. ${e.retriesLeft} retries left...`
         );
       },
@@ -97,7 +97,7 @@ async function requestSnodesForPubkeyRetryable(pubKey: string): Promise<Array<Sn
       minTimeout: 100,
       maxTimeout: 4000,
       onFailedAttempt: e => {
-        window?.log?.warn(
+        console.warn(
           `requestSnodesForPubkeyRetryable attempt #${e.attemptNumber} failed. ${e.retriesLeft} retries left...`
         );
       },
@@ -113,7 +113,7 @@ export async function requestSnodesForPubkeyFromNetwork(pubKey: string): Promise
     // if all retry fails, we will end up in the catch below when the last exception thrown
     return await requestSnodesForPubkeyRetryable(pubKey);
   } catch (e) {
-    window?.log?.error('SessionSnodeAPI::requestSnodesForPubkey - error', e);
+    console.error('SessionSnodeAPI::requestSnodesForPubkey - error', e);
 
     return [];
   }

@@ -486,7 +486,7 @@ export async function USER_callRecipient(recipient: string) {
   }
   await updateConnectedDevices();
   const now = Date.now();
-  window?.log?.info(`starting call with ${ed25519Str(recipient)}..`);
+  console.info(`starting call with ${ed25519Str(recipient)}..`);
   window.inboxStore?.dispatch(
     startingCallWith({
       pubkey: recipient,
@@ -806,13 +806,13 @@ export async function USER_acceptIncomingCallRequest(fromSender: string) {
   );
 
   if (!lastOfferMessage) {
-    window?.log?.info(
+    console.info(
       'incoming call request cannot be accepted as the corresponding message is not found'
     );
     return;
   }
   if (!lastOfferMessage.uuid) {
-    window?.log?.info('incoming call request cannot be accepted as uuid is invalid');
+    console.info('incoming call request cannot be accepted as uuid is invalid');
     return;
   }
   window.inboxStore?.dispatch(answerCall({ pubkey: fromSender }));
@@ -828,7 +828,7 @@ export async function USER_acceptIncomingCallRequest(fromSender: string) {
 
   const { sdps } = lastOfferMessage;
   if (!sdps || sdps.length === 0) {
-    window?.log?.info(
+    console.info(
       'incoming call request cannot be accepted as the corresponding sdps is empty'
     );
     return;
@@ -1147,7 +1147,7 @@ export async function handleCallTypeOffer(
       const callerConvo = getConversationController().get(sender);
       const convNotif = callerConvo?.get('triggerNotificationsFor') || 'disabled';
       if (convNotif === 'disabled') {
-        window?.log?.info('notifications disabled for convo', ed25519Str(sender));
+        console.info('notifications disabled for convo', ed25519Str(sender));
       } else if (callerConvo) {
         await callerConvo.notifyIncomingCall();
       }

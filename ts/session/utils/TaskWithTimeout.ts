@@ -15,7 +15,7 @@ export const createTaskWithTimeout = (task: any, id: string, givenTimeout?: numb
             errorForStack.stack
           }`;
 
-          window?.log?.error(message);
+          console.error(message);
           reject(new Error(message));
           return;
         }
@@ -30,7 +30,7 @@ export const createTaskWithTimeout = (task: any, id: string, givenTimeout?: numb
             global.clearTimeout(localTimer);
           }
         } catch (error) {
-          window?.log?.error(
+          console.error(
             id || '',
             'task ran into problem canceling timer. Calling stack:',
             errorForStack.stack

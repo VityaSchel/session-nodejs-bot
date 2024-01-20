@@ -16,7 +16,7 @@ async function updateOurProfileSync(
   const us = UserUtils.getOurPubKeyStrFromCache();
   const ourConvo = getConversationController().get(us);
   if (!ourConvo?.id) {
-    window?.log?.warn('[profileupdate] Cannot update our profile without convo associated');
+    console.warn('[profileupdate] Cannot update our profile without convo associated');
     return;
   }
 

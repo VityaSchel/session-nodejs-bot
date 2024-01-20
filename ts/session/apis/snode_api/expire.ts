@@ -88,7 +88,7 @@ async function processExpirationResults(
     if (!isEmpty(swarm[nodeKey].failed)) {
       const reason = 'Unknown';
       const statusCode = '404';
-      window?.log?.warn(
+      console.warn(
         `loki_message:::expireMessage - Couldn't delete data from: ${
           targetNode.pubkey_ed25519
         }${reason && statusCode && ` due to an error ${reason} (${statusCode})`}`
@@ -157,11 +157,11 @@ async function expireOnNodes(targetNode: Snode, params: UpdateExpireNodeParams) 
 
       return true;
     } catch (e) {
-      window?.log?.warn('expireOnNodes Failed to parse "swarm" result: ', e.msg);
+      console.warn('expireOnNodes Failed to parse "swarm" result: ', e.msg);
     }
     return false;
   } catch (e) {
-    window?.log?.warn('expire - send error:', e, `destination ${targetNode.ip}:${targetNode.port}`);
+    console.warn('expire - send error:', e, `destination ${targetNode.ip}:${targetNode.port}`);
     throw e;
   }
 }
@@ -229,7 +229,7 @@ export async function expireMessageOnSnode(props: ExpireMessageOnSnodeProps) {
     await expireOnNodes(snode, params);
   } catch (e) {
     const snodeStr = snode ? `${snode.ip}:${snode.port}` : 'null';
-    window?.log?.warn(
+    console.warn(
       `loki_message:::expireMessage - ${e.code ? `${e.code} ` : ''}${
         e.message
       } by ${ourPubKey} for ${messageHash} via snode:${snodeStr}`

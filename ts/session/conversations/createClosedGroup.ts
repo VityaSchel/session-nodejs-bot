@@ -122,7 +122,7 @@ async function sendToGroupMembers(
     encryptionKeyPair,
     existingExpireTimer
   );
-  window?.log?.info(`Sending invites for group ${groupPublicKey} to ${listOfMembers}`);
+  console.info(`Sending invites for group ${groupPublicKey} to ${listOfMembers}`);
   // evaluating if all invites sent, if failed give the option to retry failed invites via modal dialog
   const inviteResults = await Promise.all(promises);
   const allInvitesSent = _.every(inviteResults, inviteResult => inviteResult !== false);

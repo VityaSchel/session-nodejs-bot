@@ -37,7 +37,7 @@ async function fetchAllFromCache(): Promise<Array<UnprocessedParameter>> {
 
   if (count > 1500) {
     await Data.removeAllUnprocessed();
-    window?.log?.warn(`There were ${count} messages in cache. Deleted all instead of reprocessing`);
+    console.warn(`There were ${count} messages in cache. Deleted all instead of reprocessing`);
     return [];
   }
 
@@ -53,13 +53,13 @@ async function increaseAttemptsOrRemove(
 
       try {
         if (attempts >= 10) {
-          window?.log?.warn('increaseAttemptsOrRemove final attempt for envelope', item.id);
+          console.warn('increaseAttemptsOrRemove final attempt for envelope', item.id);
           await Data.removeUnprocessed(item.id);
         } else {
           await Data.updateUnprocessedAttempts(item.id, attempts);
         }
       } catch (error) {
-        window?.log?.error(
+        console.error(
           'increaseAttemptsOrRemove error updating item after load:',
           error && error.stack ? error.stack : error
         );
@@ -71,10 +71,10 @@ async function increaseAttemptsOrRemove(
 }
 
 export async function getAllFromCache() {
-  window?.log?.info('getAllFromCache');
+  console.info('getAllFromCache');
   const items = await fetchAllFromCache();
 
-  window?.log?.info('getAllFromCache loaded', items.length, 'saved envelopes');
+  console.info('getAllFromCache loaded', items.length, 'saved envelopes');
   return increaseAttemptsOrRemove(items);
 }
 
@@ -86,7 +86,7 @@ export async function getAllFromCacheForSource(source: string) {
     item => !!item.senderIdentity || item.senderIdentity === source
   );
 
-  window?.log?.info('getAllFromCacheForSource loaded', itemsFromSource.length, 'saved envelopes');
+  console.info('getAllFromCacheForSource loaded', itemsFromSource.length, 'saved envelopes');
 
   return increaseAttemptsOrRemove(itemsFromSource);
 }
@@ -98,7 +98,7 @@ export async function updateCacheWithDecryptedContent(
   const { id, senderIdentity, source } = envelope;
   const item = await Data.getUnprocessedById(id);
   if (!item) {
-    window?.log?.error(
+    console.error(
       `updateCacheWithDecryptedContent: Didn't find item ${id} in cache to update`
     );
     return;
