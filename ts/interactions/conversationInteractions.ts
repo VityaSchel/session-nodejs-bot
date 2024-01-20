@@ -3,10 +3,8 @@ import {
   ConversationNotificationSettingType,
   ConversationTypeEnum,
 } from '../models/conversationAttributes';
-import { CallManager, SyncUtils, ToastUtils, UserUtils } from '../session/utils';
+import { CallManager, SyncUtils, UserUtils } from '../session/utils';
 
-import { SessionButtonColor } from '../components/basic/SessionButton';
-import { getCallMediaPermissionsSettings } from '../components/settings/SessionSettings';
 import { Data } from '../data/data';
 import { SettingsKey } from '../data/settings-key';
 import { uploadFileToFsWithOnionV4 } from '../session/apis/file_server_api/FileServerApi';
@@ -19,22 +17,6 @@ import { fromHexToArray, toHex } from '../session/utils/String';
 import { ConfigurationSync } from '../session/utils/job_runners/jobs/ConfigurationSyncJob';
 import { SessionUtilContact } from '../session/utils/libsession/libsession_utils_contacts';
 import { forceSyncConfigurationNowIfNeeded } from '../session/utils/sync/syncUtils';
-import {
-  conversationReset,
-  quoteMessage,
-  resetConversationExternal,
-} from '../state/ducks/conversations';
-import {
-  adminLeaveClosedGroup,
-  changeNickNameModal,
-  updateAddModeratorsModal,
-  updateBanOrUnbanUserModal,
-  updateConfirmModal,
-  updateGroupMembersModal,
-  updateGroupNameModal,
-  updateInviteContactModal,
-  updateRemoveModeratorsModal,
-} from '../state/ducks/modalDialog';
 import { MIME } from '../types';
 import { IMAGE_JPEG } from '../types/MIME';
 import { processNewAttachment } from '../types/MessageAttachment';
@@ -55,11 +37,10 @@ export async function copyPublicKeyByConvoId(convoId: string) {
     }
 
     if (fromWrapper.fullUrlWithPubkey) {
-      window.clipboard.writeText(fromWrapper.fullUrlWithPubkey);
-      ToastUtils.pushCopiedToClipBoard();
+      console.log('Copy', fromWrapper.fullUrlWithPubkey);
     }
   } else {
-    window.clipboard.writeText(convoId);
+    console.log('Copy', convoId);
   }
 }
 
@@ -77,7 +58,7 @@ export async function blockConvoById(conversationId: string) {
 
   await BlockedNumberController.block(conversation.id);
   await conversation.commit();
-  ToastUtils.pushToastSuccess('blocked', window.i18n('blocked'));
+  console.log('blocked');
 }
 
 export async function unblockConvoById(conversationId: string) {
@@ -87,14 +68,14 @@ export async function unblockConvoById(conversationId: string) {
     // we assume it's a block contact and not group.
     // this is to be able to unlock a contact we don't have a conversation with.
     await BlockedNumberController.unblockAll([conversationId]);
-    ToastUtils.pushToastSuccess('unblocked', window.i18n('unblocked'));
+    console.log('unblocked');
     return;
   }
   if (!conversation.id || conversation.isPublic()) {
     return;
   }
   await BlockedNumberController.unblockAll([conversationId]);
-  ToastUtils.pushToastSuccess('unblocked', window.i18n('unblocked'));
+  console.log('unblocked');
   await conversation.commit();
 }
 

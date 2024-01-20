@@ -1,4 +1,3 @@
-import { ipcRenderer } from 'electron';
 import { channels } from './channels';
 import { ConfigDumpData } from './configDump/configDump';
 
@@ -143,7 +142,8 @@ function makeChannel(fnName: string) {
     const jobId = makeJob(fnName);
 
     return new Promise((resolve, reject) => {
-      ipcRenderer.send(SQL_CHANNEL_KEY, jobId, fnName, ...args);
+      // ipcRenderer.send(SQL_CHANNEL_KEY, jobId, fnName, ...args);
+      console.log('SEND', SQL_CHANNEL_KEY, jobId, fnName, ...args);
 
       updateJob(jobId, {
         resolve,
@@ -161,14 +161,15 @@ function makeChannel(fnName: string) {
 
 export async function callChannel(name: string): Promise<any> {
   return new Promise((resolve, reject) => {
-    ipcRenderer.send(name);
-    ipcRenderer.once(`${name}-done`, (_event, error) => {
-      if (error) {
-        return reject(error);
-      }
+    console.log(`${name}-done`, name);
+    // ipcRenderer.once(`${name}-done`, (_event, error) => {
+    //   if (error) {
+    //     return reject(error);
+    //   }
 
-      return resolve(undefined);
-    });
+    //   return resolve(undefined);
+    // });
+    resolve(undefined)
 
     setTimeout(
       () => reject(new Error(`callChannel call to ${name} timed out`)),
@@ -180,28 +181,28 @@ export async function callChannel(name: string): Promise<any> {
 export function initData() {
   // We listen to a lot of events on ipcRenderer, often on the same channel. This prevents
   //   any warnings that might be sent to the console in that case.
-  ipcRenderer.setMaxListeners(0);
+  // ipcRenderer.setMaxListeners(0);
 
   channelsToMake.forEach(makeChannel);
 
-  ipcRenderer.on(`${SQL_CHANNEL_KEY}-done`, (_event, jobId, errorForDisplay, result) => {
-    const job = getJob(jobId);
-    if (!job) {
-      throw new Error(
-        `Received SQL channel reply to job ${jobId}, but did not have it in our registry!`
-      );
-    }
+  // ipcRenderer.on(`${SQL_CHANNEL_KEY}-done`, (_event, jobId, errorForDisplay, result) => {
+  //   const job = getJob(jobId);
+  //   if (!job) {
+  //     throw new Error(
+  //       `Received SQL channel reply to job ${jobId}, but did not have it in our registry!`
+  //     );
+  //   }
 
-    const { resolve, reject, fnName } = job;
+  //   const { resolve, reject, fnName } = job;
 
-    if (errorForDisplay) {
-      return reject(
-        new Error(`Error received from SQL channel job ${jobId} (${fnName}): ${errorForDisplay}`)
-      );
-    }
+  //   if (errorForDisplay) {
+  //     return reject(
+  //       new Error(`Error received from SQL channel job ${jobId} (${fnName}): ${errorForDisplay}`)
+  //     );
+  //   }
 
-    return resolve(result);
-  });
+  //   return resolve(result);
+  // });
 }
 
 function updateJob(id: number, data: any) {

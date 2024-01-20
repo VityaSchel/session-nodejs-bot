@@ -1,7 +1,6 @@
 module.exports = {
   root: true,
   settings: {
-    'import/core-modules': ['electron'],
     'import/resolver': {
       node: {
         extensions: ['.js', '.jsx', '.ts', '.tsx'],

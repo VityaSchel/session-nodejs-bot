@@ -32,7 +32,8 @@
     "minimatch": "^3.0.5"
   },
   "scripts": {
-    "start": "node ./ts/mains/main_node.js",
+    "start:frontend": "node ./ts/mains/main_renderer.js",
+    "start:backend": "node ./ts/mains/main_node.js",
     "build": "yarn clean && yarn protobuf && yarn update-git-info && tsc && yarn build:workers",
     "build:watch": "yarn clean && yarn protobuf && yarn update-git-info && yarn build:workers && tsc -w",
     "build:workers": "yarn worker:utils && yarn worker:libsession",

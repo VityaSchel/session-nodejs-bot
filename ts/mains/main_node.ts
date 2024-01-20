@@ -181,6 +181,10 @@ async function showMainWindow(sqlKey: string, passwordAttempt = false) {
   });
 
   ready = true;
+
+  while(true) {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  }
 }
 
 //windowMarkShouldQuit()

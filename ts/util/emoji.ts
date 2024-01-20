@@ -4,7 +4,6 @@
 /* eslint-disable import/no-mutable-exports  */
 import { init, I18n } from 'emoji-mart';
 import { FixedBaseEmoji, NativeEmojiData } from '../types/Reaction';
-import { loadEmojiPanelI18n } from './i18n';
 
 export type SizeClassType = 'default' | 'small' | 'medium' | 'large' | 'jumbo';
 
@@ -82,7 +81,6 @@ export async function initialiseEmojiData(data: any): Promise<void> {
   data.ariaLabels = ariaLabels;
   nativeEmojiData = data;
 
-  i18nEmojiData = await loadEmojiPanelI18n();
   // Data needs to be initialised once per page load for the emoji components
   // See https://github.com/missive/emoji-mart#%EF%B8%8F%EF%B8%8F-headless-search
   await init({ data, i18n: i18nEmojiData });

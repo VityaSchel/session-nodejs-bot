@@ -60,8 +60,6 @@ Storage.onready(async () => {
     console.log(`New version detected: ${currentVersion}; previous: ${lastVersion}`);
 
     await Data.cleanupOrphanedAttachments();
-
-    await deleteAllLogs();
   }
   try {
     if (Registration.isDone()) {
