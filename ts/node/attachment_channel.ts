@@ -1,5 +1,4 @@
 import path from 'path';
-import { ipcMain } from 'electron';
 import { isString, map } from 'lodash';
 import rimraf from 'rimraf';
 import fse from 'fs-extra';
@@ -69,7 +68,7 @@ export async function initAttachmentsChannel({ userDataPath }: { userDataPath: s
 
   const attachmentsDir = getAttachmentsPath(userDataPath);
 
-  ipcMain.on(ERASE_ATTACHMENTS_KEY, event => {
+  global.SBOT.ERASE_ATTACHMENTS_KEY = event => {
     try {
       rimraf.sync(attachmentsDir);
       event.sender.send(`${ERASE_ATTACHMENTS_KEY}-done`);
@@ -78,10 +77,10 @@ export async function initAttachmentsChannel({ userDataPath }: { userDataPath: s
       console.log(`erase attachments error: ${errorForDisplay}`);
       event.sender.send(`${ERASE_ATTACHMENTS_KEY}-done`, error);
     }
-  });
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
-  ipcMain.on(CLEANUP_ORPHANED_ATTACHMENTS_KEY, async event => {
+  global.SBOT.CLEANUP_ORPHANED_ATTACHMENTS_KEY = async event => {
     try {
       await cleanupOrphanedAttachments(userDataPath);
       event.sender.send(`${CLEANUP_ORPHANED_ATTACHMENTS_KEY}-done`);
@@ -90,5 +89,5 @@ export async function initAttachmentsChannel({ userDataPath }: { userDataPath: s
       console.log(`cleanup orphaned attachments error: ${errorForDisplay}`);
       event.sender.send(`${CLEANUP_ORPHANED_ATTACHMENTS_KEY}-done`, error);
     }
-  });
+  }
 }

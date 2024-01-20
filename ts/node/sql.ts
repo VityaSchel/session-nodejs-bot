@@ -1,4 +1,3 @@
-import { app, clipboard, dialog, Notification } from 'electron';
 import fs from 'fs';
 import path from 'path';
 import * as BetterSqlite3 from '@signalapp/better-sqlite3';
@@ -46,7 +45,6 @@ import {
   OPEN_GROUP_ROOMS_V2_TABLE,
   toSqliteBoolean,
 } from './database_utility';
-import { LocaleMessagesType } from './locale'; // checked - only node
 import { StorageItem } from './storage_item'; // checked - only node
 
 import { OpenGroupV2Room } from '../data/opengroups';
@@ -124,11 +122,7 @@ function _initializePaths(configDir: string) {
 }
 
 function showFailedToStart() {
-  const notification = new Notification({
-    title: 'Session failed to start',
-    body: 'Please start from terminal and open a github issue',
-  });
-  notification.show();
+  console.error('Session failed to start', 'Please start from terminal and open a github issue')
 }
 
 async function initializeSql({
@@ -139,7 +133,7 @@ async function initializeSql({
 }: {
   configDir: string;
   key: string;
-  messages: LocaleMessagesType;
+  messages: [];
   passwordAttempt: boolean;
 }) {
   console.info('initializeSql sqlnode');
@@ -202,23 +196,23 @@ async function initializeSql({
       throw error;
     }
     console.log('Database startup error:', error.stack);
-    const button = await dialog.showMessageBox({
-      buttons: [messages.copyErrorAndQuit, messages.clearAllData],
-      defaultId: 0,
-      detail: redactAll(error.stack),
-      message: messages.databaseError,
-      noLink: true,
-      type: 'error',
-    });
+    // const button = await dialog.showMessageBox({
+    //   buttons: [messages.copyErrorAndQuit, messages.clearAllData],
+    //   defaultId: 0,
+    //   detail: redactAll(error.stack),
+    //   message: messages.databaseError,
+    //   noLink: true,
+    //   type: 'error',
+    // });
 
-    if (button.response === 0) {
-      clipboard.writeText(`Database startup error:\n\n${redactAll(error.stack)}`);
-    } else {
+    console.error(`Database startup error:\n\n${redactAll(error.stack)}`);
+    // if (button.response === 0) {
+    // } else {
       closeDbInstance();
       showFailedToStart();
-    }
+    // }
 
-    app.exit(1);
+    process.exit(1);
     return false;
   }
 

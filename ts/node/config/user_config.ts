@@ -1,8 +1,6 @@
 import path from 'path';
 import process from 'process';
 
-import { app } from 'electron';
-
 import { start } from './base_config';
 
 let storageProfile;
@@ -22,15 +20,11 @@ if (!isProduction) {
   }
 }
 
-if (storageProfile) {
-  const userData = path.join(app.getPath('appData'), `Session-${storageProfile}`);
+const userData = __dirname + '/../../session-data/'; 
 
-  app.setPath('userData', userData);
-}
+console.log(`userData: ${userData}`);
 
-console.log(`userData: ${app.getPath('userData')}`);
-
-const userDataPath = app.getPath('userData');
+const userDataPath = userData;
 const targetPath = path.join(userDataPath, 'config.json');
 
 export const userConfig = start('user', targetPath);

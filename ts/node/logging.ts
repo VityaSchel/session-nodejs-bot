@@ -4,7 +4,6 @@
 import path from 'path';
 import fs from 'fs';
 
-import { app, ipcMain as ipc } from 'electron';
 import Logger from 'bunyan';
 import _ from 'lodash';
 import firstline from 'firstline';
@@ -27,7 +26,8 @@ export async function initializeLogger() {
     throw new Error('Already called initialize!');
   }
 
-  const basePath = app.getPath('userData');
+  const userData = __dirname + '/../../session-data/'; 
+  const basePath = userData;
   const logPath = path.join(basePath, 'logs');
   fs.mkdirSync(logPath, { recursive: true });
 
@@ -53,36 +53,36 @@ export async function initializeLogger() {
       ],
     });
 
-    LEVELS.forEach(level => {
-      ipc.on(`log-${level}`, (_first, ...rest) => {
-        (logger as any)[level](...rest);
-      });
-    });
+    // LEVELS.forEach(level => {
+    //   ipc.on(`log-${level}`, (_first, ...rest) => {
+    //     (logger as any)[level](...rest);
+    //   });
+    // });
 
-    ipc.on('fetch-log', event => {
-      fs.mkdirSync(logPath, { recursive: true });
-      console.info('fetching logs from logPath');
+    // ipc.on('fetch-log', event => {
+    //   fs.mkdirSync(logPath, { recursive: true });
+    //   console.info('fetching logs from logPath');
 
-      fetch(logPath).then(
-        data => {
-          event.sender.send('fetched-log', data);
-        },
-        error => {
-          logger?.error(`Problem loading log from disk: ${error.stack}`);
-        }
-      );
-    });
+    //   fetch(logPath).then(
+    //     data => {
+    //       event.sender.send('fetched-log', data);
+    //     },
+    //     error => {
+    //       logger?.error(`Problem loading log from disk: ${error.stack}`);
+    //     }
+    //   );
+    // });
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    ipc.on('delete-all-logs', async event => {
-      try {
-        await deleteAllLogs(logPath);
-      } catch (error) {
-        logger?.error(`Problem deleting all logs: ${error.stack}`);
-      }
+    // ipc.on('delete-all-logs', async event => {
+    //   try {
+    //     await deleteAllLogs(logPath);
+    //   } catch (error) {
+    //     logger?.error(`Problem deleting all logs: ${error.stack}`);
+    //   }
 
-      event.sender.send('delete-all-logs-complete');
-    });
+    //   event.sender.send('delete-all-logs-complete');
+    // });
   });
 }
 
