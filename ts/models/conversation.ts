@@ -23,7 +23,7 @@ import { getMessageQueue } from '../session';
 import { getConversationController } from '../session/conversations';
 import { ClosedGroupVisibleMessage } from '../session/messages/outgoing/visibleMessage/ClosedGroupVisibleMessage';
 import { PubKey } from '../session/types';
-import { ToastUtils, UserUtils } from '../session/utils';
+import { UserUtils } from '../session/utils';
 import { BlockedNumberController } from '../util';
 import { MessageModel } from './message';
 import { MessageAttributesOptionals, MessageDirection } from './messageType';
@@ -52,10 +52,6 @@ import {
   ReduxConversationType,
 } from '../state/ducks/conversations';
 
-import {
-  ReplyingToMessageProps,
-  SendMessageType,
-} from '../components/conversation/composition/CompositionBox';
 import { OpenGroupData } from '../data/opengroups';
 import { SettingsKey } from '../data/settings-key';
 import {
@@ -94,7 +90,6 @@ import {
   roomHasReactionsEnabled,
   SaveConversationReturn,
 } from '../types/sqlSharedTypes';
-import { Notifications } from '../util/notifications';
 import { Reactions } from '../util/reactions';
 import { Registration } from '../util/registration';
 import { Storage } from '../util/storage';
@@ -111,7 +106,6 @@ import {
 
 import { LibSessionUtil } from '../session/utils/libsession/libsession_utils';
 import { SessionUtilUserProfile } from '../session/utils/libsession/libsession_utils_user_profile';
-import { ReduxSogsRoomInfos } from '../state/ducks/sogsRoomInfo';
 import {
   getCanWriteOutsideRedux,
   getModeratorsOutsideRedux,
@@ -169,7 +163,8 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
 
     this.typingRefreshTimer = null;
     this.typingPauseTimer = null;
-    window.inboxStore?.dispatch(conversationsChanged([this.getConversationModelProps()]));
+    // window.inboxStore?.dispatch(conversationsChanged([this.getConversationModelProps()]));
+    console.log('[SBOT/redux] conversationsChanged')
   }
 
   public idForLogging() {

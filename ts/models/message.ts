@@ -88,7 +88,6 @@ import { ReactionList } from '../types/Reaction';
 import { roomHasBlindEnabled } from '../types/sqlSharedTypes';
 import { ExpirationTimerOptions } from '../util/expiringMessages';
 import { LinkPreviews } from '../util/linkPreviews';
-import { Notifications } from '../util/notifications';
 import { Storage } from '../util/storage';
 import { ConversationModel } from './conversation';
 import { READ_MESSAGE_STATE } from './conversationAttributes';

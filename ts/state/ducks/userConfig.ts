@@ -44,6 +44,6 @@ export const {
 export const userConfigReducer = reducer;
 
 export function showMessageRequestBannerOutsideRedux() {
-  console.log('showMessageRequestBannerOutsideRedux')
   // window.inboxStore?.dispatch(actions.showMessageRequestBanner());
+  console.log('[SBOT/redux] showMessageRequestBannerOutsideRedux')
 }
