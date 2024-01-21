@@ -3,10 +3,11 @@
 /* eslint-disable import/first */
 /* eslint-disable import/order */
 /* eslint-disable no-console */
+import path from 'path'
 
 // @ts-ignore
 global.SBOT ??= {};
-global.SBOT.profileDataPath ||= __dirname + '../../session-data/'
+global.SBOT.profileDataPath ||= __dirname + '/../../session-data/'
 
 import fs from 'fs';
 import crypto from 'crypto';
@@ -152,7 +153,6 @@ async function showMainWindow(sqlKey: string, passwordAttempt = false) {
   await getSwarmPollingInstance().start()
 
   isReady = true
-  console.log('isReady')
 
   while(true) {
     await new Promise((resolve) => setTimeout(resolve, 3000));
