@@ -4,7 +4,7 @@ import { MessageModel } from '../models/message';
 import { Data } from '../data/data';
 import { AttachmentDownloads } from '../session/utils';
 import { ConversationModel } from '../models/conversation';
-import { OpenGroupRequestCommonType } from '../session/apis/open_group_api/opengroupV2/ApiUtil';
+// import { OpenGroupRequestCommonType } from '../session/apis/open_group_api/opengroupV2/ApiUtil';
 import { getUnpaddedAttachment } from '../session/crypto/BufferPadding';
 import { decryptAttachment } from '../util/crypto/attachmentsEncrypter';
 import { callUtilsWorker } from '../webworker/workers/browser/util_worker_interface';
@@ -100,7 +100,7 @@ export async function downloadAttachmentSogsV3(
     url: string;
     size: number | null;
   },
-  roomInfos: OpenGroupRequestCommonType
+  roomInfos: any//OpenGroupRequestCommonType
 ) {
   const roomDetails = OpenGroupData.getV2OpenGroupRoomByRoomId(roomInfos);
   if (!roomDetails) {

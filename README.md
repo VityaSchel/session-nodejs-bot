@@ -2,6 +2,17 @@
 
 Session node.js process that runs without renderer such as Electron.
 
+- [Session Node.js Bot](#session-nodejs-bot)
+- [WORK IN PROGRESS](#work-in-progress)
+  - [Features](#features)
+  - [Methods](#methods)
+    - [Get latest conversations](#get-latest-conversations)
+    - [Subscribe to new messages](#subscribe-to-new-messages)
+    - [Send message](#send-message)
+  - [Contributing](#contributing)
+  - [Donate](#donate)
+  - [License](#license)
+
 # WORK IN PROGRESS
 
 Since there is zero documentation about swarms and zero help from Session developers, I've decided to fork session-desktop and try to split render from node instead of writing everything from scratch.
@@ -11,7 +22,7 @@ This is why this repository mustn't be used in production. It is basically fun s
 ## Features
 
 - Onion routing, connection to swarms
-- Send messages to private chats (work in progress)
+- Send messages to private chats
 - Read private chats
 
 ## Methods
@@ -34,4 +45,47 @@ console.log('Convos', convos.map(c => [c.getContactProfileNameOrShortenedPubKey(
 fs.writeFileSync('convos.json', JSON.stringify(convos[0].toJSON(), null, 2))
 ```
 
-You can use any methods available in the official `ConversationModel` type inferred from Session-desktop app such as `conversationModel.isApproved()` and `conversationModel.isBlocked()`
+You can use any methods available in the official `ConversationModel` type inferred from Session-desktop app such as `c.get('id')`, `conversationModel.isApproved()`, `conversationModel.isBlocked()` and others
+
+### Subscribe to new messages
+
+Since Session (I suppose) does not store or retrieve messages history, you have to use receiver.js to receive events about new decrypted messages
+
+### Send message
+
+```ts
+const conversationModel = getConversationController().get('05f7fe7bd047099e5266c2ffbc74c88fc8543e6f16a08575e96959fedb2dd74d54')
+type msg = {
+  body: string;
+  attachments: Array<any> | undefined;
+  quote: any | undefined;
+  preview: any | undefined;
+  groupInvitation: { url: string | undefined; name: string } | undefined;
+}
+const message: msg = {
+  body: 'test!!! ' + new Date().toISOString(),
+  attachments: undefined,
+  quote: undefined,
+  preview: undefined,
+  groupInvitation: undefined,
+}
+await conversationModel.sendMessage(message)
+```
+
+## Contributing
+
+PRs are welcome! Feel free to help development.
+
+## Donate
+
+[Contact me in Telegram](https://t.me/hlothdev)
+
+## License
+
+[Session Desktop](https://github.com/oxen-io/session-desktop) is licensed under the GPLv3. Read more here: [https://github.com/oxen-io/session-desktop/blob/unstable/LICENSE]
+
+My work is licensed under the [MIT](./LICENSE.md) license.
+
+Both licenses allows you to use this project privately, commercially, modify, distribute, patent it. Both licenses state that neither Oxen nor me are responsible for any damages. 
+
+Use this software wisely.

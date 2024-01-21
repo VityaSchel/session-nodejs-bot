@@ -85,6 +85,12 @@ import { LibSessionUtil } from '../session/utils/libsession/libsession_utils';
 import { initData } from '../data/dataInit';
 import { Storage } from '../util/storage';
 import { runners } from '../session/utils/job_runners/JobRunner';
+import { queueAllCached } from '../receiver/receiver';
+import { AttachmentDownloads } from '../session/utils';
+import { getOurPubKeyStrFromCache } from '../session/utils/User';
+import { signInByLinkingDevice } from '../util/accountManager';
+import { Data } from '../data/data';
+import { getSwarmPollingInstance } from '../session/apis/snode_api';
 
 // Both of these will be set after app fires the 'ready' event
 let logger: Logger | null = null;
@@ -205,14 +211,26 @@ async function showMainWindow(sqlKey: string, passwordAttempt = false) {
       // I don't think there is anything we can do if this happens
       throw e;
     }
+  } else {
+    console.log('Registration is not done, not initializing LibSessionUtil');
   }
 
   await getConversationController().load()
   await BlockedNumberController.load()
   await getConversationController().loadPromise()
 
-  // const conversationModel = getConversationController().get('05f7fe7bd047099e5266c2ffbc74c88fc8543e6f16a08575e96959fedb2dd74d54')
-  // console.log(typeof conversationModel)
+  Registration.markDone()
+  // console.log('result', result)
+
+  setTimeout(() => {
+    void queueAllCached();
+  }, 10 * 1000); // 10 sec
+
+  await AttachmentDownloads.start({
+    logger: console,
+  });
+
+  // const conversationModel = getConversationController().get('0531da1c39e3e524c4fe7ee8ad8b50088204e43d650df97bfaee015f3cc174a85c')
   // type msg = {
   //   body: string;
   //   attachments: Array<any> | undefined;
@@ -227,16 +245,23 @@ async function showMainWindow(sqlKey: string, passwordAttempt = false) {
   //   preview: undefined,
   //   groupInvitation: undefined,
   // }
-  // await conversationModel.sendMessage(message)
+  
 
-  const convos = getConversationController().getConversations()
-    .filter(c => c.isPrivate() && c.isActive() && c.isBlo)
+  await new Promise(resolve => setTimeout(resolve, 1000))
 
-  console.log('Convos', convos.map(c => [c.getContactProfileNameOrShortenedPubKey()]))
-  fs.writeFileSync('convos.json', JSON.stringify(convos[0].toJSON(), null, 2))
+  runners.configurationSyncRunner.startProcessing();
+
+  await getSwarmPollingInstance().start()
 
   while(true) {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
+    await Data.getAllConversations()
+
+    const convos = getConversationController().getConversations()
+      .filter(c => c.isPrivate() && c.isActive() && c.get('id'))
+
+    console.log('Convos', convos.map(c => [c.getContactProfileNameOrShortenedPubKey(), c.toJSON().lastMessage]))
   }
 }
 

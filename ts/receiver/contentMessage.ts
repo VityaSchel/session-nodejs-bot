@@ -9,10 +9,10 @@ import { removeFromCache, updateCacheWithDecryptedContent } from './cache';
 
 import { Data } from '../data/data';
 import { SettingsKey } from '../data/settings-key';
-import {
-  deleteMessagesFromSwarmAndCompletelyLocally,
-  deleteMessagesFromSwarmAndMarkAsDeletedLocally,
-} from '../interactions/conversations/unsendingInteractions';
+// import {
+//   deleteMessagesFromSwarmAndCompletelyLocally,
+//   deleteMessagesFromSwarmAndMarkAsDeletedLocally,
+// } from '../interactions/conversations/unsendingInteractions';
 import {
   CONVERSATION_PRIORITIES,
   ConversationTypeEnum,
@@ -40,6 +40,8 @@ import { isUsFromCache } from '../session/utils/User';
 export async function handleSwarmContentMessage(envelope: EnvelopePlus, messageHash: string) {
   try {
     const plaintext = await decrypt(envelope);
+
+    console.log('RECEIVED', plaintext)
 
     if (!plaintext) {
       return;
@@ -654,9 +656,9 @@ async function handleUnsendMessage(envelope: EnvelopePlus, unsendMessage: Signal
     }
     if (messageToDelete.getSource() === UserUtils.getOurPubKeyStrFromCache()) {
       // a message we sent is completely removed when we get a unsend request
-      void deleteMessagesFromSwarmAndCompletelyLocally(conversation, [messageToDelete]);
+      // void deleteMessagesFromSwarmAndCompletelyLocally(conversation, [messageToDelete]);
     } else {
-      void deleteMessagesFromSwarmAndMarkAsDeletedLocally(conversation, [messageToDelete]);
+      // void deleteMessagesFromSwarmAndMarkAsDeletedLocally(conversation, [messageToDelete]);
     }
   } else {
     console.info(

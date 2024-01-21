@@ -185,6 +185,7 @@ async function queueCached(item: UnprocessedParameter) {
 
       queueDecryptedEnvelope(envelope, payloadPlaintext, envelope.messageHash);
     } else {
+      console.log('queueSwarmEnvelope')
       queueSwarmEnvelope(envelope, envelope.messageHash);
     }
   } catch (error) {

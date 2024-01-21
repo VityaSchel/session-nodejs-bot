@@ -1,5 +1,6 @@
 /* eslint-disable more/no-then */
 /* global document, URL, Blob */
+import { File } from 'web-file-polyfill';
 
 import { blobToArrayBuffer, dataURLToBlob } from 'blob-util';
 import { toLogFormat } from './Errors';
