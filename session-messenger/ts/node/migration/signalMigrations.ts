@@ -21,7 +21,7 @@ const openDbOptions = {
   // eslint-disable-next-line no-constant-condition
   verbose: false ? console.log : undefined,
 
-  nativeBinding: path.join(
+  nativeBinding: /*path.join(
     getAppRootPath(),
     '../node_modules',
     '@signalapp',
@@ -29,7 +29,12 @@ const openDbOptions = {
     'build',
     'Release',
     'better_sqlite3.node'
-  ),
+  ),*/
+    // new URL(
+    //   '@signalapp/better-sqlite3/build/Release/better_sqlite3.node',
+    //   import.meta.url
+    // ).pathname
+    require.resolve('@signalapp/better-sqlite3/build/Release/better_sqlite3.node')
 };
 
 // eslint:disable: one-variable-per-declaration
