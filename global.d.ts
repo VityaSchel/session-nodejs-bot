@@ -10,6 +10,7 @@ declare module globalThis {
     openInbox: () => any,
     ConfigurationSyncJobDone: () => any,
     SqlChannelKey: (...args: any) => any,
-    verbose: ('warn' | 'info' | 'error')[]
+    verbose: ('warn' | 'info' | 'error')[],
+    profileDataPath: string,
   }
 }

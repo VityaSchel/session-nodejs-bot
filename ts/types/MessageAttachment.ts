@@ -63,9 +63,8 @@ let internalDeleteOnDisk: ((relativePath: string) => Promise<void>) | undefined;
 let internalWriteNewAttachmentData: ((arrayBuffer: ArrayBuffer) => Promise<string>) | undefined;
 
 // userDataPath must be app.getPath('userData');
-export async function initializeAttachmentLogic() {
-  const userData = __dirname + '/../../session-data/'; 
-  const userDataPath = userData
+export async function initializeAttachmentLogic() { 
+  const userDataPath = global.SBOT.profileDataPath
 
   if (attachmentsPath) {
     throw new Error('attachmentsPath already initialized');

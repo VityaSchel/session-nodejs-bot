@@ -7,15 +7,24 @@ let isInitialized = false,
 global.SBOT ??= {}
 
 export async function initializeSession(options?: {
-  verbose?: ('warn' | 'info' | 'error')[]
+  verbose?: ('warn' | 'info' | 'error')[],
+  profileDataPath?: string
 }) {
   if (isInitialized || isInitializing) return
   isInitializing = true
+
   global.SBOT.verbose = options?.verbose ?? ['error']
+  if (options?.profileDataPath) {
+    let profileDataPath = options?.profileDataPath
+    if (!profileDataPath.endsWith('/')) profileDataPath += '/'
+    global.SBOT.profileDataPath = profileDataPath
+  }
+
   const { getIsReady } = await import('../ts/mains/main_node')
   await new Promise<void>(resolve => setInterval(() => {
     if (getIsReady()) resolve()
   }, 10))
+
   isInitialized = true
   isInitializing = false
 }

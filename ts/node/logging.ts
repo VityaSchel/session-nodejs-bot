@@ -27,9 +27,7 @@ export async function initializeLogger() {
     throw new Error('Already called initialize!');
   }
 
-  const userData = __dirname + '/../../session-data/'; 
-  const basePath = userData;
-  const logPath = path.join(basePath, 'logs');
+  const logPath = path.join(global.SBOT.profileDataPath, 'logs');
   fs.mkdirSync(logPath, { recursive: true });
 
   return cleanupLogs(logPath).then(() => {

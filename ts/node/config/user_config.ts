@@ -21,7 +21,7 @@ if (!isProduction) {
   }
 }
 
-const userData = __dirname + '/../../../session-data/'; 
+const userData = global.SBOT.profileDataPath
 
 console.log(`userData: ${userData}`);
 

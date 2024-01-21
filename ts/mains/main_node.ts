@@ -4,15 +4,16 @@
 /* eslint-disable import/order */
 /* eslint-disable no-console */
 
+// @ts-ignore
+global.SBOT ??= {};
+global.SBOT.profileDataPath ||= __dirname + '../../session-data/'
+
 import fs from 'fs';
 import crypto from 'crypto';
 import { console } from '../sessionjs-logger';
 
 import _ from 'lodash';
 import pify from 'pify';
-import Logger from 'bunyan';
-
-import packageJson from '../../package.json';
 
 const getRealPath = pify(fs.realpath);
 
@@ -22,7 +23,7 @@ import * as PasswordUtil from '../util/passwordUtils';
 import { initAttachmentsChannel } from '../node/attachment_channel';
 
 import { ephemeralConfig } from '../node/config/ephemeral_config';
-import { getLogger, initializeLogger } from '../node/logging';
+import { initializeLogger } from '../node/logging';
 import { sqlNode } from '../node/sql';
 import * as sqlChannels from '../node/sql_channel';
 
@@ -80,8 +81,7 @@ function getDefaultSQLKey() {
 
 async function removeDB() {
   // this don't remove attachments and stuff like that...
-  const userData = __dirname + '/../../session-data/'; 
-  const userDir = await getRealPath(userData);
+  const userDir = await getRealPath(global.SBOT.profileDataPath);
   sqlNode.removeDB(userDir);
 
   try {
@@ -95,8 +95,7 @@ async function removeDB() {
 }
 
 async function showMainWindow(sqlKey: string, passwordAttempt = false) {
-  const userData = __dirname + '/../../session-data/'; 
-  const userDataPath = await getRealPath(userData);
+  const userDataPath = await getRealPath(global.SBOT.profileDataPath);
 
   await sqlNode.initializeSql({
     configDir: userDataPath,
