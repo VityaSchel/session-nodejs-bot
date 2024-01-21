@@ -1,5 +1,5 @@
-import { SignalService } from "../ts/protobuf";
-import { ConversationModel } from "../ts/models/conversation";
+import { SignalService } from "../session-messenger/ts/protobuf";
+import { ConversationModel } from "../session-messenger/ts/models/conversation";
 
 type EventCallback<T extends (...args: any[]) => any> = T;
 

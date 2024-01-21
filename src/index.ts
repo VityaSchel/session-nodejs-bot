@@ -1,4 +1,4 @@
-import { getConversationController } from '../ts/session/conversations'
+import { getConversationController } from '../session-messenger/ts/session/conversations'
 
 let isInitialized = false,
   isInitializing = false
@@ -20,7 +20,7 @@ export async function initializeSession(options?: {
     global.SBOT.profileDataPath = profileDataPath
   }
 
-  const { getIsReady } = await import('../ts/mains/main_node')
+  const { getIsReady } = await import('../session-messenger/ts/mains/main_node')
   await new Promise<void>(resolve => setInterval(() => {
     if (getIsReady()) resolve()
   }, 10))

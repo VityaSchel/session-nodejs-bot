@@ -12,9 +12,9 @@ release/
 sql/
 
 # React / TypeScript
-ts/**/*.js
-ts/protobuf/*.d.ts
-ts/**/*.js.map
+session-messenger/ts/**/*.js
+session-messenger/ts/protobuf/*.d.ts
+session-messenger/ts/**/*.js.map
 
 
 # Swapfiles
@@ -34,8 +34,8 @@ yarn-error.log
 .vscrof/
 
 *.js.map
-ts/node/**/*.d.ts
-ts/node/**/*.d.ts.map
+session-messenger/ts/node/**/*.d.ts
+session-messenger/ts/node/**/*.d.ts.map
 
 test-results/
 
@@ -44,7 +44,7 @@ coverage/
 stylesheets/dist/
 
 *.worker.js.LICENSE.txt
-ts/webworker/workers/node/**/*.node
+session-messenger/ts/webworker/workers/node/**/*.node
 
 bot.md
 

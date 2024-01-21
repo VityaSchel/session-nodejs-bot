@@ -1,7 +1,7 @@
 import { initializeSession, EventEmitter, sendMessage } from '../src'
 
 async function main() {
-  await initializeSession()
+  await initializeSession({ verbose: ['error', 'warn', 'info'] })
   const events = new EventEmitter()
   events.on('message', (message, conversation) => {
     if (message.dataMessage) {
