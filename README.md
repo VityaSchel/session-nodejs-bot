@@ -1,13 +1,14 @@
-# Session Node.js Bot
+# Session Node.js Client
 
-Session fork that runs entirely inside Node.js without renderer such as Electron. Exports useful methods to easily build your own bots
+Headless Session messenger instance that runs entirely inside Node.js without renderer such as Electron. Use it in your bots as a NPM module.
 
 [![Watch demo](https://img.youtube.com/vi/af7-DFSbFZ4/0.jpg)](https://www.youtube.com/watch?v=af7-DFSbFZ4)
 
-- [Session Node.js Bot](#session-nodejs-bot)
+- [Session Node.js Client](#session-nodejs-client)
 - [WORK IN PROGRESS](#work-in-progress)
   - [Features](#features)
-  - [Get started](#get-started)
+  - [Installation](#installation)
+  - [Building from source](#building-from-source)
   - [Examples](#examples)
     - [Calculator bot](#calculator-bot)
   - [Methods](#methods)
@@ -37,7 +38,19 @@ This is why this repository mustn't be used in production. It is basically fun s
 - Read private chats
 - Subscribe to new messages (swarm polling)
 
-## Get started
+## Installation
+
+Using npm:
+```
+npm i session-messenger-nodejs
+```
+
+Using pnpm:
+```
+pnpm i session-messenger-nodejs
+```
+
+## Building from source
 
 1. Follow official instructions on how to setup environment for Session development: <https://github.com/oxen-io/session-desktop/blob/unstable/CONTRIBUTING.md>
 2. Once you've installed everythin (`yarn install --frozen-lockfile`) stop here, and then follow instructions from this repository:
