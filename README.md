@@ -1,6 +1,6 @@
 # Session Node.js Client
 
-Headless Session messenger instance that runs entirely inside Node.js without renderer such as Electron. Use it in your bots as a NPM module.
+Headless Session messenger instance that runs entirely inside Node.js without renderer such as Electron. Use it in your bots as a NPM module (2.1MB).
 
 [![Watch demo](https://img.youtube.com/vi/af7-DFSbFZ4/0.jpg)](https://www.youtube.com/watch?v=af7-DFSbFZ4)
 
@@ -53,7 +53,7 @@ pnpm i session-messenger-nodejs
 ## Building from source
 
 1. Follow official instructions on how to setup environment for Session development: <https://github.com/oxen-io/session-desktop/blob/unstable/CONTRIBUTING.md>
-2. Once you've installed everythin (`yarn install --frozen-lockfile`) stop here, and then follow instructions from this repository:
+2. Once you've installed everything (`yarn install --frozen-lockfile`) stop here, and then follow instructions from this repository:
 3. Generate Session profile by using official up-to-date Session app on the same hardware. Then copy it to `session-data` directory. There should be files like `config.json` and directories like `attachments.noindex`
 4. You can now start writing your code anywhere inside repository. Import useful methods from `src/index.ts` such as `initializeSession`. NPM publishing is in process
 5. When you're ready for testing, run `yarn build` and `yarn start`. Please note that currently `yarn build` throws a lot of errors that you should ignore and note that it will return exit code 2, so simply running `yarn build && yarn start` **won't work**. Run commands separately or run `yarn build ; yarn start`
