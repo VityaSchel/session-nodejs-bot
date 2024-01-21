@@ -19,7 +19,7 @@ export class WorkerInterface {
   private readonly _DEBUG: boolean;
   private _jobCounter: number;
   private readonly _jobs: Record<number, any>;
-  private readonly _worker: Worker;
+  private readonly _worker: any;
 
   constructor(path: string, timeout = WORKER_TIMEOUT) {
     (process as any).dlopen = () => {
@@ -32,7 +32,7 @@ export class WorkerInterface {
     this._DEBUG = false;
     this._jobCounter = 0;
 
-    this._worker.onmessage = e => {
+    this._worker.onmessage = (e: any) => {
       const [jobId, errorForDisplay, result] = e.data;
 
       const job = this._getJob(jobId);

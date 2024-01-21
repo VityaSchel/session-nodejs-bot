@@ -49,8 +49,8 @@
 
 // const pollForEverythingInterval = DURATION.SECONDS * 10;
 
-// export const invalidAuthRequiresBlinding =
-//   'Invalid authentication: this server requires the use of blinded ids';
+export const invalidAuthRequiresBlinding =
+  'Invalid authentication: this server requires the use of blinded ids';
 
 // /**
 //  * An OpenGroupServerPollerV2 polls for everything for a particular server. We should

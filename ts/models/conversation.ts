@@ -29,7 +29,7 @@ import { MessageModel } from './message';
 import { MessageAttributesOptionals, MessageDirection } from './messageType';
 
 import { Data } from '../data/data';
-import { OpenGroupRequestCommonType } from '../session/apis/open_group_api/opengroupV2/ApiUtil';
+// import { OpenGroupRequestCommonType } from '../session/apis/open_group_api/opengroupV2/ApiUtil';
 import { OpenGroupUtils } from '../session/apis/open_group_api/utils';
 import { getOpenGroupV2FromConversationId } from '../session/apis/open_group_api/utils/OpenGroupUtils';
 import { ExpirationTimerUpdateMessage } from '../session/messages/outgoing/controlMessage/ExpirationTimerUpdateMessage';
@@ -248,7 +248,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
     return groupAdmins && groupAdmins.length > 0 ? groupAdmins : [];
   }
 
-  public getConversationModelProps(): ReduxConversationType {
+  public getConversationModelProps(): any {
     const isPublic = this.isPublic();
 
     const ourNumber = UserUtils.getOurPubKeyStrFromCache();
@@ -261,7 +261,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
 
     // To reduce the redux store size, only set fields which cannot be undefined.
     // For instance, a boolean can usually be not set if false, etc
-    const toRet: ReduxConversationType = {
+    const toRet: any = {
       id: this.id as string,
       activeAt: this.get('active_at'),
       type: this.get('type'),
@@ -461,7 +461,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
     return current;
   }
 
-  public async makeQuote(quotedMessage: MessageModel): Promise<ReplyingToMessageProps | null> {
+  public async makeQuote(quotedMessage: MessageModel): Promise<any | null> {
     const attachments = quotedMessage.get('attachments');
     const preview = quotedMessage.get('preview');
 
@@ -494,7 +494,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
     };
   }
 
-  public toOpenGroupV2(): OpenGroupRequestCommonType {
+  public toOpenGroupV2(): any {
     if (!this.isOpenGroupV2()) {
       throw new Error('tried to run toOpenGroup for not public group v2');
     }
@@ -701,7 +701,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
       .catch(console.error);
   }
 
-  public async sendMessage(msg: SendMessageType) {
+  public async sendMessage(msg: any) {
     const { attachments, body, groupInvitation, preview, quote } = msg;
     this.clearTypingTimers();
     const expireTimer = this.get('expireTimer');
@@ -726,15 +726,15 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
     });
 
     // We're offline!
-    if (!window.isOnline) {
-      const error = new Error('Network is not available');
-      error.name = 'SendMessageNetworkError';
-      (error as any).number = this.id;
-      await messageModel.saveErrors([error]);
-      await this.commit();
+    // if (!window.isOnline) {
+    //   const error = new Error('Network is not available');
+    //   error.name = 'SendMessageNetworkError';
+    //   (error as any).number = this.id;
+    //   await messageModel.saveErrors([error]);
+    //   await this.commit();
 
-      return;
-    }
+    //   return;
+    // }
 
     this.set({
       lastMessage: messageModel.getNotificationText(),
@@ -982,7 +982,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
       if (allReadMessagesIds.length) {
         await this.sendReadReceiptsIfNeeded(uniq(allReadMessagesIds));
       }
-      Notifications.clearByConversationID(this.id);
+      // Notifications.clearByConversationID(this.id);
       // window.inboxStore?.dispatch(markConversationFullyRead(this.id));
       console.log('[SBOT/redux] markConversationFullyRead')
 
@@ -1121,9 +1121,11 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
       return nickOrReal;
     }
     if (this.isPrivate()) {
-      return window.i18n('anonymous');
+      // return window.i18n('anonymous');
+      return 'anonymous'
     }
-    return window.i18n('unknown');
+    // return window.i18n('unknown');
+    return 'unknown'
   }
 
   public isAdmin(pubKey?: string) {
@@ -1149,8 +1151,9 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
       return false;
     }
 
-    const groupModerators = getModeratorsOutsideRedux(this.id as string);
-    return Array.isArray(groupModerators) && groupModerators.includes(pubKey);
+    // const groupModerators = getModeratorsOutsideRedux(this.id as string);
+    // return Array.isArray(groupModerators) && groupModerators.includes(pubKey);
+    return false
   }
 
   /**
@@ -1357,15 +1360,15 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
 
     if (
       isFinite(infos.active_users) &&
-      infos.active_users !== 0 &&
-      getSubscriberCountOutsideRedux(this.id) !== active_users
+      infos.active_users !== 0// &&
+      // getSubscriberCountOutsideRedux(this.id) !== active_users
     ) {
-      ReduxSogsRoomInfos.setSubscriberCountOutsideRedux(this.id, active_users);
+      // ReduxSogsRoomInfos.setSubscriberCountOutsideRedux(this.id, active_users);
     }
 
-    if (getCanWriteOutsideRedux(this.id) !== !!write) {
-      ReduxSogsRoomInfos.setCanWriteOutsideRedux(this.id, !!write);
-    }
+    // if (getCanWriteOutsideRedux(this.id) !== !!write) {
+    //   ReduxSogsRoomInfos.setCanWriteOutsideRedux(this.id, !!write);
+    // }
 
     let hasChange = await this.handleSogsModsOrAdminsChanges({
       modsOrAdmins: details.admins,
@@ -1443,14 +1446,15 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
     await Data.removeMessage(messageId);
     this.updateLastMessage();
 
-    window.inboxStore?.dispatch(
-      conversationActions.messagesDeleted([
-        {
-          conversationKey: this.id,
-          messageId,
-        },
-      ])
-    );
+    // window.inboxStore?.dispatch(
+    //   conversationActions.messagesDeleted([
+    //     {
+    //       conversationKey: this.id,
+    //       messageId,
+    //     },
+    //   ])
+    // );
+    console.log('[SBOT/redux] messagesDeleted')
   }
 
   public isPinned() {
@@ -1482,7 +1486,8 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
 
     const pubkey = this.id;
     if (UserUtils.isUsFromCache(pubkey)) {
-      return window.i18n('you');
+      // return window.i18n('you');
+      return 'you'
     }
 
     const profileName = this.get('displayNameInProfile');
@@ -1542,7 +1547,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
       const isFirstMessageOfConvo =
         (await Data.getMessagesByConversation(this.id, { messageId: null })).messages.length === 1;
       if (hadNoRequestsPrior && isFirstMessageOfConvo) {
-        friendRequestText = window.i18n('youHaveANewFriendRequest');
+        friendRequestText = 'youHaveANewFriendRequest'//window.i18n('youHaveANewFriendRequest');
       } else {
         console.info(
           'notification cancelled for as pending requests already exist',
@@ -1591,15 +1596,16 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
     const messageId = message.id;
     const isExpiringMessage = this.isExpiringMessage(messageJSON);
 
-    Notifications.addNotification({
-      conversationId,
-      iconUrl,
-      isExpiringMessage,
-      message: friendRequestText || message.getNotificationText(),
-      messageId,
-      messageSentAt,
-      title: friendRequestText ? '' : convo.getNicknameOrRealUsernameOrPlaceholder(),
-    });
+    // Notifications.addNotification({
+    //   conversationId,
+    //   iconUrl,
+    //   isExpiringMessage,
+    //   message: friendRequestText || message.getNotificationText(),
+    //   messageId,
+    //   messageSentAt,
+    //   title: friendRequestText ? '' : convo.getNicknameOrRealUsernameOrPlaceholder(),
+    // });
+    console.log('[SBOT/redux] addNotification')
   }
 
   public async notifyIncomingCall() {
@@ -1622,16 +1628,17 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
     const now = Date.now();
     const iconUrl = await this.getNotificationIcon();
 
-    Notifications.addNotification({
-      conversationId,
-      iconUrl,
-      isExpiringMessage: false,
-      message: window.i18n('incomingCallFrom', [
-        this.getNicknameOrRealUsername() || window.i18n('anonymous'),
-      ]),
-      messageSentAt: now,
-      title: this.getNicknameOrRealUsernameOrPlaceholder(),
-    });
+    // Notifications.addNotification({
+    //   conversationId,
+    //   iconUrl,
+    //   isExpiringMessage: false,
+    //   message: window.i18n('incomingCallFrom', [
+    //     this.getNicknameOrRealUsername() || window.i18n('anonymous'),
+    //   ]),
+    //   messageSentAt: now,
+    //   title: this.getNicknameOrRealUsernameOrPlaceholder(),
+    // });
+    console.log('[SBOT/redux] addNotification')
   }
 
   public async notifyTypingNoCommit({ isTyping, sender }: { isTyping: boolean; sender: string }) {
@@ -1824,7 +1831,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
     const roomInfo = OpenGroupData.getV2OpenGroupRoom(groupUrl);
 
     if (!roomInfo || !roomInfo.serverPublicKey) {
-      ToastUtils.pushToastError('no-sogs-matching', window.i18n('couldntFindServerMatching'));
+      // ToastUtils.pushToastError('no-sogs-matching', window.i18n('couldntFindServerMatching'));
       console.error('Could not find room with matching server url', groupUrl);
       throw new Error(`Could not find room with matching server url: ${groupUrl}`);
     }
@@ -1906,7 +1913,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
 
   private async markConversationReadBouncy(newestUnreadDate: number, readAt: number = Date.now()) {
     const conversationId = this.id;
-    Notifications.clearByConversationID(conversationId);
+    // Notifications.clearByConversationID(conversationId);
 
     const oldUnreadNowRead = (await this.getUnreadByConversation(newestUnreadDate)).models;
 
@@ -1933,7 +1940,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
     if (oldUnreadNowReadAttrs?.length) {
       await Data.saveMessages(oldUnreadNowReadAttrs);
     }
-    const allProps: Array<MessageModelPropsWithoutConvoProps> = [];
+    const allProps: Array<any> = [];
 
     // eslint-disable-next-line no-restricted-syntax
     for (const nowRead of oldUnreadNowRead) {
@@ -2135,7 +2142,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
         case 'admins':
           return this.updateGroupAdmins(replacedWithOurRealSessionId, false);
         case 'mods':
-          ReduxSogsRoomInfos.setModeratorsOutsideRedux(this.id, replacedWithOurRealSessionId);
+          // ReduxSogsRoomInfos.setModeratorsOutsideRedux(this.id, replacedWithOurRealSessionId);
           return false;
         default:
           assertUnreachable(type, `handleSogsModsOrAdminsChanges: unhandled switch case: ${type}`);
@@ -2273,7 +2280,7 @@ const throttledAllConversationsDispatch = debounce(
   { trailing: true, leading: true, maxWait: 1000 }
 );
 
-const updatesToDispatch: Map<string, ReduxConversationType> = new Map();
+const updatesToDispatch: Map<string, any> = new Map();
 
 export class ConversationCollection extends Backbone.Collection<ConversationModel> {
   constructor(models?: Array<ConversationModel>) {

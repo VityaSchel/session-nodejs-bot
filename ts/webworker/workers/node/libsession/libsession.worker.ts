@@ -119,7 +119,7 @@ function initUserWrapper(options: Array<any>, wrapperType: ConfigWrapperObjectTy
   }
 }
 
-onmessage = async (e: { data: [number, ConfigWrapperObjectTypes, string, ...any] }) => {
+self.onmessage = async (e: { data: [number, ConfigWrapperObjectTypes, string, ...any] }) => {
   const [jobId, config, action, ...args] = e.data;
 
   try {
@@ -142,7 +142,7 @@ onmessage = async (e: { data: [number, ConfigWrapperObjectTypes, string, ...any]
     const errorForDisplay = prepareErrorForPostMessage(error);
     postMessage([jobId, errorForDisplay]);
   }
-};
+}
 
 function prepareErrorForPostMessage(error: any) {
   if (!error) {

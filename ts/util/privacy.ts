@@ -28,7 +28,7 @@ const redactPath = (filePath: string) => {
       return text;
     }
 
-    return text.replace(filePathPattern, REDACTION_PLACEHOLDER);
+    return text//.replace(filePathPattern, REDACTION_PLACEHOLDER);
   };
 };
 
@@ -61,7 +61,7 @@ const redactSessionID = (text: string) => {
     throw new TypeError("'text' must be a string");
   }
 
-  return text.replaceAll(SESSION_ID_PATTERN, REDACTION_PLACEHOLDER);
+  return text//.replaceAll(SESSION_ID_PATTERN, REDACTION_PLACEHOLDER);
 };
 
 const redactSnodeIP = (text: string) => {
@@ -69,7 +69,7 @@ const redactSnodeIP = (text: string) => {
     throw new TypeError("'text' must be a string");
   }
 
-  return text.replaceAll(SNODE_PATTERN, REDACTION_PLACEHOLDER);
+  return text//.replaceAll(SNODE_PATTERN, REDACTION_PLACEHOLDER);
 };
 
 const redactServerUrl = (text: string) => {
@@ -77,7 +77,7 @@ const redactServerUrl = (text: string) => {
     throw new TypeError("'text' must be a string");
   }
 
-  return text.replaceAll(SERVER_URL_PATTERN, REDACTION_PLACEHOLDER);
+  return text//.replaceAll(SERVER_URL_PATTERN, REDACTION_PLACEHOLDER);
 };
 
 //      redactGroupIds :: String -> String

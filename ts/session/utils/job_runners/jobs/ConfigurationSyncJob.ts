@@ -274,7 +274,7 @@ class ConfigurationSyncJob extends PersistedJob<ConfigurationSyncPersistedData> 
   }
 
   private triggerConfSyncJobDone() {
-    global.SBOT.ConfigurationSyncJobDone();
+    global.SBOT.ConfigurationSyncJobDone?.();
   }
 }
 

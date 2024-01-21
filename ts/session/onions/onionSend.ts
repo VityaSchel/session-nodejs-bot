@@ -119,12 +119,12 @@ const sendViaOnionV4ToNonSnodeWithRetries = async (
 
   const payloadObj = buildSendViaOnionPayload(url, fetchOptions);
 
-  if (window.sessionFeatureFlags?.debug.debugNonSnodeRequests) {
-    console.info(
-      'sendViaOnionV4ToNonSnodeWithRetries: buildSendViaOnionPayload returned ',
-      JSON.stringify(payloadObj)
-    );
-  }
+  // if (window.sessionFeatureFlags?.debug.debugNonSnodeRequests) {
+  //   console.info(
+  //     'sendViaOnionV4ToNonSnodeWithRetries: buildSendViaOnionPayload returned ',
+  //     JSON.stringify(payloadObj)
+  //   );
+  // }
   // if protocol is forced to 'http:' => just use http (without the ':').
   // otherwise use https as protocol (this is the default)
   const forcedHttp = url.protocol === PROTOCOLS.HTTP;
@@ -144,12 +144,12 @@ const sendViaOnionV4ToNonSnodeWithRetries = async (
     result = await pRetry(
       async () => {
         const pathNodes = await OnionSending.getOnionPathForSending();
-        if (window.sessionFeatureFlags?.debug.debugNonSnodeRequests) {
-          console.info(
-            'sendViaOnionV4ToNonSnodeWithRetries: getOnionPathForSending returned',
-            JSON.stringify(pathNodes)
-          );
-        }
+        // if (window.sessionFeatureFlags?.debug.debugNonSnodeRequests) {
+        //   console.info(
+        //     'sendViaOnionV4ToNonSnodeWithRetries: getOnionPathForSending returned',
+        //     JSON.stringify(pathNodes)
+        //   );
+        // }
         if (!pathNodes) {
           throw new Error('getOnionPathForSending is emtpy');
         }
@@ -169,12 +169,12 @@ const sendViaOnionV4ToNonSnodeWithRetries = async (
           throwErrors,
         });
 
-        if (window.sessionFeatureFlags?.debug.debugNonSnodeRequests) {
-          console.info(
-            'sendViaOnionV4ToNonSnodeWithRetries: sendOnionRequestHandlingSnodeEject returned: ',
-            JSON.stringify(onionV4Response)
-          );
-        }
+        // if (window.sessionFeatureFlags?.debug.debugNonSnodeRequests) {
+        //   console.info(
+        //     'sendViaOnionV4ToNonSnodeWithRetries: sendOnionRequestHandlingSnodeEject returned: ',
+        //     JSON.stringify(onionV4Response)
+        //   );
+        // }
 
         if (abortSignal?.aborted) {
           // if the request was aborted, we just want to stop retries.
@@ -382,7 +382,7 @@ async function sendBinaryViaOnionV4ToSogs(sendOptions: {
   if (!endpoint.startsWith('/')) {
     throw new Error('endpoint needs a leading /');
   }
-  const builtUrl = new window.URL(`${serverUrl}${endpoint}`);
+  const builtUrl = new URL(`${serverUrl}${endpoint}`);
   let headersWithSogsHeadersIfNeeded = await OpenGroupPollingUtils.getOurOpenGroupHeaders(
     serverPubkey,
     endpoint,
@@ -465,9 +465,9 @@ async function getBinaryViaOnionV4FromFileServer(sendOptions: {
   }
   const builtUrl = new URL(`${fileServerURL}${endpoint}`);
 
-  if (window.sessionFeatureFlags?.debug.debugFileServerRequests) {
-    console.info(`getBinaryViaOnionV4FromFileServer fsv2: "${builtUrl} `);
-  }
+  // if (window.sessionFeatureFlags?.debug.debugFileServerRequests) {
+  //   console.info(`getBinaryViaOnionV4FromFileServer fsv2: "${builtUrl} `);
+  // }
 
   // this throws for a bunch of reasons.
   // One of them, is if we get a 404 (i.e. the file server was reached but reported no such attachments exists)
@@ -484,12 +484,12 @@ async function getBinaryViaOnionV4FromFileServer(sendOptions: {
     abortSignal
   );
 
-  if (window.sessionFeatureFlags?.debug.debugFileServerRequests) {
-    console.info(
-      `getBinaryViaOnionV4FromFileServer fsv2: "${builtUrl}; got:`,
-      JSON.stringify(res)
-    );
-  }
+  // if (window.sessionFeatureFlags?.debug.debugFileServerRequests) {
+  //   console.info(
+  //     `getBinaryViaOnionV4FromFileServer fsv2: "${builtUrl}; got:`,
+  //     JSON.stringify(res)
+  //   );
+  // }
   return res as OnionV4BinarySnodeResponse;
 }
 

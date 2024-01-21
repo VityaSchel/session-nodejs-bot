@@ -7,6 +7,7 @@ import {
   decryptAttachmentBufferNode as realDecryptAttachmentBufferNode,
   encryptAttachmentBufferNode as realEncryptAttachmentBufferNode,
 } from '../../../../node/encrypt_attachment_buffer';
+import crypto from 'crypto'
 
 /* eslint-disable no-console */
 /* eslint-disable strict */
@@ -30,7 +31,7 @@ const functions = {
   bytesFromString,
 };
 
-onmessage = async (e: any) => {
+self.onmessage = async (e: any) => {
   const [jobId, fnName, ...args] = e.data;
 
   try {

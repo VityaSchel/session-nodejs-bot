@@ -84,6 +84,7 @@ import { Registration } from '../util/registration';
 import { LibSessionUtil } from '../session/utils/libsession/libsession_utils';
 import { initData } from '../data/dataInit';
 import { Storage } from '../util/storage';
+import { runners } from '../session/utils/job_runners/JobRunner';
 
 // Both of these will be set after app fires the 'ready' event
 let logger: Logger | null = null;
@@ -197,6 +198,11 @@ async function showMainWindow(sqlKey: string, passwordAttempt = false) {
 
   console.log('============================== test0')
 
+  await runners.avatarDownloadRunner.loadJobsFromDb();
+  runners.avatarDownloadRunner.startProcessing();
+  await runners.configurationSyncRunner.loadJobsFromDb();
+  runners.configurationSyncRunner.startProcessing();
+
   if (Registration.isDone()) {
     try {
       await LibSessionUtil.initializeLibSessionUtilWrappers();
@@ -219,23 +225,25 @@ async function showMainWindow(sqlKey: string, passwordAttempt = false) {
   await getConversationController().loadPromise()
   console.log('============================== test4')
 
-  const conversationModel = getConversationController().get()
-  console.log(typeof conversationModel)
-  type msg = {
-    body: string;
-    attachments: Array<any> | undefined;
-    quote: any | undefined;
-    preview: any | undefined;
-    groupInvitation: { url: string | undefined; name: string } | undefined;
-  }
-  const message: msg = {
-    body: 'test!!! ' + new Date().toISOString(),
-    attachments: undefined,
-    quote: undefined,
-    preview: undefined,
-    groupInvitation: undefined,
-  }
-  await conversationModel.sendMessage(message)
+  // const conversationModel = getConversationController().get('05f7fe7bd047099e5266c2ffbc74c88fc8543e6f16a08575e96959fedb2dd74d54')
+  // console.log(typeof conversationModel)
+  // type msg = {
+  //   body: string;
+  //   attachments: Array<any> | undefined;
+  //   quote: any | undefined;
+  //   preview: any | undefined;
+  //   groupInvitation: { url: string | undefined; name: string } | undefined;
+  // }
+  // const message: msg = {
+  //   body: 'test!!! ' + new Date().toISOString(),
+  //   attachments: undefined,
+  //   quote: undefined,
+  //   preview: undefined,
+  //   groupInvitation: undefined,
+  // }
+  // await conversationModel.sendMessage(message)
+
+  console.log('Convos', getConversationController().getConversations().filter(c => c.isPrivate))
 
   while(true) {
     await new Promise((resolve) => setTimeout(resolve, 1000));

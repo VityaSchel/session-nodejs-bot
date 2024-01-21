@@ -73,7 +73,7 @@ async function requestSnodesForPubkeyWithTargetNode(
       maxTimeout: 2000,
       onFailedAttempt: e => {
         console.warn(
-          `requestSnodesForPubkeyWithTargetNode attempt #${e.attemptNumber} failed. ${e.retriesLeft} retries left...`
+          `requestSnodesForPubkeyWithTargetNode attempt #${e.attemptNumber} failed. ${e.retriesLeft} retries left..., ${e.message}, ${e.stack}`
         );
       },
     }
