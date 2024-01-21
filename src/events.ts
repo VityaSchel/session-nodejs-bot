@@ -1,35 +1,41 @@
 import { SignalService } from "../ts/protobuf";
+import { ConversationModel } from "../ts/models/conversation";
 
-type EventCallback = (...args: any[]) => void;
+type EventCallback<T extends (...args: any[]) => any> = T;
 
 type Events = {
-  message: (content: SignalService.Content) => any
+  message: (content: SignalService.Content, conversation: ConversationModel) => any
 }
 
-class EventEmitter {
-  private static instances: EventEmitter[] = [];
+class EventEmitter<E extends Record<string, (...args: any[]) => any> = Events> {
+  private static instances: EventEmitter<any>[] = [];
 
-  private events: Record<string, EventCallback[]> = {};
+  private events: Record<keyof E, EventCallback<E[keyof E]>[]> = {} as Record<
+    keyof E,
+    EventCallback<E[keyof E]>[]
+  >;
 
   constructor() {
     EventEmitter.instances.push(this);
   }
 
-  on(eventName: string, callback: EventCallback): void {
+  on<K extends keyof E>(eventName: K, callback: EventCallback<E[K]>): void {
     if (!this.events[eventName]) {
       this.events[eventName] = [];
     }
     this.events[eventName].push(callback);
   }
 
-  emit(eventName: string, ...args: any[]): void {
+  emit<K extends keyof E>(eventName: string, ...args: Parameters<E[K]>): ReturnType<E[K]>[] {
     const callbacks = this.events[eventName];
+    const results: ReturnType<E[K]>[] = [];
     if (callbacks) {
-      callbacks.forEach((callback) => callback(...args));
+      callbacks.forEach((callback) => results.push(callback(...args)));
     }
+    return results;
   }
 
-  off(eventName: string, callback: EventCallback): void {
+  off<K extends keyof E>(eventName: K, callback: EventCallback<E[K]>): void {
     const callbacks = this.events[eventName];
     if (callbacks) {
       this.events[eventName] = callbacks.filter((cb) => cb !== callback);

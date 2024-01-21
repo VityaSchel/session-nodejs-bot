@@ -3,10 +3,10 @@ import { getConversationController } from '../ts/session/conversations'
 let isInitialized = false
 
 export async function initializeSession() {
-  const { isReady } = await import('../ts/mains/main_node')
+  const { getIsReady } = await import('../ts/mains/main_node')
   await new Promise<void>(resolve => setInterval(() => {
-    if(isReady) resolve()
-  }, 100))
+    if (getIsReady()) resolve()
+  }, 10))
   isInitialized = true
 }
 

@@ -394,7 +394,6 @@ export async function innerHandleSwarmContentMessage(
 ): Promise<void> {
   try {
     perfStart(`SignalService.Content.decode-${envelope.id}`);
-    console.info('innerHandleSwarmContentMessage');
     perfStart(`isBlocked-${envelope.id}`);
 
     const content = SignalService.Content.decode(new Uint8Array(plaintext));
@@ -452,6 +451,8 @@ export async function innerHandleSwarmContentMessage(
         ConversationTypeEnum.GROUP
       );
     }
+
+    SBOTEvents.emitToAllInstances('message', content, senderConversationModel)
 
     if (content.dataMessage) {
       // because typescript is funky with incoming protobufs
@@ -524,9 +525,6 @@ export async function innerHandleSwarmContentMessage(
         content.messageRequestResponse as SignalService.MessageRequestResponse
       );
     }
-
-    console.log('Received new message', content.toJSON());
-    SBOTEvents.emitToAllInstances('message', content)
   } catch (e) {
     console.warn(e.message);
   }

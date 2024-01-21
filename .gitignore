@@ -57,3 +57,6 @@ bot.md
 
 session-data*/*
 !session-data*/.gitkeep
+
+src/*.js
+examples/*.js

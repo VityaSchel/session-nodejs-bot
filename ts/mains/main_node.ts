@@ -168,6 +168,7 @@ async function showMainWindow(sqlKey: string, passwordAttempt = false) {
   await getSwarmPollingInstance().start()
 
   isReady = true
+  console.log('isReady')
 
   while(true) {
     await new Promise((resolve) => setTimeout(resolve, 3000));
@@ -231,4 +232,4 @@ global.SBOT.setPassword = async (passPhrase, oldPhrase) => {
 }
 global.SBOT.ready()
 
-export { isReady }
+export const getIsReady = () => isReady

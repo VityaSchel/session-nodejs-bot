@@ -154,7 +154,7 @@ export async function getOnionPath({ toExclude }: { toExclude?: Snode }): Promis
   if (onionPaths.length === 0) {
     // if (!_.isEmpty(window.inboxStore?.getState().onionPaths.snodePaths)) {
       // window.inboxStore?.dispatch(updateOnionPaths([]));
-      console.log('[SBOT/redux] updateOnionPaths')
+      // console.log('[SBOT/redux] updateOnionPaths')
     // }
   } else {
     const ipsOnly = onionPaths.map(m =>
@@ -164,7 +164,7 @@ export async function getOnionPath({ toExclude }: { toExclude?: Snode }): Promis
     );
     // if (!_.isEqual(window.inboxStore?.getState().onionPaths.snodePaths, ipsOnly)) {
       // window.inboxStore?.dispatch(updateOnionPaths(ipsOnly));
-      console.log('[SBOT/redux] updateOnionPaths')
+      // console.log('[SBOT/redux] updateOnionPaths')
     // }
   }
 
