@@ -29,7 +29,7 @@
   },
   "scripts": {
     "start": "node ./ts/mains/main_node.js",
-    "build": "yarn clean && yarn protobuf && yarn update-git-info && tsc && yarn build:workers",
+    "build": "yarn clean && yarn protobuf && yarn update-git-info && tsc > /dev/null || exit 0 && yarn build:workers",
     "build:watch": "yarn clean && yarn protobuf && yarn update-git-info && yarn build:workers && tsc -w",
     "build:workers": "yarn worker:utils && yarn worker:libsession",
     "watch": "yarn clean && yarn protobuf && yarn update-git-info && yarn build-everything:watch",

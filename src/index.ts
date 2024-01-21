@@ -7,11 +7,11 @@ let isInitialized = false,
 global.SBOT ??= {}
 
 export async function initializeSession(options?: {
-  verbose?: boolean
+  verbose?: ('warn' | 'info' | 'error')[]
 }) {
   if (isInitialized || isInitializing) return
   isInitializing = true
-  global.SBOT.verbose = options?.verbose ?? false
+  global.SBOT.verbose = options?.verbose ?? ['error']
   const { getIsReady } = await import('../ts/mains/main_node')
   await new Promise<void>(resolve => setInterval(() => {
     if (getIsReady()) resolve()

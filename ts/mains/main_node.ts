@@ -49,21 +49,9 @@ import { queueAllCached } from '../receiver/receiver';
 import { AttachmentDownloads } from '../session/utils';
 import { getSwarmPollingInstance } from '../session/apis/snode_api';
 
-// Both of these will be set after app fires the 'ready' event
-let logger: Logger | null = null;
-
-function assertLogger(): Logger {
-  if (!logger) {
-    throw new Error('assertLogger: logger is not set');
-  }
-  return logger;
-}
 
 global.SBOT.ready = async () => {
   await initializeLogger();
-  logger = getLogger();
-  assertLogger().info('app ready');
-  assertLogger().info(`starting version ${packageJson.version}`);
 
   const key = getDefaultSQLKey();
 

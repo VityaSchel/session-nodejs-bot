@@ -12,7 +12,7 @@ Session fork that runs entirely inside Node.js without renderer such as Electron
     - [Calculator bot](#calculator-bot)
   - [Methods](#methods)
   - [API reference](#api-reference)
-    - [initializeSession(options?: { verbose?: boolean }): Promise\<void\>](#initializesessionoptions--verbose-boolean--promisevoid)
+    - [initializeSession(options?: { verbose?: ('warn' | 'info' | 'error')\[\] }): Promise\<void\>](#initializesessionoptions--verbose-warn--info--error--promisevoid)
     - [getConversations(): ConversationModel\[\]](#getconversations-conversationmodel)
     - [class EventEmitter](#class-eventemitter)
     - [sendMessage(sessionID: string, message: SessionOutgoingMessage): Promise\<void\>](#sendmessagesessionid-string-message-sessionoutgoingmessage-promisevoid)
@@ -63,9 +63,11 @@ Please be aware that this app generates A LOT of console logs. I'm working on re
 
 ## API reference
 
-### initializeSession(options?: { verbose?: boolean }): Promise\<void\>
+### initializeSession(options?: { verbose?: ('warn' | 'info' | 'error')[] }): Promise\<void\>
 
 Initialize Session instance in current Node.js process. Must be called and await'ed before using any Session-related methods. Must be only called once per Node.js process. If you need more instances running simultaniously, spawn Node.js children processes.
+
+Don't want to see any logs? Pass `verbose: []`. This parameter defaults to `['error']`
 
 ### getConversations(): ConversationModel[]
 

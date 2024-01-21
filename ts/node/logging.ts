@@ -268,11 +268,11 @@ function logAtLevel(level: string, ...args: any) {
 }
 
 // This blows up using mocha --watch, so we ensure it is run just once
-if (!(console as ConsoleCustom)._log) {
-  (console as ConsoleCustom)._log = console.log;
-  console.log = _.partial(logAtLevel, 'info');
-  (console as ConsoleCustom)._error = console.error;
-  console.error = _.partial(logAtLevel, 'error');
-  (console as ConsoleCustom)._warn = console.warn;
-  console.warn = _.partial(logAtLevel, 'warn');
-}
+// if (!(console as ConsoleCustom)._log) {
+//   (console as ConsoleCustom)._log = console.log;
+//   console.log = _.partial(logAtLevel, 'info');
+//   (console as ConsoleCustom)._error = console.error;
+//   console.error = _.partial(logAtLevel, 'error');
+//   (console as ConsoleCustom)._warn = console.warn;
+//   console.warn = _.partial(logAtLevel, 'warn');
+// }

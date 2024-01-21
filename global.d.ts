@@ -1,5 +1,5 @@
 declare module globalThis {
-  var SBOT = {
+  var SBOT: {
     ERASE_ATTACHMENTS_KEY: (event: any) => any,
     CLEANUP_ORPHANED_ATTACHMENTS_KEY: (event: any) => any,
     resetDatabase: () => any,
@@ -10,6 +10,6 @@ declare module globalThis {
     openInbox: () => any,
     ConfigurationSyncJobDone: () => any,
     SqlChannelKey: (...args: any) => any,
-    verbose: boolean
+    verbose: ('warn' | 'info' | 'error')[]
   }
 }
