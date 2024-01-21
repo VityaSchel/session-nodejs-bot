@@ -188,15 +188,9 @@ async function showMainWindow(sqlKey: string, passwordAttempt = false) {
 
   ready = true;
 
-  console.log('============================== test')
-
   initData()
 
-  console.log('============================== storage fetch')
-
   await Storage.fetch()
-
-  console.log('============================== test0')
 
   await runners.avatarDownloadRunner.loadJobsFromDb();
   runners.avatarDownloadRunner.startProcessing();
@@ -213,17 +207,9 @@ async function showMainWindow(sqlKey: string, passwordAttempt = false) {
     }
   }
 
-  console.log('============================== test1')
-
   await getConversationController().load()
-  console.log('============================== test2')
-
   await BlockedNumberController.load()
-
-  console.log('============================== test3')
-  
   await getConversationController().loadPromise()
-  console.log('============================== test4')
 
   // const conversationModel = getConversationController().get('05f7fe7bd047099e5266c2ffbc74c88fc8543e6f16a08575e96959fedb2dd74d54')
   // console.log(typeof conversationModel)
@@ -243,7 +229,11 @@ async function showMainWindow(sqlKey: string, passwordAttempt = false) {
   // }
   // await conversationModel.sendMessage(message)
 
-  console.log('Convos', getConversationController().getConversations().filter(c => c.isPrivate))
+  const convos = getConversationController().getConversations()
+    .filter(c => c.isPrivate() && c.isActive() && c.isBlo)
+
+  console.log('Convos', convos.map(c => [c.getContactProfileNameOrShortenedPubKey()]))
+  fs.writeFileSync('convos.json', JSON.stringify(convos[0].toJSON(), null, 2))
 
   while(true) {
     await new Promise((resolve) => setTimeout(resolve, 1000));
