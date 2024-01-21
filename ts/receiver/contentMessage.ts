@@ -36,12 +36,11 @@ import { ConfigMessageHandler } from './configMessage';
 import { ECKeyPair } from './keypairs';
 import { ContactsWrapperActions } from '../webworker/workers/browser/libsession_worker_interface';
 import { isUsFromCache } from '../session/utils/User';
+import { EventEmitter as SBOTEvents } from '../../src/events';
 
 export async function handleSwarmContentMessage(envelope: EnvelopePlus, messageHash: string) {
   try {
     const plaintext = await decrypt(envelope);
-
-    console.log('RECEIVED', plaintext)
 
     if (!plaintext) {
       return;
@@ -525,6 +524,9 @@ export async function innerHandleSwarmContentMessage(
         content.messageRequestResponse as SignalService.MessageRequestResponse
       );
     }
+
+    console.log('Received new message', content.toJSON());
+    SBOTEvents.emitToAllInstances('message', content)
   } catch (e) {
     console.warn(e.message);
   }

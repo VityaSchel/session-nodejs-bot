@@ -4,10 +4,6 @@
 /* eslint-disable import/order */
 /* eslint-disable no-console */
 
-import path, { join } from 'path';
-import { platform as osPlatform } from 'process';
-import url from 'url';
-import os from 'os';
 import fs from 'fs';
 import crypto from 'crypto';
 
@@ -18,54 +14,23 @@ import _ from 'lodash';
 import pify from 'pify';
 import Logger from 'bunyan';
 
-import packageJson from '../../package.json'; // checked - only node
+import packageJson from '../../package.json';
 
 const getRealPath = pify(fs.realpath);
 
-let readyForShutdown: boolean = false;
+import { userConfig } from '../node/config/user_config';
+import * as PasswordUtil from '../util/passwordUtils';
 
-import { config } from '../node/config'; // checked - only node
-
-// Very important to put before the single instance check, since it is based on the
-//   userData directory.
-import { userConfig } from '../node/config/user_config'; // checked - only node
-import * as PasswordUtil from '../util/passwordUtils'; // checked - only node
-
-const development = (config as any).environment === 'development';
-const appInstance = config.util.getEnv('NODE_APP_INSTANCE') || 0;
-
-// We generally want to pull in our own modules after this point, after the user
-//   data directory has been set.
 import { initAttachmentsChannel } from '../node/attachment_channel';
 
-import { ephemeralConfig } from '../node/config/ephemeral_config'; // checked - only node
-import { getLogger, initializeLogger } from '../node/logging'; // checked - only node
-import { sqlNode } from '../node/sql'; // checked - only node
-import * as sqlChannels from '../node/sql_channel'; // checked - only node
-import { windowMarkShouldQuit, windowShouldQuit } from '../node/window_state'; // checked - only node
-// import { createTemplate } from '../node/menu'; // checked - only node
-// import { installFileHandler, installWebHandler } from '../node/protocol_filter'; // checked - only node
-// import { installPermissionsHandler } from '../node/permissions'; // checked - only node
+import { ephemeralConfig } from '../node/config/ephemeral_config';
+import { getLogger, initializeLogger } from '../node/logging';
+import { sqlNode } from '../node/sql';
+import * as sqlChannels from '../node/sql_channel';
 
-let appStartInitialSpellcheckSetting = true;
+let isReady = false;
 
 sqlChannels.initializeSqlChannel()
-
-const enableTestIntegrationWiderWindow = false;
-const isTestIntegration =
-  enableTestIntegrationWiderWindow &&
-  Boolean(
-    process.env.NODE_APP_INSTANCE && process.env.NODE_APP_INSTANCE.includes('test-integration')
-  );
-async function getSpellCheckSetting() {
-  const json = sqlNode.getItemById('spell-check');
-  // Default to `true` if setting doesn't exist yet
-  if (!json) {
-    return true;
-  }
-
-  return json.value;
-}
 
 const windowFromUserConfig = userConfig.get('window');
 const windowFromEphemeral = ephemeralConfig.get('window');
@@ -75,9 +40,6 @@ if (windowFromUserConfig) {
   ephemeralConfig.set('window', windowConfig);
 }
 
-// import {load as loadLocale} from '../..'
-import { setLastestRelease } from '../node/latest_desktop_release';
-import { getAppRootPath } from '../node/getRootPath';
 import { getConversationController } from '../session/conversations';
 import { BlockedNumberController } from '../util';
 import { Registration } from '../util/registration';
@@ -87,8 +49,6 @@ import { Storage } from '../util/storage';
 import { runners } from '../session/utils/job_runners/JobRunner';
 import { queueAllCached } from '../receiver/receiver';
 import { AttachmentDownloads } from '../session/utils';
-import { getOurPubKeyStrFromCache } from '../session/utils/User';
-import { signInByLinkingDevice } from '../util/accountManager';
 import { Data } from '../data/data';
 import { getSwarmPollingInstance } from '../session/apis/snode_api';
 
@@ -102,33 +62,6 @@ function assertLogger(): Logger {
   return logger;
 }
 
-function prepareURL(pathSegments: Array<string>, moreKeys?: { theme: any }) {
-  const urlObject: url.UrlObject = {
-    pathname: join(...pathSegments),
-    protocol: 'file:',
-    slashes: true,
-    query: {
-      name: packageJson.productName,
-      locale: 'ru',
-      version: '1.11.5',
-      commitHash: config.get('commitHash'),
-      environment: (config as any).environment,
-      node_version: process.versions.node,
-      hostname: os.hostname(),
-      appInstance: process.env.NODE_APP_INSTANCE,
-      proxyUrl: process.env.HTTPS_PROXY || process.env.https_proxy,
-      appStartInitialSpellcheckSetting,
-      ...moreKeys,
-    },
-  };
-  return url.format(urlObject);
-}
-
-// Use these for shutdown:
-// windowShouldQuit()
-// requestShutdown()
-
-let ready = false;
 global.SBOT.ready = async () => {
   await initializeLogger();
   logger = getLogger();
@@ -186,13 +119,11 @@ async function showMainWindow(sqlKey: string, passwordAttempt = false) {
     messages: [],
     passwordAttempt,
   });
-  appStartInitialSpellcheckSetting = await getSpellCheckSetting();
 
   await initAttachmentsChannel({
     userDataPath,
   });
 
-  ready = true;
 
   initData()
 
@@ -230,38 +161,16 @@ async function showMainWindow(sqlKey: string, passwordAttempt = false) {
     logger: console,
   });
 
-  // const conversationModel = getConversationController().get('0531da1c39e3e524c4fe7ee8ad8b50088204e43d650df97bfaee015f3cc174a85c')
-  // type msg = {
-  //   body: string;
-  //   attachments: Array<any> | undefined;
-  //   quote: any | undefined;
-  //   preview: any | undefined;
-  //   groupInvitation: { url: string | undefined; name: string } | undefined;
-  // }
-  // const message: msg = {
-  //   body: 'test!!! ' + new Date().toISOString(),
-  //   attachments: undefined,
-  //   quote: undefined,
-  //   preview: undefined,
-  //   groupInvitation: undefined,
-  // }
-  
-
   await new Promise(resolve => setTimeout(resolve, 1000))
 
   runners.configurationSyncRunner.startProcessing();
 
   await getSwarmPollingInstance().start()
 
+  isReady = true
+
   while(true) {
     await new Promise((resolve) => setTimeout(resolve, 3000));
-
-    await Data.getAllConversations()
-
-    const convos = getConversationController().getConversations()
-      .filter(c => c.isPrivate() && c.isActive() && c.get('id'))
-
-    console.log('Convos', convos.map(c => [c.getContactProfileNameOrShortenedPubKey(), c.toJSON().lastMessage]))
   }
 }
 
@@ -321,3 +230,5 @@ global.SBOT.setPassword = async (passPhrase, oldPhrase) => {
   }
 }
 global.SBOT.ready()
+
+export { isReady }
