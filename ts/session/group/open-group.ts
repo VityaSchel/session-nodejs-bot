@@ -1,5 +1,6 @@
 import { OpenGroupData } from '../../data/opengroups';
 import { downloadAttachmentSogsV3 } from '../../receiver/attachments';
+import { console } from '../../sessionjs-logger';
 import { MIME } from '../../types';
 import { urlToBlob } from '../../types/attachments/VisualAttachment';
 import { processNewAttachment } from '../../types/MessageAttachment';

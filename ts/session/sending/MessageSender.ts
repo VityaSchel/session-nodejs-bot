@@ -37,6 +37,7 @@ import { PubKey } from '../types';
 import { RawMessage } from '../types/RawMessage';
 import { EmptySwarmError } from '../utils/errors';
 import { fromUInt8ArrayToBase64 } from '../utils/String';
+import { console } from '../../sessionjs-logger';
 
 // ================ SNODE STORE ================
 

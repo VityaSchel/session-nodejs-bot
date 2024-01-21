@@ -13,6 +13,7 @@ import {
 import { addAttachmentPadding } from '../crypto/BufferPadding';
 import { encryptAttachment } from '../../util/crypto/attachmentsEncrypter';
 import { uploadFileToFsWithOnionV4 } from '../apis/file_server_api/FileServerApi';
+import { console } from '../../sessionjs-logger';
 
 interface UploadParams {
   attachment: Attachment;

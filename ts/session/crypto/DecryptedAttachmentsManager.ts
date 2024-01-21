@@ -21,6 +21,7 @@ import {
   getAttachmentPath,
 } from '../../types/MessageAttachment';
 import { decryptAttachmentBufferRenderer } from '../../util/local_attachments_encrypter';
+import { console } from '../../sessionjs-logger';
 
 export const urlToDecryptedBlobMap = new Map<
   string,

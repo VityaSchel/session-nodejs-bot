@@ -5,6 +5,7 @@ import { getSodiumRenderer } from '../../../crypto';
 import { UserUtils } from '../../../utils';
 import { fromBase64ToArray, fromHexToArray } from '../../../utils/String';
 import { SogsBlinding } from '../sogsv3/sogsBlinding';
+import { console } from '../../../../sessionjs-logger';
 
 export class OpenGroupMessageV2 {
   public serverId?: number;

@@ -4,6 +4,7 @@ import AbortController from 'abort-controller';
 import { PubKey } from '../../../types';
 import { OpenGroupRequestCommonType } from '../opengroupV2/ApiUtil';
 import { batchFirstSubIsSuccess, sogsBatchSend } from './sogsV3BatchPoll';
+import { console } from '../../../../sessionjs-logger';
 
 /**
  * Add those pubkeys as admins.

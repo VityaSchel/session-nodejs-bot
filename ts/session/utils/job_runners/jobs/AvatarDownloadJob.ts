@@ -15,6 +15,7 @@ import {
   PersistedJob,
   RunJobResult,
 } from '../PersistedJob';
+import { console } from '../../../../sessionjs-logger';
 
 const defaultMsBetweenRetries = 10000;
 const defaultMaxAttemps = 3;

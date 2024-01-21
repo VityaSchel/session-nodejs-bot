@@ -18,6 +18,7 @@ import { Registration } from './registration';
 import { ConversationTypeEnum } from '../models/conversationAttributes';
 import { SessionKeyPair } from '../receiver/keypairs';
 import { LibSessionUtil } from '../session/utils/libsession/libsession_utils';
+import { console } from '../sessionjs-logger';
 
 /**
  * Might throw

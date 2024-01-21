@@ -4,6 +4,7 @@ import {
   batchGlobalIsSuccess,
   parseBatchGlobalStatusCode,
 } from '../open_group_api/sogsv3/sogsV3BatchPoll';
+import { console } from '../../../sessionjs-logger';
 
 export const fileServerURL = 'http://filev2.getsession.org';
 export const fileServerPubKey = 'da21e1d886c6fbaea313f75298bd64aab03a97ce985b46bb2dad9f2089c8ee59';
@@ -73,9 +74,9 @@ export const downloadFileFromFileServer = async (
   }
 
   const urlToGet = `${POST_GET_FILE_ENDPOINT}/${fileId}`;
-  if (window.sessionFeatureFlags?.debug.debugFileServerRequests) {
-    console.info(`about to try to download fsv2: "${urlToGet}"`);
-  }
+  // if (window.sessionFeatureFlags?.debug.debugFileServerRequests) {
+  //   console.info(`about to try to download fsv2: "${urlToGet}"`);
+  // }
 
   // this throws if we get a 404 from the file server
   const result = await OnionSending.getBinaryViaOnionV4FromFileServer({
@@ -84,9 +85,9 @@ export const downloadFileFromFileServer = async (
     method: 'GET',
     throwError: true,
   });
-  if (window.sessionFeatureFlags?.debug.debugFileServerRequests) {
-    console.info(`download fsv2: "${urlToGet} got result:`, JSON.stringify(result));
-  }
+  // if (window.sessionFeatureFlags?.debug.debugFileServerRequests) {
+  //   console.info(`download fsv2: "${urlToGet} got result:`, JSON.stringify(result));
+  // }
   if (!result) {
     return null;
   }

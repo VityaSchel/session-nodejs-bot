@@ -19,6 +19,7 @@ import { ProfileManager } from '../session/profile_manager/ProfileManager';
 import { ReleasedFeatures } from '../util/releaseFeature';
 // // import { PropsForMessageWithoutConvoProps, lookupQuote } from '../state/ducks/conversations';
 import { PubKey } from '../session/types';
+import { console } from '../sessionjs-logger';
 
 // function contentTypeSupported(type: string): boolean {
 //   const Chrome = GoogleChrome;

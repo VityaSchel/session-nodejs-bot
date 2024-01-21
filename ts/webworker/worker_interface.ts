@@ -1,4 +1,5 @@
 import Worker from 'web-worker'
+import { console } from '../sessionjs-logger';
 
 const WORKER_TIMEOUT = 60 * 1000; // one minute
 

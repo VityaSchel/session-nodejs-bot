@@ -17,6 +17,7 @@ import {
   xor,
 } from 'lodash';
 import { from_hex } from 'libsodium-wrappers-sumo';
+import { console } from '../sessionjs-logger';
 
 import { SignalService } from '../protobuf';
 import { getMessageQueue } from '../session';

@@ -8,6 +8,7 @@ import { filter, findIndex, remove } from 'lodash';
 import { Reactions } from '../../../../util/reactions';
 import { OpenGroupReactionMessageV4 } from '../opengroupV2/OpenGroupServerPoller';
 import { getOpenGroupV2ConversationId } from '../utils/OpenGroupUtils';
+import { console } from '../../../../sessionjs-logger';
 
 export enum ChangeType {
   REACTIONS = 0,

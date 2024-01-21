@@ -33,6 +33,7 @@ import { UserUtils } from '../utils';
 // import { getCurrentlySelectedConversationOutsideRedux } from '../../state/selectors/conversations';
 import { removeAllClosedGroupEncryptionKeyPairs } from '../../receiver/closedGroups';
 import { OpenGroupUtils } from '../apis/open_group_api/utils';
+import { console } from '../../sessionjs-logger';
 
 let instance: ConversationController | null;
 

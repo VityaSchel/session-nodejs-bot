@@ -6,9 +6,7 @@
 
 import fs from 'fs';
 import crypto from 'crypto';
-
-// @ts-ignore
-global.SBOT = {}
+import { console } from '../sessionjs-logger';
 
 import _ from 'lodash';
 import pify from 'pify';
@@ -49,7 +47,6 @@ import { Storage } from '../util/storage';
 import { runners } from '../session/utils/job_runners/JobRunner';
 import { queueAllCached } from '../receiver/receiver';
 import { AttachmentDownloads } from '../session/utils';
-import { Data } from '../data/data';
 import { getSwarmPollingInstance } from '../session/apis/snode_api';
 
 // Both of these will be set after app fires the 'ready' event

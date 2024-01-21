@@ -1,6 +1,7 @@
 import { isNumber } from 'lodash';
 import { Data } from '../../../data/data';
 import { Storage } from '../../../util/storage';
+// import { console } from '../../../sessionjs-logger';
 
 let hasSeenHardfork190: boolean | undefined;
 let hasSeenHardfork191: boolean | undefined;

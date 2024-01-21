@@ -10,6 +10,7 @@ import { initializeAttachmentLogic, processNewAttachment } from '../../types/Mes
 import { getAttachmentMetadata } from '../../types/message/initializeAttachmentMetadata';
 import { was404Error } from '../apis/snode_api/onions';
 import { AttachmentDownloadMessageDetails } from '../../types/sqlSharedTypes';
+import { console } from '../../sessionjs-logger';
 
 // this may cause issues if we increment that value to > 1, but only having one job will block the whole queue while one attachment is downloading
 const MAX_ATTACHMENT_JOB_PARALLELISM = 3;

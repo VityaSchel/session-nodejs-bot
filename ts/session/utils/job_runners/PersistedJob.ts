@@ -1,4 +1,5 @@
 import { cloneDeep, isEmpty } from 'lodash';
+import { console } from '../../../sessionjs-logger';
 
 export type PersistedJobType =
   | 'ConfigurationSyncJobType'

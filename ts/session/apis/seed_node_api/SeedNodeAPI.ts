@@ -12,6 +12,7 @@ import { allowOnlyOneAtATime } from '../../utils/Promise';
 import { APPLICATION_JSON } from '../../../types/MIME';
 import { isLinux } from '../../../OS';
 import { Snode } from '../../../data/data';
+import { console } from '../../../sessionjs-logger';
 
 /**
  * Fetch all snodes from seed nodes.

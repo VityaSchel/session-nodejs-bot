@@ -1,3 +1,5 @@
+import { console } from "../../sessionjs-logger";
+
 const sound = './sound/ringing.mp3';
 
 let currentlyRinging = false;

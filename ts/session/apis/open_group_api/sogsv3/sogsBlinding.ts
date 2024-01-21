@@ -15,6 +15,7 @@ import {
   toX25519,
 } from '../../../utils/SodiumUtils';
 import { OnionSending } from '../../../onions/onionSend';
+import { console } from '../../../../sessionjs-logger';
 
 async function getSogsSignature({
   blinded,

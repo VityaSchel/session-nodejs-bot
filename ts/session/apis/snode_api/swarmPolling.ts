@@ -29,6 +29,7 @@ import { LibSessionUtil } from '../../utils/libsession/libsession_utils';
 import { SnodeNamespace, SnodeNamespaces } from './namespaces';
 import { SnodeAPIRetrieve } from './retrieveRequest';
 import { RetrieveMessageItem, RetrieveMessagesResultsBatched } from './types';
+import { console } from '../../../sessionjs-logger';
 
 export function extractWebSocketContent(
   message: string,

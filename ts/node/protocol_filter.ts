@@ -1,5 +1,6 @@
 import path from 'path';
 import fs from 'fs';
+import { console } from '../sessionjs-logger';
 
 function eliminateAllAfterCharacter(str: string, character: string) {
   const index = str.indexOf(character);

@@ -10,6 +10,7 @@ import {
   OpenGroupRequestHeaders,
 } from '../opengroupV2/OpenGroupPollingUtils';
 import { addJsonContentTypeToHeaders } from './sogsV3SendMessage';
+import { console } from '../../../../sessionjs-logger';
 
 type BatchFetchRequestOptions = {
   method: 'POST' | 'PUT' | 'GET' | 'DELETE';

@@ -1,6 +1,7 @@
 import { last, orderBy } from 'lodash';
 import { assertUnreachable } from '../../../types/sqlSharedTypes';
 import { PickEnum } from '../../../types/Enums';
+import { console } from '../../../sessionjs-logger';
 
 export enum SnodeNamespaces {
   /**

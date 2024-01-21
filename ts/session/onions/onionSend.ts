@@ -22,6 +22,7 @@ import {
 import { pnServerPubkeyHex, pnServerUrl } from '../apis/push_notification_api/PnServer';
 import { fileServerPubKey, fileServerURL } from '../apis/file_server_api/FileServerApi';
 import { invalidAuthRequiresBlinding } from '../apis/open_group_api/opengroupV2/OpenGroupServerPoller';
+import { console } from '../../sessionjs-logger';
 
 export type OnionFetchOptions = {
   method: string;

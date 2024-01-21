@@ -1,6 +1,7 @@
 import { Data } from '../data/data';
 import { commitConversationAndRefreshWrapper } from '../models/conversation';
 import { PubKey } from '../session/types';
+import { console } from '../sessionjs-logger';
 import { Storage } from './storage';
 
 const BLOCKED_NUMBERS_ID = 'blocked';

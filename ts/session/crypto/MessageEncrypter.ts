@@ -5,6 +5,7 @@ import { fromHexToArray } from '../utils/String';
 import { Data } from '../../data/data';
 import { UserUtils } from '../utils';
 import { addMessagePadding } from './BufferPadding';
+import { console } from '../../sessionjs-logger';
 
 export { concatUInt8Array, getSodiumRenderer };
 

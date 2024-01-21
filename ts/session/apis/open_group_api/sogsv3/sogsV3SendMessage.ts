@@ -9,6 +9,7 @@ import {
   OpenGroupRequestHeaders,
 } from '../opengroupV2/OpenGroupPollingUtils';
 import { batchGlobalIsSuccess, parseBatchGlobalStatusCode } from './sogsV3BatchPoll';
+import { console } from '../../../../sessionjs-logger';
 
 export function addJsonContentTypeToHeaders(
   headers: OpenGroupRequestHeaders

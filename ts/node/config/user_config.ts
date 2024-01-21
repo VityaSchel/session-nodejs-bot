@@ -2,6 +2,7 @@ import path from 'path';
 import process from 'process';
 
 import { start } from './base_config';
+import { console } from '../../sessionjs-logger';
 
 let storageProfile;
 

@@ -1,3 +1,4 @@
+import { console } from '../../../sessionjs-logger';
 import { getSodiumRenderer } from '../../crypto';
 import { StringUtils, UserUtils } from '../../utils';
 import { fromHexToArray, fromUInt8ArrayToBase64 } from '../../utils/String';

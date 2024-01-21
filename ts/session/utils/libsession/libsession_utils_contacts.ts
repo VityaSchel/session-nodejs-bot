@@ -4,6 +4,7 @@ import { getContactInfoFromDBValues } from '../../../types/sqlSharedTypes';
 import { ContactsWrapperActions } from '../../../webworker/workers/browser/libsession_worker_interface';
 import { getConversationController } from '../../conversations';
 import { PubKey } from '../../types';
+import { console } from '../../../sessionjs-logger';
 
 /**
  * This file is centralizing the management of data from the Contacts Wrapper of libsession.

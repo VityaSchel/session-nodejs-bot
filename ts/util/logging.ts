@@ -6,6 +6,7 @@
 import _ from 'lodash';
 
 import { redactAll } from './privacy';
+import { console } from '../sessionjs-logger';
 
 // Default Bunyan levels: https://github.com/trentm/node-bunyan#levels
 // To make it easier to visually scan logs, we make all levels the same length
@@ -112,7 +113,7 @@ function logAtLevel(level: string, prefix: string, ...args: any) {
 // const onerror = (_message, _script, _line, _col, error) => {
 //   const errorInfo = JSON.stringify(error);
 
-//   console.error(
+  // console.error(
 //     `Top-level unhandled error: "${_message}";"${_script}";"${_line}";"${_col}" ${errorInfo}`,
 //     error
 //   );

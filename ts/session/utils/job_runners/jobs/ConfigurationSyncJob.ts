@@ -20,6 +20,7 @@ import {
 import { ReleasedFeatures } from '../../../../util/releaseFeature';
 import { allowOnlyOneAtATime } from '../../Promise';
 import { isSignInByLinking } from '../../../../util/storage';
+import { console } from '../../../../sessionjs-logger';
 
 const defaultMsBetweenRetries = 15000; // a long time between retries, to avoid running multiple jobs at the same time, when one was postponed at the same time as one already planned (5s)
 const defaultMaxAttempts = 2;

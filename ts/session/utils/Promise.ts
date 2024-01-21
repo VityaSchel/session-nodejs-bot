@@ -2,6 +2,7 @@
 /* eslint-disable no-async-promise-executor */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { Snode } from '../../data/data';
+import { console } from '../../sessionjs-logger';
 
 type SimpleFunction<T> = (arg: T) => void;
 type Return<T> = Promise<T> | T;

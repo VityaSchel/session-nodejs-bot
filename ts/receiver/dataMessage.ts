@@ -25,6 +25,7 @@ import { isUsFromCache } from '../session/utils/User';
 import { Action, Reaction } from '../types/Reaction';
 import { toLogFormat } from '../types/attachments/Errors';
 import { Reactions } from '../util/reactions';
+import { console } from '../sessionjs-logger';
 
 function cleanAttachment(attachment: any) {
   return {

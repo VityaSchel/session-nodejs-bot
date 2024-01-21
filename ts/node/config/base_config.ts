@@ -1,4 +1,5 @@
 import { readFileSync, unlinkSync, writeFileSync } from 'fs';
+import { console } from '../../sessionjs-logger';
 
 const ENCODING = 'utf8';
 

@@ -26,6 +26,7 @@ import { encryptProfile } from '../util/crypto/profileEncrypter';
 import { ReleasedFeatures } from '../util/releaseFeature';
 import { Storage, setLastProfileUpdateTimestamp } from '../util/storage';
 import { UserGroupsWrapperActions } from '../webworker/workers/browser/libsession_worker_interface';
+import { console } from '../sessionjs-logger';
 
 export async function copyPublicKeyByConvoId(convoId: string) {
   if (OpenGroupUtils.isOpenGroupV2(convoId)) {

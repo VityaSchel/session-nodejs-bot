@@ -1,4 +1,5 @@
 import { getSodiumNode } from './sodiumNode';
+import { console } from '../sessionjs-logger';
 
 export async function decryptAttachmentBufferNode(
   encryptingKey: Uint8Array,

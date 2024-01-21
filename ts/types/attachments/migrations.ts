@@ -20,6 +20,7 @@ import {
   THUMBNAIL_CONTENT_TYPE,
   THUMBNAIL_SIDE,
 } from './VisualAttachment';
+import { console } from '../../sessionjs-logger';
 
 // Returns true if `rawAttachment` is a valid attachment based on our current schema.
 // Over time, we can expand this definition to become more narrow, e.g. require certain
@@ -111,7 +112,7 @@ export const replaceUnicodeV2 = (fileName: string) => {
 
 // const removeSchemaVersion = ({ attachment }: any) => {
 //   if (!isValid(attachment)) {
-//     console.error('Attachment.removeSchemaVersion: Invalid input attachment:', attachment);
+    // console.error('Attachment.removeSchemaVersion: Invalid input attachment:', attachment);
 //     return attachment;
 //   }
 

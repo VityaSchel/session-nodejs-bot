@@ -9,6 +9,7 @@ import { ToastUtils, UserUtils } from '../../../utils';
 import { OpenGroupPollingUtils } from '../opengroupV2/OpenGroupPollingUtils';
 import { getOpenGroupV2ConversationId } from '../utils/OpenGroupUtils';
 import { batchGlobalIsSuccess, parseBatchGlobalStatusCode } from './sogsV3BatchPoll';
+import { console } from '../../../../sessionjs-logger';
 
 export const hasReactionSupport = async (
   conversationId: string,

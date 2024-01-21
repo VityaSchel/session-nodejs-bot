@@ -12,6 +12,7 @@ import {
   QuotedAttachment,
 } from '../messages/outgoing/visibleMessage/VisibleMessage';
 import { RawPreview, RawQuote } from './Attachments';
+import { console } from '../../sessionjs-logger';
 
 interface UploadParamsV2 {
   attachment: Attachment;

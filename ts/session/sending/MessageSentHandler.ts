@@ -5,6 +5,7 @@ import { PnServer } from '../apis/push_notification_api';
 import { OpenGroupVisibleMessage } from '../messages/outgoing/visibleMessage/OpenGroupVisibleMessage';
 import { RawMessage } from '../types';
 import { UserUtils } from '../utils';
+import { console } from '../../sessionjs-logger';
 
 async function handlePublicMessageSentSuccess(
   sentMessageIdentifier: string,

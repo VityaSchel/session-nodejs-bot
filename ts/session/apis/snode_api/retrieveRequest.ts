@@ -14,6 +14,7 @@ import {
 } from './SnodeRequestTypes';
 import { SnodeSignature } from './snodeSignatures';
 import { RetrieveMessagesResultsBatched, RetrieveMessagesResultsContent } from './types';
+import { console } from '../../../sessionjs-logger';
 
 async function buildRetrieveRequest(
   lastHashes: Array<string>,

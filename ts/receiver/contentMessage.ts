@@ -37,6 +37,7 @@ import { ECKeyPair } from './keypairs';
 import { ContactsWrapperActions } from '../webworker/workers/browser/libsession_worker_interface';
 import { isUsFromCache } from '../session/utils/User';
 import { EventEmitter as SBOTEvents } from '../../src/events';
+import { console } from '../sessionjs-logger';
 
 export async function handleSwarmContentMessage(envelope: EnvelopePlus, messageHash: string) {
   try {

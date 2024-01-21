@@ -9,6 +9,7 @@ import {
   StoreOnNodeParams,
   StoreOnNodeSubRequest,
 } from './SnodeRequestTypes';
+import { console } from '../../../sessionjs-logger';
 
 function justStores(params: Array<StoreOnNodeParams>) {
   return params.map(p => {

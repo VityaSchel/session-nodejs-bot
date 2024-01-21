@@ -10,6 +10,7 @@ import { fromBase64ToArray, fromHexToArray } from '../../utils/String';
 import { doSnodeBatchRequest } from './batchRequest';
 import { getSwarmFor } from './snodePool';
 import { SnodeSignature } from './snodeSignatures';
+import { console } from '../../../sessionjs-logger';
 
 export const ERROR_CODE_NO_CONNECT = 'ENETUNREACH: No network connection.';
 

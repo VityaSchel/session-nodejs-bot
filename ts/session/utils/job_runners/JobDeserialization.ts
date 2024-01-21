@@ -2,6 +2,7 @@ import { isEmpty, isString } from 'lodash';
 import { AvatarDownload } from './jobs/AvatarDownloadJob';
 import { ConfigurationSync } from './jobs/ConfigurationSyncJob';
 import { PersistedJob, TypeOfPersistedData } from './PersistedJob';
+import { console } from '../../../sessionjs-logger';
 
 export function persistedJobFromData<T extends TypeOfPersistedData>(
   data: T

@@ -3,6 +3,8 @@
 // import _ from 'lodash';
 // import { v4 as uuidv4 } from 'uuid';
 
+import { console } from "../../../sessionjs-logger";
+
 // import { MessageUtils, UserUtils } from '..';
 // import { SignalService } from '../../../protobuf';
 // import { openConversationWithMessages } from '../../../state/ducks/conversations';
@@ -269,7 +271,7 @@
 //         throw new Error('cannot selectCameraByDeviceId without a peer connection');
 //       }
 
-//       console.info('replacing video track');
+      // console.info('replacing video track');
 //       const videoSender = peerConnection
 //         .getTransceivers()
 //         .find(t => t.sender.track?.kind === 'video')?.sender;

@@ -20,6 +20,7 @@ import { ERROR_CODE_NO_CONNECT } from './SNodeAPI';
 import { hrefPnServerProd } from '../push_notification_api/PnServer';
 import { callUtilsWorker } from '../../../webworker/workers/browser/util_worker_interface';
 import { encodeV4Request } from '../../onions/onionv4';
+import { console } from '../../../sessionjs-logger';
 
 // hold the ed25519 key of a snode against the time it fails. Used to remove a snode only after a few failures (snodeFailureThreshold failures)
 let snodeFailureCount: Record<string, number> = {};

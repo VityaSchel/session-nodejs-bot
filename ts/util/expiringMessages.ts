@@ -5,6 +5,7 @@ import { initWallClockListener } from './wallClockListener';
 
 import { Data } from '../data/data';
 import { getConversationController } from '../session/conversations';
+import { console } from '../sessionjs-logger';
 
 export async function destroyMessagesAndUpdateRedux(
   messages: Array<{

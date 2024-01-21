@@ -5,6 +5,7 @@ import { TTL_DEFAULT } from '../session/constants';
 import { CallManager, UserUtils } from '../session/utils';
 import { removeFromCache } from './cache';
 import { EnvelopePlus } from './types';
+import { console } from '../sessionjs-logger';
 
 export async function handleCallMessage(
   envelope: EnvelopePlus,

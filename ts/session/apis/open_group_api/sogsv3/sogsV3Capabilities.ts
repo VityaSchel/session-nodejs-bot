@@ -4,6 +4,7 @@ import { OpenGroupData } from '../../../../data/opengroups';
 import { OnionSending } from '../../../onions/onionSend';
 import { OpenGroupPollingUtils } from '../opengroupV2/OpenGroupPollingUtils';
 import { batchGlobalIsSuccess } from './sogsV3BatchPoll';
+import { console } from '../../../../sessionjs-logger';
 
 const capabilitiesFetchForServer = async (
   serverUrl: string,

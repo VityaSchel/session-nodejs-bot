@@ -15,6 +15,7 @@ import { fromHexToArray } from '../../../utils/String';
 import { KNOWN_BLINDED_KEYS_ITEM } from '../../../../data/settings-key';
 import { roomHasBlindEnabled } from '../../../../types/sqlSharedTypes';
 import { Storage } from '../../../../util/storage';
+import { console } from '../../../../sessionjs-logger';
 
 export type BlindedIdMapping = {
   blindedId: string;

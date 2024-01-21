@@ -25,6 +25,7 @@ import { ClosedGroupNewMessage } from '../messages/outgoing/controlMessage/group
 import { ClosedGroupRemovedMembersMessage } from '../messages/outgoing/controlMessage/group/ClosedGroupRemovedMembersMessage';
 import { UserUtils } from '../utils';
 import { fromHexToArray, toHex } from '../utils/String';
+import { console } from '../../sessionjs-logger';
 
 export type GroupInfo = {
   id: string;

@@ -9,6 +9,7 @@ import { Onions, SnodePool } from '.';
 import { SeedNodeAPI } from '../seed_node_api';
 import { requestSnodesForPubkeyFromNetwork } from './getSwarmFor';
 import { ServiceNodesList } from './getServiceNodesList';
+import { console } from '../../../sessionjs-logger';
 
 /**
  * If we get less than this snode in a swarm, we fetch new snodes for this pubkey

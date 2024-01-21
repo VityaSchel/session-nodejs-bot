@@ -11,6 +11,7 @@ import { readLastLinesEnc } from 'read-last-lines-ts';
 import rimraf from 'rimraf';
 
 import { redactAll } from '../util/privacy';
+import { console } from '../sessionjs-logger';
 
 const LEVELS = ['fatal', 'error', 'warn', 'info', 'debug', 'trace'];
 let logger: Logger | undefined;

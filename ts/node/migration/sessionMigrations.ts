@@ -37,6 +37,7 @@ import {
 import { getIdentityKeys, sqlNode } from '../sql';
 import { sleepFor } from '../../session/utils/Promise';
 import { SettingsKey } from '../../data/settings-key';
+import { console } from '../../sessionjs-logger';
 
 const hasDebugEnvVariable = Boolean(process.env.SESSION_DEBUG);
 

@@ -4,6 +4,7 @@ import { roomHasBlindEnabled } from '../../../../types/sqlSharedTypes';
 import { OnionSending } from '../../../onions/onionSend';
 import { OpenGroupRequestCommonType } from '../opengroupV2/ApiUtil';
 import { batchGlobalIsSuccess } from './sogsV3BatchPoll';
+import { console } from '../../../../sessionjs-logger';
 
 /**
  * Returns the id on which the file is saved, or null

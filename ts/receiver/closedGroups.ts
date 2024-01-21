@@ -26,6 +26,7 @@ import { ConfigWrapperObjectTypes } from '../webworker/workers/browser/libsessio
 import { getSettingsKeyFromLibsessionWrapper } from './configMessage';
 import { ECKeyPair, HexKeyPair } from './keypairs';
 import { queueAllCachedFromSource } from './receiver';
+import { console } from '../sessionjs-logger';
 
 export const distributingClosedGroupEncryptionKeyPairs = new Map<string, ECKeyPair>();
 

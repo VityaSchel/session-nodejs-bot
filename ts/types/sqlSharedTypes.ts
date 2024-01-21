@@ -9,6 +9,7 @@ import { ConversationAttributes } from '../models/conversationAttributes';
 import { OpenGroupRequestCommonType } from '../session/apis/open_group_api/opengroupV2/ApiUtil';
 import { fromHexToArray } from '../session/utils/String';
 import { ConfigWrapperObjectTypes } from '../webworker/workers/browser/libsession_worker_functions';
+import { console } from '../sessionjs-logger';
 
 /**
  * This wrapper can be used to make a function type not async, asynced.

@@ -4,6 +4,7 @@
 /* eslint-disable import/no-mutable-exports  */
 import { init, I18n } from 'emoji-mart';
 import { FixedBaseEmoji, NativeEmojiData } from '../types/Reaction';
+import { console } from '../sessionjs-logger';
 
 export type SizeClassType = 'default' | 'small' | 'medium' | 'large' | 'jumbo';
 

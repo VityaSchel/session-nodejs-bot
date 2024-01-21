@@ -1,4 +1,5 @@
 import { sqlNode } from './sql'; // checked - only node
+import { console } from '../sessionjs-logger';
 // import { userConfig } from './config/user_config'; // checked - only node
 // import { ephemeralConfig } from './config/ephemeral_config'; // checked - only node
 

@@ -16,6 +16,7 @@ import { perfEnd, perfStart } from '../session/utils/Performance';
 import { createTaskWithTimeout } from '../session/utils/TaskWithTimeout';
 import { UnprocessedParameter } from '../types/sqlSharedTypes';
 import { getEnvelopeId } from './common';
+import { console } from '../sessionjs-logger';
 
 export { downloadAttachment } from './attachments';
 

@@ -5,6 +5,7 @@ import { doSnodeBatchRequest } from './batchRequest';
 import { GetNetworkTime } from './getNetworkTime';
 import { minSnodePoolCount, requiredSnodesForAgreement } from './snodePool';
 import { GetServiceNodesSubRequest } from './SnodeRequestTypes';
+import { console } from '../../../sessionjs-logger';
 
 function buildSnodeListRequests(): Array<GetServiceNodesSubRequest> {
   const request: GetServiceNodesSubRequest = {

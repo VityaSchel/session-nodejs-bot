@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import path from 'path';
+import { console } from '../sessionjs-logger';
 
 let environment = 'development'
 

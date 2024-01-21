@@ -11,6 +11,7 @@ import {
   TypeOfPersistedData,
 } from './PersistedJob';
 import { Storage } from '../../../util/storage';
+import { console } from '../../../sessionjs-logger';
 
 /**
  * 'job_in_progress' if there is already a job in progress

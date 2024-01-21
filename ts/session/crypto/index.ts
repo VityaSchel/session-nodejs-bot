@@ -6,6 +6,7 @@ import * as DecryptedAttachmentsManager from './DecryptedAttachmentsManager';
 
 import { toHex } from '../utils/String';
 import { ECKeyPair } from '../../receiver/keypairs';
+import { console } from '../../sessionjs-logger';
 
 export { MessageEncrypter, DecryptedAttachmentsManager };
 

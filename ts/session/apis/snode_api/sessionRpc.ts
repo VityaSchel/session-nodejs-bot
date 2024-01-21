@@ -9,6 +9,7 @@ import { Snode } from '../../../data/data';
 
 import { ERROR_421_HANDLED_RETRY_REQUEST, Onions, snodeHttpsAgent, SnodeResponse } from './onions';
 import { APPLICATION_JSON } from '../../../types/MIME';
+import { console } from '../../../sessionjs-logger';
 
 export interface LokiFetchOptions {
   method: 'GET' | 'POST';

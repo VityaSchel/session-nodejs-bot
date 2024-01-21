@@ -12,6 +12,7 @@ import {
 import { ToastUtils } from '../../session/utils';
 import { GoogleChrome } from '../../util';
 import { autoScaleForAvatar, autoScaleForThumbnail } from '../../util/attachmentsUtil';
+import { console } from '../../sessionjs-logger';
 
 export const THUMBNAIL_SIDE = 200;
 export const THUMBNAIL_CONTENT_TYPE = 'image/png';

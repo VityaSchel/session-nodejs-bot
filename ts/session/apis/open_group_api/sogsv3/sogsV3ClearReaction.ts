@@ -16,6 +16,7 @@ import {
   updateMutationCache,
 } from './sogsV3MutationCache';
 import { hasReactionSupport } from './sogsV3SendReaction';
+import { console } from '../../../../sessionjs-logger';
 
 /**
  * Clears a reaction on open group server using onion v4 logic and batch send

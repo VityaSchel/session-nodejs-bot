@@ -3,6 +3,7 @@ import { Snode } from '../../../data/data';
 import { processOnionRequestErrorAtDestination, SnodeResponse } from './onions';
 import { snodeRpc } from './sessionRpc';
 import { NotEmptyArrayOfBatchResults, SnodeApiSubRequests } from './SnodeRequestTypes';
+import { console } from '../../../sessionjs-logger';
 
 /**
  * This is the equivalent to the batch send on sogs. The target node runs each sub request and returns a list of all the sub status and bodies.

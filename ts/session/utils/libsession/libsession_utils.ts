@@ -13,6 +13,7 @@ import { GetNetworkTime } from '../../apis/snode_api/getNetworkTime';
 import { SnodeNamespaces } from '../../apis/snode_api/namespaces';
 import { SharedConfigMessage } from '../../messages/outgoing/controlMessage/SharedConfigMessage';
 import { ConfigurationSync } from '../job_runners/jobs/ConfigurationSyncJob';
+import { console } from '../../../sessionjs-logger';
 
 const requiredUserVariants: Array<ConfigWrapperObjectTypes> = [
   'UserConfig',

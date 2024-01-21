@@ -1,3 +1,4 @@
+import { console } from '../sessionjs-logger';
 import { saveURLAsFile } from './saveURLAsFile';
 
 export function saveQRCode(

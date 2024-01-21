@@ -7,6 +7,7 @@ import { ToastUtils, UserUtils } from '../session/utils';
 
 import { Action, OpenGroupReactionList, ReactionList, RecentReactions } from '../types/Reaction';
 import { getRecentReactions, saveRecentReations } from './storage';
+import { console } from '../sessionjs-logger';
 
 const SOGSReactorsFetchCount = 5;
 const rateCountLimit = 20;

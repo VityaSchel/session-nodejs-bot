@@ -4,6 +4,7 @@ import { EnvelopePlus } from './types';
 import { StringUtils } from '../session/utils';
 import { Data } from '../data/data';
 import { UnprocessedParameter } from '../types/sqlSharedTypes';
+import { console } from '../sessionjs-logger';
 
 export async function removeFromCache(envelope: Pick<EnvelopePlus, 'id'>) {
   return Data.removeUnprocessed(envelope.id);

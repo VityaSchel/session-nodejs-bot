@@ -10,6 +10,7 @@ import { doSnodeBatchRequest } from './batchRequest';
 import { GetNetworkTime } from './getNetworkTime';
 import { getRandomSnode } from './snodePool';
 import { OnsResolveSubRequest } from './SnodeRequestTypes';
+import { console } from '../../../sessionjs-logger';
 
 // ONS name can have [a-zA-Z0-9_-] except that - is not allowed as start or end
 // do not define a regex but rather create it on the fly to avoid https://stackoverflow.com/questions/3891641/regex-test-only-works-every-other-time

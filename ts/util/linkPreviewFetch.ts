@@ -4,6 +4,7 @@ import { AbortSignal } from 'abort-controller';
 import { AbortSignal as AbortSignalNode } from 'node-fetch/externals';
 
 import { IMAGE_GIF, IMAGE_ICO, IMAGE_JPEG, IMAGE_PNG, IMAGE_WEBP, MIMEType } from '../types/MIME';
+import { console } from '../sessionjs-logger';
 
 const MAX_REQUEST_COUNT_WITH_REDIRECTS = 20;
 

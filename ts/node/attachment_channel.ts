@@ -8,6 +8,7 @@ import { default as glob } from 'glob';
 
 import { sqlNode } from './sql'; // checked - only node
 import { createDeleter, getAttachmentsPath } from '../shared/attachments/shared_attachments';
+import { console } from '../sessionjs-logger';
 
 let initialized = false;
 

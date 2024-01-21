@@ -10,6 +10,7 @@ import {
 } from '../../../types/sqlSharedTypes';
 import { UserGroupsWrapperActions } from '../../../webworker/workers/browser/libsession_worker_interface';
 import { getConversationController } from '../../conversations';
+import { console } from '../../../sessionjs-logger';
 
 /**
  * Returns true if that conversation is an active group

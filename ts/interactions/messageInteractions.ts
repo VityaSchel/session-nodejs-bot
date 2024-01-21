@@ -1,3 +1,4 @@
+// import { console } from '../sessionjs-logger';
 // import { joinOpenGroupV2WithUIEvents } from '../session/apis/open_group_api/opengroupV2/JoinOpenGroupV2';
 // import {
 //   sogsV3AddAdmin,

@@ -1,5 +1,6 @@
 import { OpenGroupV2Room } from '../../../../data/opengroups';
 import { ConversationModel } from '../../../../models/conversation';
+import { console } from '../../../../sessionjs-logger';
 import { getConversationController } from '../../../conversations';
 import { PromiseUtils, ToastUtils } from '../../../utils';
 

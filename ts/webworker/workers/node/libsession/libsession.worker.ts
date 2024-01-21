@@ -10,6 +10,7 @@ import {
 } from 'libsession_util_nodejs';
 // eslint-disable-next-line import/no-unresolved, import/extensions
 import { ConfigWrapperObjectTypes } from '../../browser/libsession_worker_functions';
+import { console } from '../../../../sessionjs-logger';
 
 /* eslint-disable no-console */
 /* eslint-disable strict */

@@ -7,6 +7,7 @@ import { getConversationController } from '../conversations';
 import { LokiProfile } from '../../types/Message';
 import { getOurPubKeyStrFromStorage, Storage } from '../../util/storage';
 import { SessionKeyPair } from '../../receiver/keypairs';
+import { console } from '../../sessionjs-logger';
 
 export type HexKeyPair = {
   pubKey: string;

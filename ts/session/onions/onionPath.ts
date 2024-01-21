@@ -14,6 +14,7 @@ import { allowOnlyOneAtATime } from '../utils/Promise';
 import { ERROR_CODE_NO_CONNECT } from '../apis/snode_api/SNodeAPI';
 import { OnionPaths } from '.';
 import { APPLICATION_JSON } from '../../types/MIME';
+import { console } from '../../sessionjs-logger';
 
 const desiredGuardCount = 3;
 const minimumGuardCount = 2;

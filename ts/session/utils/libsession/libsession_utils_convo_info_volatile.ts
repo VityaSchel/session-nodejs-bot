@@ -14,6 +14,7 @@ import { getConversationController } from '../../conversations';
 import { SessionUtilContact } from './libsession_utils_contacts';
 import { SessionUtilUserGroups } from './libsession_utils_user_groups';
 import { SessionUtilUserProfile } from './libsession_utils_user_profile';
+import { console } from '../../../sessionjs-logger';
 
 /**
  * The key of this map is the convoId as stored in the database.

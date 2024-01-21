@@ -2,6 +2,7 @@ import { MessageCollection } from '../models/message';
 
 import { Data } from '../data/data';
 import { getConversationController } from '../session/conversations';
+import { console } from '../sessionjs-logger';
 
 async function getTargetMessage(reader: string, messages: MessageCollection) {
   if (messages.length === 0) {

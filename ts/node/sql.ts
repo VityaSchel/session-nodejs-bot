@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import * as BetterSqlite3 from '@signalapp/better-sqlite3';
 import rimraf from 'rimraf';
+import { console } from '../sessionjs-logger';
 
 import { base64_variants, from_base64, to_hex } from 'libsodium-wrappers-sumo';
 import {

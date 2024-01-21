@@ -14,6 +14,7 @@ import { OnionSending } from '../../../onions/onionSend';
 import { allowOnlyOneAtATime } from '../../../utils/Promise';
 import { OpenGroupPollingUtils } from '../opengroupV2/OpenGroupPollingUtils';
 import { getOpenGroupV2ConversationId } from '../utils/OpenGroupUtils';
+import { console } from '../../../../sessionjs-logger';
 
 export async function fetchBinaryFromSogsWithOnionV4(sendOptions: {
   serverUrl: string;

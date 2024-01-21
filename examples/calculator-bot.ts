@@ -43,10 +43,3 @@ async function main() {
 }
 
 main()
-
-// await Data.getAllConversations()
-
-// const convos = getConversationController().getConversations()
-//   .filter(c => c.isPrivate() && c.isActive() && c.get('id'))
-
-// console.log('Convos', convos.map(c => [c.getContactProfileNameOrShortenedPubKey(), c.toJSON().lastMessage]))

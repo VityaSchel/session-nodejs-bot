@@ -3,6 +3,7 @@ import { OpenGroupData } from '../../../../data/opengroups';
 import { DecodedResponseBodiesV4 } from '../../../onions/onionv4';
 import { BatchSogsReponse, OpenGroupBatchRow } from './sogsV3BatchPoll';
 import { parseCapabilities } from './sogsV3Capabilities';
+import { console } from '../../../../sessionjs-logger';
 
 /**
  * @param subrequestOptionsLookup list of subrequests used for the batch request (order sensitive)

@@ -42,6 +42,7 @@ import { processMessagesUsingCache } from './sogsV3MutationCache';
 import { destroyMessagesAndUpdateRedux } from '../../../../util/expiringMessages';
 import { sogsRollingDeletions } from './sogsRollingDeletions';
 import { assertUnreachable } from '../../../../types/sqlSharedTypes';
+import { console } from '../../../../sessionjs-logger';
 
 /**
  * Get the convo matching those criteria and make sure it is an opengroup convo, or return null.

@@ -6,6 +6,7 @@ import { fromHexToArray } from '../String';
 import { CONVERSATION_PRIORITIES } from '../../../models/conversationAttributes';
 import { Storage } from '../../../util/storage';
 import { SettingsKey } from '../../../data/settings-key';
+import { console } from '../../../sessionjs-logger';
 
 async function insertUserProfileIntoWrapper(convoId: string) {
   if (!isUserProfileToStoreInWrapper(convoId)) {

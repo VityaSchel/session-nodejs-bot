@@ -2,6 +2,7 @@ import { SignalService } from '../../../../../protobuf';
 import { ClosedGroupMessage, ClosedGroupMessageParams } from './ClosedGroupMessage';
 import { fromHexToArray } from '../../../../utils/String';
 import { ECKeyPair } from '../../../../../receiver/keypairs';
+import { console } from '../../../../../sessionjs-logger';
 
 export interface ClosedGroupNewMessageParams extends ClosedGroupMessageParams {
   name: string;

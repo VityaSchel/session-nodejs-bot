@@ -17,6 +17,8 @@
 // import { forceSyncConfigurationNowIfNeeded } from '../utils/sync/syncUtils';
 // import { getConversationController } from './ConversationController';
 
+// import { console } from "../../sessionjs-logger";
+
 // export async function createClosedGroup(groupName: string, members: Array<string>, isV3: boolean) {
 //   const setOfMembers = new Set(members);
 
@@ -122,7 +124,7 @@
 //     encryptionKeyPair,
 //     existingExpireTimer
 //   );
-//   console.info(`Sending invites for group ${groupPublicKey} to ${listOfMembers}`);
+  // console.info(`Sending invites for group ${groupPublicKey} to ${listOfMembers}`);
 //   // evaluating if all invites sent, if failed give the option to retry failed invites via modal dialog
 //   const inviteResults = await Promise.all(promises);
 //   const allInvitesSent = _.every(inviteResults, inviteResult => inviteResult !== false);

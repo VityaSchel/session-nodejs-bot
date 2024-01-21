@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { Data } from '../../../../data/data';
 import { OpenGroupMessageV4 } from './OpenGroupServerPoller';
+import { console } from '../../../../sessionjs-logger';
 
 export const filterDuplicatesFromDbAndIncomingV4 = async (
   newMessages: Array<OpenGroupMessageV4>

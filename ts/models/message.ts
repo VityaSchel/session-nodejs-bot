@@ -73,6 +73,7 @@ import { LinkPreviews } from '../util/linkPreviews';
 import { Storage } from '../util/storage';
 import { ConversationModel } from './conversation';
 import { READ_MESSAGE_STATE } from './conversationAttributes';
+import { console } from '../sessionjs-logger';
 
 /**
  * @returns true if the array contains only a single item being 'You', 'you' or our device pubkey

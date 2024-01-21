@@ -2,6 +2,7 @@ import { cloneDeep, isNumber, uniq } from 'lodash';
 import { OpenGroupRequestCommonType } from '../session/apis/open_group_api/opengroupV2/ApiUtil';
 import { isOpenGroupV2 } from '../session/apis/open_group_api/utils/OpenGroupUtils';
 import { channels } from './channels';
+import { console } from '../sessionjs-logger';
 
 export type OpenGroupV2RoomWithImageID = {
   serverUrl: string;

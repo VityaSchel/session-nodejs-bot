@@ -1,5 +1,6 @@
 import { GetNetworkTime } from '../session/apis/snode_api/getNetworkTime';
 import { ConfigurationSync } from '../session/utils/job_runners/jobs/ConfigurationSyncJob';
+import { console } from '../sessionjs-logger';
 import { assertUnreachable } from '../types/sqlSharedTypes';
 import { Storage } from './storage';
 

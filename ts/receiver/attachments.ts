@@ -14,6 +14,7 @@ import {
   downloadFileFromFileServer,
   fileServerURL,
 } from '../session/apis/file_server_api/FileServerApi';
+import { console } from '../sessionjs-logger';
 
 export async function downloadAttachment(attachment: {
   url: string;

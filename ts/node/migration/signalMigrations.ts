@@ -14,6 +14,7 @@ import {
 } from '../database_utility';
 import { getAppRootPath } from '../getRootPath';
 import { updateSessionSchema } from './sessionMigrations';
+import { console } from '../../sessionjs-logger';
 
 // eslint:disable: quotemark non-literal-fs-path one-variable-per-declaration
 const openDbOptions = {

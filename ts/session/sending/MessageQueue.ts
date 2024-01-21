@@ -31,6 +31,7 @@ import {
   SnodeNamespacesUser,
 } from '../apis/snode_api/namespaces';
 import { SharedConfigMessage } from '../messages/outgoing/controlMessage/SharedConfigMessage';
+import { console } from '../../sessionjs-logger';
 
 type ClosedGroupMessageType =
   | ClosedGroupVisibleMessage

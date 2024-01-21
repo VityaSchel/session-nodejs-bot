@@ -14,6 +14,7 @@ import { THUMBNAIL_SIDE } from '../types/attachments/VisualAttachment';
 
 import { MAX_ATTACHMENT_FILESIZE_BYTES } from '../session/constants';
 import { perfEnd, perfStart } from '../session/utils/Performance';
+import { console } from '../sessionjs-logger';
 
 /**
  * The logic for sending attachments is as follow:

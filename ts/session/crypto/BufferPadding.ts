@@ -1,3 +1,4 @@
+import { console } from '../../sessionjs-logger';
 import { MAX_ATTACHMENT_FILESIZE_BYTES } from '../constants';
 
 /**

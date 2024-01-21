@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import _ from 'lodash';
 import { File } from 'web-file-polyfill';
+import { console } from '../sessionjs-logger';
 
 /**
  * When IPC arguments are prepared for the cross-process send, they are JSON.stringified.

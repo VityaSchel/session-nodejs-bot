@@ -5,6 +5,7 @@ import {
   ConversationAttributesWithNotSavedOnes,
   CONVERSATION_PRIORITIES,
 } from '../models/conversationAttributes';
+import { console } from '../sessionjs-logger';
 
 export const CONVERSATIONS_TABLE = 'conversations';
 export const MESSAGES_TABLE = 'messages';

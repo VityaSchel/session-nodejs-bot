@@ -10,6 +10,7 @@ import { doSnodeBatchRequest } from './batchRequest';
 import { GetNetworkTime } from './getNetworkTime';
 import { getSwarmFor } from './snodePool';
 import { SnodeSignature } from './snodeSignatures';
+import { console } from '../../../sessionjs-logger';
 
 async function verifySignature({
   pubkey,

@@ -2,6 +2,8 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-promise-executor-return */
 
+import { console } from "../../sessionjs-logger";
+
 export const createTaskWithTimeout = (task: any, id: string, givenTimeout?: number) => {
   const timeout = givenTimeout || 1000 * 60 * 3; // three minutes
 

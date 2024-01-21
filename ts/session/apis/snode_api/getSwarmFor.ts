@@ -5,6 +5,7 @@ import { doSnodeBatchRequest } from './batchRequest';
 import { GetNetworkTime } from './getNetworkTime';
 import { getRandomSnode } from './snodePool';
 import { SwarmForSubRequest } from './SnodeRequestTypes';
+import { console } from '../../../sessionjs-logger';
 
 function buildSwarmForSubRequests(pubkey: string): Array<SwarmForSubRequest> {
   return [{ method: 'get_swarm', params: { pubkey } }];

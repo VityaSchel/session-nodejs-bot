@@ -8,6 +8,7 @@ import { isNumber } from 'lodash';
 import { Snode } from '../../../data/data';
 import { doSnodeBatchRequest } from './batchRequest';
 import { NetworkTimeSubRequest } from './SnodeRequestTypes';
+import { console } from '../../../sessionjs-logger';
 
 function getNetworkTimeSubRequests(): Array<NetworkTimeSubRequest> {
   const request: NetworkTimeSubRequest = { method: 'info', params: {} };

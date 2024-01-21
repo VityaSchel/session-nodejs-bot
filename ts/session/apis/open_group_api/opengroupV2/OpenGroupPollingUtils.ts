@@ -7,6 +7,7 @@ import { fromHexToArray } from '../../../utils/String';
 import { getSodiumRenderer } from '../../../crypto';
 import { SogsBlinding } from '../sogsv3/sogsBlinding';
 import { GetNetworkTime } from '../../snode_api/getNetworkTime';
+import { console } from '../../../../sessionjs-logger';
 
 export type OpenGroupRequestHeaders = {
   'X-SOGS-Pubkey': string;

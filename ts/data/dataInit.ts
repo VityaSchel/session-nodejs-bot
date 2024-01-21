@@ -1,3 +1,4 @@
+import { console } from '../sessionjs-logger';
 import { channels } from './channels';
 import { ConfigDumpData } from './configDump/configDump';
 

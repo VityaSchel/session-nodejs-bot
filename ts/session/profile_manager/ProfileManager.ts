@@ -3,6 +3,7 @@ import { getConversationController } from '../conversations';
 import { UserUtils } from '../utils';
 import { toHex } from '../utils/String';
 import { AvatarDownload } from '../utils/job_runners/jobs/AvatarDownloadJob';
+import { console } from '../../sessionjs-logger';
 
 /**
  * This can be used to update our conversation display name with the given name right away, and plan an AvatarDownloadJob to retrieve the new avatar if needed to download it

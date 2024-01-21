@@ -55,6 +55,7 @@ import { HexKeyPair } from './keypairs';
 import { queueAllCachedFromSource } from './receiver';
 import { EnvelopePlus } from './types';
 import { ConversationModel } from '../models/conversation';
+import { console } from '../sessionjs-logger';
 
 function groupByVariant(
   incomingConfigs: Array<IncomingMessage<SignalService.ISharedConfigMessage>>

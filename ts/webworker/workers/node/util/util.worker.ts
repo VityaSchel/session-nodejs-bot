@@ -8,6 +8,7 @@ import {
   encryptAttachmentBufferNode as realEncryptAttachmentBufferNode,
 } from '../../../../node/encrypt_attachment_buffer';
 import crypto from 'crypto'
+import { console } from '../../../../sessionjs-logger';
 
 /* eslint-disable no-console */
 /* eslint-disable strict */

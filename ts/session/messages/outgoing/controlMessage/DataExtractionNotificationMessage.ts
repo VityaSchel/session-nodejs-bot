@@ -10,6 +10,7 @@ import { UserUtils } from '../../../utils';
 import { SettingsKey } from '../../../../data/settings-key';
 import { Storage } from '../../../../util/storage';
 import { SnodeNamespaces } from '../../../apis/snode_api/namespaces';
+import { console } from '../../../../sessionjs-logger';
 
 interface DataExtractionNotificationMessageParams extends MessageParams {
   referencedAttachmentTimestamp: number;

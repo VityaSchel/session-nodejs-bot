@@ -1,7 +1,7 @@
 {
   "name": "session.js",
   "description": "Private messaging from your desktop",
-  "version": "1.11.5",
+  "version": "1.0.0",
   "license": "MIT",
   "author": "Viktor Shchelochkov <hi@hloth.dev> (https://hloth.dev)",
   "repository": {
@@ -300,5 +300,6 @@
       "ts/webworker/workers/node/libsession/*.node",
       "!dev-app-update.yml"
     ]
-  }
+  },
+  "files": []
 }

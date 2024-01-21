@@ -6,6 +6,7 @@ import {
   OpenGroupBatchRow,
   sogsBatchSend,
 } from './sogsV3BatchPoll';
+import { console } from '../../../../sessionjs-logger';
 
 /**
  * Deletes messages on open group server using onion v4 logic and batch send

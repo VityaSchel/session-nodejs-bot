@@ -24,6 +24,7 @@ import { channels } from './channels';
 import * as dataInit from './dataInit';
 import { cleanData } from './dataUtils';
 import { SNODE_POOL_ITEM_ID } from './settings-key';
+import { console } from '../sessionjs-logger';
 
 const ERASE_SQL_KEY = 'erase-sql-key';
 const ERASE_ATTACHMENTS_KEY = 'erase-attachments';

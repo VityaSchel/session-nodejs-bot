@@ -32,6 +32,7 @@ import { fromBase64ToArray, fromHexToArray } from '../String';
 import { getCompleteUrlFromRoom } from '../../apis/open_group_api/utils/OpenGroupUtils';
 import { Storage } from '../../../util/storage';
 import { ReleasedFeatures } from '../../../util/releaseFeature';
+import { console } from '../../../sessionjs-logger';
 
 const ITEM_ID_LAST_SYNC_TIMESTAMP = 'lastSyncedTimestamp';
 

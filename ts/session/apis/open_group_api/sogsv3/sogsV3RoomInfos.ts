@@ -6,6 +6,7 @@ import { OnionSending } from '../../../onions/onionSend';
 import { OpenGroupV2Info } from '../opengroupV2/ApiUtil';
 import { batchGlobalIsSuccess, parseBatchGlobalStatusCode } from './sogsV3BatchPoll';
 import { fetchCapabilitiesAndUpdateRelatedRoomsOfServerUrl } from './sogsV3Capabilities';
+import { console } from '../../../../sessionjs-logger';
 
 export const getAllRoomInfos = async (roomInfos: OpenGroupV2Room) => {
   const result = await OnionSending.sendJsonViaOnionV4ToSogs({

@@ -56,7 +56,7 @@ ts/webworker/workers/node/**/*.node
 bot.md
 
 session-data*/*
-!session-data*/.gitkeep
+!session-data/.gitkeep
 
 src/*.js
 examples/*.js
