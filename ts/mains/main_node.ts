@@ -41,13 +41,15 @@ import { initAttachmentsChannel } from '../node/attachment_channel';
 import { ephemeralConfig } from '../node/config/ephemeral_config'; // checked - only node
 import { getLogger, initializeLogger } from '../node/logging'; // checked - only node
 import { sqlNode } from '../node/sql'; // checked - only node
-// import * as sqlChannels from '../node/sql_channel'; // checked - only node
+import * as sqlChannels from '../node/sql_channel'; // checked - only node
 import { windowMarkShouldQuit, windowShouldQuit } from '../node/window_state'; // checked - only node
 // import { createTemplate } from '../node/menu'; // checked - only node
 // import { installFileHandler, installWebHandler } from '../node/protocol_filter'; // checked - only node
 // import { installPermissionsHandler } from '../node/permissions'; // checked - only node
 
 let appStartInitialSpellcheckSetting = true;
+
+sqlChannels.initializeSqlChannel()
 
 const enableTestIntegrationWiderWindow = false;
 const isTestIntegration =
@@ -76,6 +78,12 @@ if (windowFromUserConfig) {
 // import {load as loadLocale} from '../..'
 import { setLastestRelease } from '../node/latest_desktop_release';
 import { getAppRootPath } from '../node/getRootPath';
+import { getConversationController } from '../session/conversations';
+import { BlockedNumberController } from '../util';
+import { Registration } from '../util/registration';
+import { LibSessionUtil } from '../session/utils/libsession/libsession_utils';
+import { initData } from '../data/dataInit';
+import { Storage } from '../util/storage';
 
 // Both of these will be set after app fires the 'ready' event
 let logger: Logger | null = null;
@@ -178,6 +186,56 @@ async function showMainWindow(sqlKey: string, passwordAttempt = false) {
   });
 
   ready = true;
+
+  console.log('============================== test')
+
+  initData()
+
+  console.log('============================== storage fetch')
+
+  await Storage.fetch()
+
+  console.log('============================== test0')
+
+  if (Registration.isDone()) {
+    try {
+      await LibSessionUtil.initializeLibSessionUtilWrappers();
+    } catch (e) {
+      console.warn('LibSessionUtil.initializeLibSessionUtilWrappers failed with', e.message);
+      // I don't think there is anything we can do if this happens
+      throw e;
+    }
+  }
+
+  console.log('============================== test1')
+
+  await getConversationController().load()
+  console.log('============================== test2')
+
+  await BlockedNumberController.load()
+
+  console.log('============================== test3')
+  
+  await getConversationController().loadPromise()
+  console.log('============================== test4')
+
+  const conversationModel = getConversationController().get()
+  console.log(typeof conversationModel)
+  type msg = {
+    body: string;
+    attachments: Array<any> | undefined;
+    quote: any | undefined;
+    preview: any | undefined;
+    groupInvitation: { url: string | undefined; name: string } | undefined;
+  }
+  const message: msg = {
+    body: 'test!!! ' + new Date().toISOString(),
+    attachments: undefined,
+    quote: undefined,
+    preview: undefined,
+    groupInvitation: undefined,
+  }
+  await conversationModel.sendMessage(message)
 
   while(true) {
     await new Promise((resolve) => setTimeout(resolve, 1000));

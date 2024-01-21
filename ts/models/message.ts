@@ -57,24 +57,6 @@ import {
 import { perfEnd, perfStart } from '../session/utils/Performance';
 import { buildSyncMessage } from '../session/utils/sync/syncUtils';
 import { isUsFromCache } from '../session/utils/User';
-import {
-  FindAndFormatContactType,
-  LastMessageStatusType,
-  MessageModelPropsWithoutConvoProps,
-  MessagePropsDetails,
-  messagesChanged,
-  PropsForAttachment,
-  PropsForExpirationTimer,
-  PropsForGroupInvitation,
-  PropsForGroupUpdate,
-  PropsForGroupUpdateAdd,
-  PropsForGroupUpdateGeneral,
-  PropsForGroupUpdateKicked,
-  PropsForGroupUpdateLeft,
-  PropsForGroupUpdateName,
-  PropsForMessageWithoutConvoProps,
-  PropsForQuote,
-} from '../state/ducks/conversations';
 import { AttachmentTypeWithPath, isVoiceMessage } from '../types/Attachment';
 import { getAttachmentMetadata } from '../types/message/initializeAttachmentMetadata';
 import {
@@ -125,14 +107,10 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
     }
     autoBind(this);
 
-    if (window) {
-      window.contextMenuShown = false;
-    }
-
     this.getMessageModelProps();
   }
 
-  public getMessageModelProps(): MessageModelPropsWithoutConvoProps {
+  public getMessageModelProps(): any {
     perfStart(`getPropsMessage-${this.id}`);
     const propsForDataExtractionNotification = this.getPropsForDataExtractionNotification();
     const propsForGroupInvitation = this.getPropsForGroupInvitation();
@@ -141,7 +119,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
     const propsForMessageRequestResponse = this.getPropsForMessageRequestResponse();
     const propsForQuote = this.getPropsForQuote();
     const callNotificationType = this.get('callNotificationType');
-    const messageProps: MessageModelPropsWithoutConvoProps = {
+    const messageProps: any = {
       propsForMessage: this.getPropsForMessage(),
     };
     if (propsForDataExtractionNotification) {
@@ -227,6 +205,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
     if (description) {
       // regex with a 'g' to ignore part groups
       const regex = new RegExp(`@${PubKey.regexForPubkeys}`, 'g');
+      // @ts-ignore
       const pubkeysInDesc = description.match(regex);
       (pubkeysInDesc || []).forEach((pubkeyWithAt: string) => {
         const pubkey = pubkeyWithAt.slice(1);
@@ -235,25 +214,25 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
           pubkey
         );
         if (isUS) {
-          description = description?.replace(pubkeyWithAt, `@${window.i18n('you')}`);
+          // @ts-ignore
+          description = description?.replace(pubkeyWithAt, `@${('you')}`);
         } else if (displayName && displayName.length) {
+          // @ts-ignore
           description = description?.replace(pubkeyWithAt, `@${displayName}`);
         }
       });
       return description;
     }
     if ((this.get('attachments') || []).length > 0) {
-      return window.i18n('mediaMessage');
+      return ('mediaMessage');
     }
     if (this.isExpirationTimerUpdate()) {
       const expireTimerUpdate = this.get('expirationTimerUpdate');
       if (!expireTimerUpdate || !expireTimerUpdate.expireTimer) {
-        return window.i18n('disappearingMessagesDisabled');
+        return ('disappearingMessagesDisabled');
       }
 
-      return window.i18n('timerSetTo', [
-        ExpirationTimerOptions.getAbbreviated(expireTimerUpdate.expireTimer || 0),
-      ]);
+      return 'timerSetTo';
     }
 
     return '';
@@ -267,7 +246,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
     await deleteExternalMessageFiles(this.attributes);
   }
 
-  public getPropsForTimerNotification(): PropsForExpirationTimer | null {
+  public getPropsForTimerNotification(): any | null {
     if (!this.isExpirationTimerUpdate()) {
       return null;
     }
@@ -280,7 +259,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
     const timespan = ExpirationTimerOptions.getName(expireTimer || 0);
     const disabled = !expireTimer;
 
-    const basicProps: PropsForExpirationTimer = {
+    const basicProps: any = {
       ...findAndFormatContact(source),
       timespan,
       disabled,
@@ -293,7 +272,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
     return basicProps;
   }
 
-  public getPropsForGroupInvitation(): PropsForGroupInvitation | null {
+  public getPropsForGroupInvitation(): any | null {
     if (!this.isGroupInvitation()) {
       return null;
     }
@@ -369,7 +348,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
     };
   }
 
-  public getPropsForGroupUpdateMessage(): PropsForGroupUpdate | null {
+  public getPropsForGroupUpdateMessage(): any | null {
     const groupUpdate = this.getGroupUpdateAsArray();
 
     if (!groupUpdate || isEmpty(groupUpdate)) {
@@ -383,7 +362,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
     };
 
     if (groupUpdate.joined?.length) {
-      const change: PropsForGroupUpdateAdd = {
+      const change: any = {
         type: 'add',
         added: groupUpdate.joined,
       };
@@ -391,7 +370,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
     }
 
     if (groupUpdate.kicked?.length) {
-      const change: PropsForGroupUpdateKicked = {
+      const change: any = {
         type: 'kicked',
         kicked: groupUpdate.kicked,
       };
@@ -399,7 +378,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
     }
 
     if (groupUpdate.left?.length) {
-      const change: PropsForGroupUpdateLeft = {
+      const change: any = {
         type: 'left',
         left: groupUpdate.left,
       };
@@ -407,7 +386,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
     }
 
     if (groupUpdate.name) {
-      const change: PropsForGroupUpdateName = {
+      const change: any = {
         type: 'name',
         newName: groupUpdate.name,
       };
@@ -415,13 +394,13 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
     }
 
     // Just show a "Group Updated" message, not sure what was changed
-    const changeGeneral: PropsForGroupUpdateGeneral = {
+    const changeGeneral: any = {
       type: 'general',
     };
     return { change: changeGeneral, ...sharedProps };
   }
 
-  public getMessagePropStatus(): LastMessageStatusType {
+  public getMessagePropStatus(): any {
     if (this.hasErrors()) {
       return 'error';
     }
@@ -457,7 +436,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
     return 'sending';
   }
 
-  public getPropsForMessage(): PropsForMessageWithoutConvoProps {
+  public getPropsForMessage(): any {
     const sender = this.getSource();
     const expirationLength = this.get('expireTimer') * 1000;
     const expireTimerStart = this.get('expirationStartTimestamp');
@@ -467,7 +446,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
     const attachments = this.get('attachments') || [];
     const isTrustedForAttachmentDownload = this.isTrustedForAttachmentDownload();
     const body = this.get('body');
-    const props: PropsForMessageWithoutConvoProps = {
+    const props: any = {
       id: this.id,
       direction: (this.isIncoming() ? 'incoming' : 'outgoing') as MessageModelType,
       timestamp: this.get('sent_at') || 0,
@@ -543,7 +522,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
     }
 
     return previews.map((preview: any) => {
-      let image: PropsForAttachment | null = null;
+      let image: any | null = null;
       try {
         if (preview.image) {
           image = this.getPropsForAttachment(preview.image);
@@ -564,11 +543,11 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
     return this.get('reacts') || null;
   }
 
-  public getPropsForQuote(): PropsForQuote | null {
+  public getPropsForQuote(): any | null {
     return this.get('quote') || null;
   }
 
-  public getPropsForAttachment(attachment: AttachmentTypeWithPath): PropsForAttachment | null {
+  public getPropsForAttachment(attachment: AttachmentTypeWithPath): any | null {
     if (!attachment) {
       return null;
     }
@@ -620,7 +599,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
     };
   }
 
-  public async getPropsForMessageDetail(): Promise<MessagePropsDetails> {
+  public async getPropsForMessageDetail(): Promise<any> {
     // We include numbers we didn't successfully send to so we can display errors.
     // Older messages don't have the recipients included on the message, so we fall
     //   back to the conversation's current recipients
@@ -654,7 +633,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
     // sort by pubkey
     const sortedContacts = sortBy(finalContacts, contact => contact.pubkey);
 
-    const toRet: MessagePropsDetails = {
+    const toRet: any = {
       sentAt: this.get('sent_at') || 0,
       receivedAt: this.get('received_at') || 0,
       convoId: this.get('conversationId'),
@@ -751,7 +730,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
   public async markAsDeleted() {
     this.set({
       isDeleted: true,
-      body: window.i18n('messageDeletedPlaceholder'),
+      body: ('messageDeletedPlaceholder'),
       quote: undefined,
       groupInvitation: undefined,
       dataExtractionNotification: undefined,
@@ -769,10 +748,6 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
 
   // One caller today: event handler for the 'Retry Send' entry on right click of a failed send message
   public async retrySend() {
-    if (!window.isOnline) {
-      console.error('retrySend: Cannot retry since we are offline!');
-      return null;
-    }
 
     this.set({ errors: null, sent: false, sent_to: [] });
     await this.commit();
@@ -1036,8 +1011,6 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
       // based on `setToExpire()`
       this.set({ expires_at: expiresAt });
     }
-
-    Notifications.clearByMessageId(this.id);
   }
 
   public isExpiring() {
@@ -1159,24 +1132,22 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
     const groupUpdate = this.getGroupUpdateAsArray();
     if (groupUpdate) {
       if (arrayContainsUsOnly(groupUpdate.kicked)) {
-        return window.i18n('youGotKickedFromGroup');
+        return ('youGotKickedFromGroup');
       }
       if (arrayContainsUsOnly(groupUpdate.left)) {
-        return window.i18n('youLeftTheGroup');
+        return ('youLeftTheGroup');
       }
 
       if (groupUpdate.left && groupUpdate.left.length === 1) {
-        return window.i18n('leftTheGroup', [
-          getConversationController().getContactProfileNameOrShortenedPubKey(groupUpdate.left[0]),
-        ]);
+        return 'leftTheGroup';
       }
 
       const messages = [];
       if (!groupUpdate.name && !groupUpdate.joined && !groupUpdate.kicked && !groupUpdate.kicked) {
-        return window.i18n('updatedTheGroup'); // Group Updated
+        return ('updatedTheGroup'); // Group Updated
       }
       if (groupUpdate.name) {
-        return window.i18n('titleIsNow', [groupUpdate.name]);
+        return 'titleIsNow';
       }
       if (groupUpdate.joined && groupUpdate.joined.length) {
         const names = groupUpdate.joined.map(
@@ -1184,9 +1155,9 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
         );
 
         if (names.length > 1) {
-          messages.push(window.i18n('multipleJoinedTheGroup', [names.join(', ')]));
+          messages.push('multipleJoinedTheGroup ' + names.join(', '));
         } else {
-          messages.push(window.i18n('joinedTheGroup', names));
+          messages.push('joinedTheGroup ' + names.join(', '));
         }
         return messages.join(' ');
       }
@@ -1198,18 +1169,18 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
         );
 
         if (names.length > 1) {
-          messages.push(window.i18n('multipleKickedFromTheGroup', [names.join(', ')]));
+          messages.push('multipleKickedFromTheGroup');
         } else {
-          messages.push(window.i18n('kickedFromTheGroup', names));
+          messages.push('kickedFromTheGroup');
         }
       }
       return messages.join(' ');
     }
     if (this.isIncoming() && this.hasErrors()) {
-      return window.i18n('incomingError');
+      return ('incomingError');
     }
     if (this.isGroupInvitation()) {
-      return `😎 ${window.i18n('openGroupInvitation')}`;
+      return `😎 ${('openGroupInvitation')}`;
     }
 
     if (this.isDataExtractionNotification()) {
@@ -1217,14 +1188,14 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
         'dataExtractionNotification'
       ) as DataExtractionNotificationMsg;
       if (dataExtraction.type === SignalService.DataExtractionNotification.Type.SCREENSHOT) {
-        return window.i18n('tookAScreenshot', [
+        return 'tookAScreenshot' + [
           getConversationController().getContactProfileNameOrShortenedPubKey(dataExtraction.source),
-        ]);
+        ].join(', ');
       }
 
-      return window.i18n('savedTheFile', [
+      return 'savedTheFile' + [
         getConversationController().getContactProfileNameOrShortenedPubKey(dataExtraction.source),
-      ]);
+      ].join(', ');
     }
     if (this.get('callNotificationType')) {
       const displayName = getConversationController().getContactProfileNameOrShortenedPubKey(
@@ -1232,19 +1203,19 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
       );
       const callNotificationType = this.get('callNotificationType');
       if (callNotificationType === 'missed-call') {
-        return window.i18n('callMissed', [displayName]);
+        return 'callMissed '+ displayName;
       }
       if (callNotificationType === 'started-call') {
-        return window.i18n('startedACall', [displayName]);
+        return 'startedACall '+ displayName;
       }
       if (callNotificationType === 'answered-a-call') {
-        return window.i18n('answeredACall', [displayName]);
+        return 'answeredACall '+ displayName;
       }
     }
     if (this.get('reaction')) {
       const reaction = this.get('reaction');
       if (reaction && reaction.emoji && reaction.emoji !== '') {
-        return window.i18n('reactionNotification', [reaction.emoji]);
+        return 'reactionNotification ' + reaction.emoji;
       }
     }
     return this.get('body');
@@ -1256,19 +1227,20 @@ const throttledAllMessagesDispatch = debounce(
     if (updatesToDispatch.size === 0) {
       return;
     }
-    window.inboxStore?.dispatch(messagesChanged([...updatesToDispatch.values()]));
+    // window.inboxStore?.dispatch(messagesChanged([...updatesToDispatch.values()]));
+    console.log('[SBOT/redux] messagesChanged')
     updatesToDispatch.clear();
   },
   500,
   { trailing: true, leading: true, maxWait: 1000 }
 );
 
-const updatesToDispatch: Map<string, MessageModelPropsWithoutConvoProps> = new Map();
+const updatesToDispatch: Map<string, any> = new Map();
 export class MessageCollection extends Backbone.Collection<MessageModel> {}
 
 MessageCollection.prototype.model = MessageModel;
 
-export function findAndFormatContact(pubkey: string): FindAndFormatContactType {
+export function findAndFormatContact(pubkey: string): any {
   const contactModel = getConversationController().get(pubkey);
   let profileName: string | null = null;
   let isMe = false;
@@ -1277,7 +1249,7 @@ export function findAndFormatContact(pubkey: string): FindAndFormatContactType {
     pubkey === UserUtils.getOurPubKeyStrFromCache() ||
     (pubkey && PubKey.isBlinded(pubkey) && isUsAnySogsFromCache(pubkey))
   ) {
-    profileName = window.i18n('you');
+    profileName = ('you');
     isMe = true;
   } else {
     profileName = contactModel?.getNicknameOrRealUsername() || null;

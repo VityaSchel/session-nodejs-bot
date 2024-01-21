@@ -6,10 +6,10 @@ import { isEmpty, isNil } from 'lodash';
 import { Data } from '../../data/data';
 import { OpenGroupData } from '../../data/opengroups';
 import { ConversationCollection, ConversationModel } from '../../models/conversation';
-import {
-  actions as conversationActions,
-  resetConversationExternal,
-} from '../../state/ducks/conversations';
+// import {
+//   actions as conversationActions,
+//   resetConversationExternal,
+// } from '../../state/ducks/conversations';
 import { BlockedNumberController } from '../../util';
 import { getOpenGroupManager } from '../apis/open_group_api/opengroupV2/OpenGroupManagerV2';
 import { getSwarmFor } from '../apis/snode_api/snodePool';
@@ -30,7 +30,7 @@ import { getSwarmPollingInstance } from '../apis/snode_api';
 import { SnodeNamespaces } from '../apis/snode_api/namespaces';
 import { ClosedGroupMemberLeftMessage } from '../messages/outgoing/controlMessage/group/ClosedGroupMemberLeftMessage';
 import { UserUtils } from '../utils';
-import { getCurrentlySelectedConversationOutsideRedux } from '../../state/selectors/conversations';
+// import { getCurrentlySelectedConversationOutsideRedux } from '../../state/selectors/conversations';
 import { removeAllClosedGroupEncryptionKeyPairs } from '../../receiver/closedGroups';
 import { OpenGroupUtils } from '../apis/open_group_api/utils';
 
@@ -130,12 +130,13 @@ export class ConversationController {
         throw error;
       }
 
-      window?.inboxStore?.dispatch(
-        conversationActions.conversationAdded({
-          id: conversation.id,
-          data: conversation.getConversationModelProps(),
-        })
-      );
+      // window?.inboxStore?.dispatch(
+      //   conversationActions.conversationAdded({
+      //     id: conversation.id,
+      //     data: conversation.getConversationModelProps(),
+      //   })
+      // );
+      console.log('[SBOT/redux] conversationActions')
 
       if (!conversation.isPublic() && conversation.isActive()) {
         // NOTE: we request snodes updating the cache, but ignore the result
@@ -287,9 +288,10 @@ export class ConversationController {
         await SessionUtilContact.removeContactFromWrapper(conversation.id); // then remove the entry alltogether from the wrapper
         await SessionUtilConvoInfoVolatile.removeContactFromWrapper(conversation.id);
       }
-      if (getCurrentlySelectedConversationOutsideRedux() === conversation.id) {
-        window.inboxStore?.dispatch(resetConversationExternal());
-      }
+      // if (getCurrentlySelectedConversationOutsideRedux() === conversation.id) {
+      //   // window.inboxStore?.dispatch(resetConversationExternal());
+      //   console.log('[SBOT/redux] resetConversationExternal')
+      // }
     }
 
     if (!options.fromSyncMessage) {
@@ -383,9 +385,10 @@ export class ConversationController {
   public reset() {
     this._initialPromise = Promise.resolve();
     this._initialFetchComplete = false;
-    if (window?.inboxStore) {
-      window.inboxStore?.dispatch(conversationActions.removeAllConversations());
-    }
+    // if (window?.inboxStore) {
+      // window.inboxStore?.dispatch(conversationActions.removeAllConversations());
+      // console.log('[SBOT/redux] conversationActions')
+    // }
     this.conversations.reset([]);
   }
 
@@ -430,11 +433,13 @@ export class ConversationController {
     if (conversation) {
       this.conversations.remove(conversation);
 
-      window?.inboxStore?.dispatch(
-        conversationActions.conversationsChanged([conversation.getConversationModelProps()])
-      );
+      // window?.inboxStore?.dispatch(
+      //   conversationActions.conversationsChanged([conversation.getConversationModelProps()])
+      // );
+      console.log('[SBOT/redux] conversationActions')
     }
-    window.inboxStore?.dispatch(conversationActions.conversationRemoved(convoId));
+    // window.inboxStore?.dispatch(conversationActions.conversationRemoved(convoId));
+    console.log('[SBOT/redux] conversationActions')
 
     console.info(`cleanUpGroupConversation, convo removed from store: ${convoId}`);
   }

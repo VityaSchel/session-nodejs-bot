@@ -1,3 +1,5 @@
+import Worker from 'web-worker'
+
 const WORKER_TIMEOUT = 60 * 1000; // one minute
 
 class TimedOutError extends Error {

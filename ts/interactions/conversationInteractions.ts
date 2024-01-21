@@ -143,42 +143,44 @@ export async function declineConversationWithoutConfirm({
     await forceSyncConfigurationNowIfNeeded();
   }
   if (currentlySelectedConvo && currentlySelectedConvo === conversationId) {
-    window?.inboxStore?.dispatch(resetConversationExternal());
+    // window?.inboxStore?.dispatch(resetConversationExternal());
+    console.log('[SBOT/redux] resetConversationExternal')
   }
 }
 
 export const declineConversationWithConfirm = ({
-  conversationId,
-  syncToDevices,
-  blockContact,
-  currentlySelectedConvo,
+  // conversationId,
+  // syncToDevices,
+  // blockContact,
+  // currentlySelectedConvo,
 }: {
   conversationId: string;
   currentlySelectedConvo: string | undefined;
   syncToDevices: boolean;
   blockContact: boolean; // if set to false, the contact will just be set to not approved
 }) => {
-  window?.inboxStore?.dispatch(
-    updateConfirmModal({
-      okText: blockContact ? window.i18n('block') : window.i18n('decline'),
-      cancelText: window.i18n('cancel'),
-      message: window.i18n('declineRequestMessage'),
-      onClickOk: async () => {
-        await declineConversationWithoutConfirm({
-          conversationId,
-          currentlySelectedConvo,
-          blockContact,
-          syncToDevices,
-        });
-      },
-      onClickCancel: () => {
-        window?.inboxStore?.dispatch(updateConfirmModal(null));
-      },
-      onClickClose: () => {
-        window?.inboxStore?.dispatch(updateConfirmModal(null));
-      },
-    })
-  );
+  // window?.inboxStore?.dispatch(
+  //   updateConfirmModal({
+  //     okText: blockContact ? window.i18n('block') : window.i18n('decline'),
+  //     cancelText: window.i18n('cancel'),
+  //     message: window.i18n('declineRequestMessage'),
+  //     onClickOk: async () => {
+  //       await declineConversationWithoutConfirm({
+  //         conversationId,
+  //         currentlySelectedConvo,
+  //         blockContact,
+  //         syncToDevices,
+  //       });
+  //     },
+  //     onClickCancel: () => {
+  //       window?.inboxStore?.dispatch(updateConfirmModal(null));
+  //     },
+  //     onClickClose: () => {
+  //       window?.inboxStore?.dispatch(updateConfirmModal(null));
+  //     },
+  //   })
+  // );
+  console.log('[SBOT/redux] updateConfirmModal')
 };
 
 export async function showUpdateGroupNameByConvoId(conversationId: string) {
@@ -191,7 +193,8 @@ export async function showUpdateGroupNameByConvoId(conversationId: string) {
         .map(m => getConversationController().getOrCreateAndWait(m, ConversationTypeEnum.PRIVATE))
     );
   }
-  window.inboxStore?.dispatch(updateGroupNameModal({ conversationId }));
+  // window.inboxStore?.dispatch(updateGroupNameModal({ conversationId }));
+  console.log('[SBOT/redux] updateGroupNameModal')
 }
 
 export async function showUpdateGroupMembersByConvoId(conversationId: string) {
@@ -204,7 +207,8 @@ export async function showUpdateGroupMembersByConvoId(conversationId: string) {
         .map(m => getConversationController().getOrCreateAndWait(m, ConversationTypeEnum.PRIVATE))
     );
   }
-  window.inboxStore?.dispatch(updateGroupMembersModal({ conversationId }));
+  // window.inboxStore?.dispatch(updateGroupMembersModal({ conversationId }));
+  console.log('[SBOT/redux] updateGroupMembersModal')
 }
 
 export function showLeaveGroupByConvoId(conversationId: string) {
@@ -214,8 +218,8 @@ export function showLeaveGroupByConvoId(conversationId: string) {
     throw new Error('showLeaveGroupDialog() called with a non group convo.');
   }
 
-  const title = window.i18n('leaveGroup');
-  const message = window.i18n('leaveGroupConfirmation');
+  const title = 'leavegroup_title'//window.i18n('leaveGroup');
+  const message = 'leavegroup_confirmation'//window.i18n('leaveGroupConfirmation');
   const isAdmin = (conversation.get('groupAdmins') || []).includes(
     UserUtils.getOurPubKeyStrFromCache()
   );
@@ -225,58 +229,66 @@ export function showLeaveGroupByConvoId(conversationId: string) {
   // if this is a community, or we legacy group are not admin, we can just show a confirmation dialog
   if (isPublic || (isClosedGroup && !isAdmin)) {
     const onClickClose = () => {
-      window.inboxStore?.dispatch(updateConfirmModal(null));
+      // window.inboxStore?.dispatch(updateConfirmModal(null));
+      console.log('[SBOT/redux] updateConfirmModal')
     };
-    window.inboxStore?.dispatch(
-      updateConfirmModal({
-        title,
-        message,
-        onClickOk: async () => {
-          if (isPublic) {
-            await getConversationController().deleteCommunity(conversation.id, {
-              fromSyncMessage: false,
-            });
-          } else {
-            await getConversationController().deleteClosedGroup(conversation.id, {
-              fromSyncMessage: false,
-              sendLeaveMessage: true,
-            });
-          }
-          onClickClose();
-        },
-        onClickClose,
-      })
-    );
+    // window.inboxStore?.dispatch(
+    //   updateConfirmModal({
+    //     title,
+    //     message,
+    //     onClickOk: async () => {
+    //       if (isPublic) {
+    //         await getConversationController().deleteCommunity(conversation.id, {
+    //           fromSyncMessage: false,
+    //         });
+    //       } else {
+    //         await getConversationController().deleteClosedGroup(conversation.id, {
+    //           fromSyncMessage: false,
+    //           sendLeaveMessage: true,
+    //         });
+    //       }
+    //       onClickClose();
+    //     },
+    //     onClickClose,
+    //   })
+    // );
+    console.log('[SBOT/redux] updateConfirmModal')
     return;
   }
-  window.inboxStore?.dispatch(
-    adminLeaveClosedGroup({
-      conversationId,
-    })
-  );
+  // window.inboxStore?.dispatch(
+  //   adminLeaveClosedGroup({
+  //     conversationId,
+  //   })
+  // );
+  console.log('[SBOT/redux] adminLeaveClosedGroup')
 }
 export function showInviteContactByConvoId(conversationId: string) {
-  window.inboxStore?.dispatch(updateInviteContactModal({ conversationId }));
+  // window.inboxStore?.dispatch(updateInviteContactModal({ conversationId }));
+  console.log('[SBOT/redux] updateInviteContactModal')
 }
 
 export function showAddModeratorsByConvoId(conversationId: string) {
-  window.inboxStore?.dispatch(updateAddModeratorsModal({ conversationId }));
+  // window.inboxStore?.dispatch(updateAddModeratorsModal({ conversationId }));
+  console.log('[SBOT/redux] updateAddModeratorsModal')
 }
 
 export function showRemoveModeratorsByConvoId(conversationId: string) {
-  window.inboxStore?.dispatch(updateRemoveModeratorsModal({ conversationId }));
+  // window.inboxStore?.dispatch(updateRemoveModeratorsModal({ conversationId }));
+  console.log('[SBOT/redux] updateRemoveModeratorsModal')
 }
 
 export function showBanUserByConvoId(conversationId: string, pubkey?: string) {
-  window.inboxStore?.dispatch(
-    updateBanOrUnbanUserModal({ banType: 'ban', conversationId, pubkey })
-  );
+  // window.inboxStore?.dispatch(
+  //   updateBanOrUnbanUserModal({ banType: 'ban', conversationId, pubkey })
+  // );
+  console.log('[SBOT/redux] updateBanOrUnbanUserModal')
 }
 
 export function showUnbanUserByConvoId(conversationId: string, pubkey?: string) {
-  window.inboxStore?.dispatch(
-    updateBanOrUnbanUserModal({ banType: 'unban', conversationId, pubkey })
-  );
+  // window.inboxStore?.dispatch(
+  //   updateBanOrUnbanUserModal({ banType: 'unban', conversationId, pubkey })
+  // );
+  console.log('[SBOT/redux] updateBanOrUnbanUserModal')
 }
 
 export async function markAllReadByConvoId(conversationId: string) {
@@ -306,7 +318,8 @@ export async function clearNickNameByConvoId(conversationId: string) {
 }
 
 export function showChangeNickNameByConvoId(conversationId: string) {
-  window.inboxStore?.dispatch(changeNickNameModal({ conversationId }));
+  // window.inboxStore?.dispatch(changeNickNameModal({ conversationId }));
+  console.log('[SBOT/redux] changeNickNameModal')
 }
 
 export async function deleteAllMessagesByConvoIdNoConfirmation(conversationId: string) {
@@ -320,12 +333,14 @@ export async function deleteAllMessagesByConvoIdNoConfirmation(conversationId: s
   });
 
   await conversation.commit();
-  window.inboxStore?.dispatch(conversationReset(conversationId));
+  // window.inboxStore?.dispatch(conversationReset(conversationId));
+  console.log('[SBOT/redux] conversationReset')
 }
 
 export function deleteAllMessagesByConvoIdWithConfirmation(conversationId: string) {
   const onClickClose = () => {
-    window?.inboxStore?.dispatch(updateConfirmModal(null));
+    // window?.inboxStore?.dispatch(updateConfirmModal(null));
+    console.log('[SBOT/redux] updateConfirmModal')
   };
 
   const onClickOk = async () => {
@@ -333,15 +348,16 @@ export function deleteAllMessagesByConvoIdWithConfirmation(conversationId: strin
     onClickClose();
   };
 
-  window?.inboxStore?.dispatch(
-    updateConfirmModal({
-      title: window.i18n('deleteMessages'),
-      message: window.i18n('deleteConversationConfirmation'),
-      onClickOk,
-      okTheme: SessionButtonColor.Danger,
-      onClickClose,
-    })
-  );
+  // window?.inboxStore?.dispatch(
+  //   updateConfirmModal({
+  //     title: window.i18n('deleteMessages'),
+  //     message: window.i18n('deleteConversationConfirmation'),
+  //     onClickOk,
+  //     okTheme: SessionButtonColor.Danger,
+  //     onClickClose,
+  //   })
+  // );
+  console.log('[SBOT/redux] updateConfirmModal')
 }
 
 export async function setDisappearingMessagesByConvoId(
@@ -353,7 +369,8 @@ export async function setDisappearingMessagesByConvoId(
   const canSetDisappearing = !conversation.isOutgoingRequest() && !conversation.isIncomingRequest();
 
   if (!canSetDisappearing) {
-    ToastUtils.pushMustBeApproved();
+    // ToastUtils.pushMustBeApproved();
+    console.log('[SBOT/redux] pushMustBeApproved')
     return;
   }
 
@@ -513,9 +530,11 @@ export async function replyToMessage(messageId: string) {
   const quotedMessageProps = await conversationModel.makeQuote(quotedMessageModel);
 
   if (quotedMessageProps) {
-    window.inboxStore?.dispatch(quoteMessage(quotedMessageProps));
+    // window.inboxStore?.dispatch(quoteMessage(quotedMessageProps));
+    console.log('[SBOT/redux] quoteMessage')
   } else {
-    window.inboxStore?.dispatch(quoteMessage(undefined));
+    // window.inboxStore?.dispatch(quoteMessage(undefined));
+    console.log('[SBOT/redux] quoteMessage')
   }
 }
 
@@ -525,25 +544,26 @@ export async function replyToMessage(messageId: string) {
  */
 export async function showLinkSharingConfirmationModalDialog(e: any) {
   const pastedText = e.clipboardData.getData('text');
-  if (isURL(pastedText) && !window.getSettingValue(SettingsKey.settingsLinkPreview, false)) {
+  if (isURL(pastedText)/* && !window.getSettingValue(SettingsKey.settingsLinkPreview, false)*/) {
     const alreadyDisplayedPopup =
       (await Data.getItemById(SettingsKey.hasLinkPreviewPopupBeenDisplayed))?.value || false;
     if (!alreadyDisplayedPopup) {
-      window.inboxStore?.dispatch(
-        updateConfirmModal({
-          shouldShowConfirm:
-            !window.getSettingValue(SettingsKey.settingsLinkPreview) && !alreadyDisplayedPopup,
-          title: window.i18n('linkPreviewsTitle'),
-          message: window.i18n('linkPreviewsConfirmMessage'),
-          okTheme: SessionButtonColor.Danger,
-          onClickOk: async () => {
-            await window.setSettingValue(SettingsKey.settingsLinkPreview, true);
-          },
-          onClickClose: async () => {
-            await Storage.put(SettingsKey.hasLinkPreviewPopupBeenDisplayed, true);
-          },
-        })
-      );
+      // window.inboxStore?.dispatch(
+      //   updateConfirmModal({
+      //     shouldShowConfirm:
+      //       !window.getSettingValue(SettingsKey.settingsLinkPreview) && !alreadyDisplayedPopup,
+      //     title: window.i18n('linkPreviewsTitle'),
+      //     message: window.i18n('linkPreviewsConfirmMessage'),
+      //     okTheme: SessionButtonColor.Danger,
+      //     onClickOk: async () => {
+      //       await window.setSettingValue(SettingsKey.settingsLinkPreview, true);
+      //     },
+      //     onClickClose: async () => {
+      //       await Storage.put(SettingsKey.hasLinkPreviewPopupBeenDisplayed, true);
+      //     },
+      //   })
+      // );
+      console.log('[SBOT/redux] updateConfirmModal')
     }
   }
 }
@@ -564,14 +584,15 @@ export async function callRecipient(pubkey: string, canCall: boolean) {
   const convo = getConversationController().get(pubkey);
 
   if (!canCall) {
-    ToastUtils.pushUnableToCall();
+    // ToastUtils.pushUnableToCall();
+    console.log('[SBOT] Unable To Call')
     return;
   }
 
-  if (!getCallMediaPermissionsSettings()) {
-    ToastUtils.pushVideoCallPermissionNeeded();
-    return;
-  }
+  // if (!getCallMediaPermissionsSettings()) {
+  //   ToastUtils.pushVideoCallPermissionNeeded();
+  //   return;
+  // }
 
   if (convo && convo.isPrivate() && !convo.isMe()) {
     await CallManager.USER_callRecipient(convo.id);

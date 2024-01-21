@@ -8,5 +8,7 @@ declare module globalThis {
     ready: () => any,
     shutdown: () => any,
     openInbox: () => any,
+    ConfigurationSyncJobDone: () => any,
+    SqlChannelKey: (...args: any) => any,
   }
 }

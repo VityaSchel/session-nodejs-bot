@@ -1,5 +1,5 @@
 import { defaults } from 'lodash';
-import { LastMessageStatusType } from '../state/ducks/conversations';
+// import { LastMessageStatusType } from '../state/ducks/conversations';
 
 /**
  * Private chats have always the type `Private`
@@ -55,7 +55,7 @@ export interface ConversationAttributes {
   // 0 means inactive (undefined and null too but we try to get rid of them and only have 0 = inactive)
   active_at: number; // this field is the one used to sort conversations in the left pane from most recent
 
-  lastMessageStatus: LastMessageStatusType;
+  lastMessageStatus: any;
   /**
    * lastMessage is actually just a preview of the last message text, shortened to 60 chars.
    * This is to avoid filling the redux store with a huge last message when it's only used in the

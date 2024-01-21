@@ -143,13 +143,13 @@ function makeChannel(fnName: string) {
 
     return new Promise((resolve, reject) => {
       // ipcRenderer.send(SQL_CHANNEL_KEY, jobId, fnName, ...args);
-      console.log('SEND', SQL_CHANNEL_KEY, jobId, fnName, ...args);
+      resolve(global.SBOT.SqlChannelKey(null, null, fnName, ...args))
 
       updateJob(jobId, {
-        resolve,
+        resolve: () => {},
         reject,
         args: _DEBUG ? args : null,
-      });
+      })
 
       jobs[jobId].timer = setTimeout(
         () => reject(new Error(`SQL channel job ${jobId} (${fnName}) timed out`)),

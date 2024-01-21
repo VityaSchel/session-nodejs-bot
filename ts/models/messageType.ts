@@ -1,10 +1,10 @@
 import { defaultsDeep } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
-import {
-  CallNotificationType,
-  LastMessageStatusType,
-  PropsForMessageWithConvoProps,
-} from '../state/ducks/conversations';
+// import {
+//   CallNotificationType,
+//   LastMessageStatusType,
+//   PropsForMessageWithConvoProps,
+// } from '../state/ducks/conversations';
 import { AttachmentTypeWithPath } from '../types/Attachment';
 import { Reaction, ReactionList, SortedReactionList } from '../types/Reaction';
 import { READ_MESSAGE_STATE } from './conversationAttributes';
@@ -53,7 +53,7 @@ export interface MessageAttributes {
    * timestamp is the sent_at timestamp, which is the envelope.timestamp
    */
   timestamp?: number;
-  status?: LastMessageStatusType;
+  status?: any;
   sent_to: Array<string>;
   sent: boolean;
 
@@ -114,7 +114,7 @@ export interface MessageAttributes {
    */
   isDeleted?: boolean;
 
-  callNotificationType?: CallNotificationType;
+  callNotificationType?: any;
 }
 
 export interface DataExtractionNotificationMsg {
@@ -201,7 +201,7 @@ export interface MessageAttributesOptionals {
   unread?: number;
   group?: any;
   timestamp?: number;
-  status?: LastMessageStatusType;
+  status?: any;
   sent_to?: Array<string>;
   sent?: boolean;
   serverId?: number;
@@ -213,7 +213,7 @@ export interface MessageAttributesOptionals {
   direction?: MessageModelType;
   messageHash?: string;
   isDeleted?: boolean;
-  callNotificationType?: CallNotificationType;
+  callNotificationType?: any;
 }
 
 /**
@@ -244,7 +244,7 @@ export const fillMessageAttributesWithDefaults = (
  * Those props are the one generated from a single Message improved by the one by the app itself.
  * Some of the one added comes from the MessageList, some from redux, etc..
  */
-export type MessageRenderingProps = PropsForMessageWithConvoProps & {
+export type MessageRenderingProps = any & {
   disableMenu?: boolean;
   /** Note: this should be formatted for display */
   attachments?: Array<AttachmentTypeWithPath>; // vs Array<PropsForAttachment>;

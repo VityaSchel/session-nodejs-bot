@@ -1,7 +1,5 @@
 import { throttle, uniq } from 'lodash';
 import moment from 'moment';
-import { messagesExpired } from '../state/ducks/conversations';
-import { TimerOptionsArray } from '../state/ducks/timerOptions';
 import { LocalizerKeys } from '../types/LocalizerKeys';
 import { initWallClockListener } from './wallClockListener';
 
@@ -26,7 +24,8 @@ export async function destroyMessagesAndUpdateRedux(
     console.error('destroyMessages: removeMessagesByIds failed', e && e.message ? e.message : e);
   }
   // trigger a redux update if needed for all those messages
-  window.inboxStore?.dispatch(messagesExpired(messages));
+  // window.inboxStore?.dispatch(messagesExpired(messages));
+  console.log('[SBOT/redux] messagesExpired')
 
   // trigger a refresh the last message for all those uniq conversation
   conversationWithChanges.forEach(convoIdToUpdate => {
@@ -123,12 +122,12 @@ const updateExpiringMessagesCheck = () => {
 
 function getTimerOptionName(time: number, unit: moment.DurationInputArg2) {
   return (
-    window.i18n(['timerOption', time, unit].join('_') as LocalizerKeys) ||
+    // window.i18n(['timerOption', time, unit].join('_') as LocalizerKeys) ||
     moment.duration(time, unit).humanize()
   );
 }
 function getTimerOptionAbbreviated(time: number, unit: string) {
-  return window.i18n(['timerOption', time, unit, 'abbreviated'].join('_') as LocalizerKeys);
+  return ''//window.i18n(['timerOption', time, unit, 'abbreviated'].join('_') as LocalizerKeys);
 }
 
 const timerOptionsDurations: Array<{
@@ -175,7 +174,7 @@ function getAbbreviated(seconds = 0) {
   return [seconds, 's'].join('');
 }
 
-function getTimerSecondsWithName(): TimerOptionsArray {
+function getTimerSecondsWithName(): any {
   return timerOptionsDurations.map(t => {
     return { name: getName(t.seconds), value: t.seconds };
   });

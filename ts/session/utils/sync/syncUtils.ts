@@ -94,9 +94,9 @@ export const forceSyncConfigurationNowIfNeeded = async (waitForMessageSent = fal
     });
     if (ReleasedFeatures.isUserConfigFeatureReleasedCached()) {
       if (waitForMessageSent) {
-        window.Whisper.events.once(ConfigurationSyncJobDone, () => {
+        global.SBOT.ConfigurationSyncJobDone = () => {
           resolve(true);
-        });
+        }
         return;
       }
       resolve(true);

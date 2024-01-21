@@ -274,7 +274,7 @@ class ConfigurationSyncJob extends PersistedJob<ConfigurationSyncPersistedData> 
   }
 
   private triggerConfSyncJobDone() {
-    window.Whisper.events.trigger(ConfigurationSyncJobDone);
+    global.SBOT.ConfigurationSyncJobDone();
   }
 }
 

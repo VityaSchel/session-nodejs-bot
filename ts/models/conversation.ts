@@ -44,13 +44,6 @@ import {
 import { perfEnd, perfStart } from '../session/utils/Performance';
 import { toHex } from '../session/utils/String';
 import { createTaskWithTimeout } from '../session/utils/TaskWithTimeout';
-import {
-  actions as conversationActions,
-  conversationsChanged,
-  markConversationFullyRead,
-  MessageModelPropsWithoutConvoProps,
-  ReduxConversationType,
-} from '../state/ducks/conversations';
 
 import { OpenGroupData } from '../data/opengroups';
 import { SettingsKey } from '../data/settings-key';
@@ -106,11 +99,6 @@ import {
 
 import { LibSessionUtil } from '../session/utils/libsession/libsession_utils';
 import { SessionUtilUserProfile } from '../session/utils/libsession/libsession_utils_user_profile';
-import {
-  getCanWriteOutsideRedux,
-  getModeratorsOutsideRedux,
-  getSubscriberCountOutsideRedux,
-} from '../state/selectors/sogsRoomInfo';
 import { markAttributesAsReadIfNeeded } from './messageFactory';
 
 type InMemoryConvoInfos = {
@@ -164,7 +152,7 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
     this.typingRefreshTimer = null;
     this.typingPauseTimer = null;
     // window.inboxStore?.dispatch(conversationsChanged([this.getConversationModelProps()]));
-    console.log('[SBOT/redux] conversationsChanged')
+    // console.log('[SBOT/redux] conversationsChanged')
   }
 
   public idForLogging() {
@@ -995,7 +983,8 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
         await this.sendReadReceiptsIfNeeded(uniq(allReadMessagesIds));
       }
       Notifications.clearByConversationID(this.id);
-      window.inboxStore?.dispatch(markConversationFullyRead(this.id));
+      // window.inboxStore?.dispatch(markConversationFullyRead(this.id));
+      console.log('[SBOT/redux] markConversationFullyRead')
 
       return;
     }
@@ -1952,7 +1941,8 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
     }
 
     if (allProps.length) {
-      window.inboxStore?.dispatch(conversationActions.messagesChanged(allProps));
+      // window.inboxStore?.dispatch(conversationActions.messagesChanged(allProps));
+      console.log('[SBOT/redux] conversationActions')
     }
 
     await this.commit();
@@ -1989,7 +1979,8 @@ export class ConversationModel extends Backbone.Model<ConversationAttributes> {
     await model.setToExpire();
 
     const messageModelProps = model.getMessageModelProps();
-    window.inboxStore?.dispatch(conversationActions.messagesChanged([messageModelProps]));
+    // window.inboxStore?.dispatch(conversationActions.messagesChanged([messageModelProps]));
+    console.log('[SBOT/redux] conversationActions')
     this.updateLastMessage();
 
     await this.commit();
@@ -2273,7 +2264,8 @@ const throttledAllConversationsDispatch = debounce(
     if (updatesToDispatch.size === 0) {
       return;
     }
-    window.inboxStore?.dispatch(conversationsChanged([...updatesToDispatch.values()]));
+    // window.inboxStore?.dispatch(conversationsChanged([...updatesToDispatch.values()]));
+    // console.log('[SBOT/redux] conversationsChanged')
 
     updatesToDispatch.clear();
   },
