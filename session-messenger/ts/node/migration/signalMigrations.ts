@@ -23,7 +23,7 @@ const openDbOptions = {
 
   nativeBinding: path.join(
     getAppRootPath(),
-    'node_modules',
+    '../node_modules',
     '@signalapp',
     'better-sqlite3',
     'build',
