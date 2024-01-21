@@ -28,16 +28,16 @@
     "minimatch": "^3.0.5"
   },
   "scripts": {
-    "start": "node ./ts/mains/main_node.js",
+    "start": "node ./session-messenger/ts/mains/main_node.js",
     "build": "yarn clean && yarn protobuf && tsc > /dev/null || exit 0 && yarn build:workers",
     "build:watch": "yarn clean && yarn protobuf && yarn build:workers && tsc -w",
     "build:workers": "yarn worker:utils && yarn worker:libsession",
     "watch": "yarn clean && yarn protobuf && yarn build-everything:watch",
-    "protobuf": "pbjs --target static-module --wrap commonjs --out ts/protobuf/compiled.js protos/*.proto && pbts --out ts/protobuf/compiled.d.ts ts/protobuf/compiled.js --force-long",
-    "clean": "rimraf 'src/**/*.js' 'examples/**/*.js' 'ts/**/*.js' 'ts/*.js' 'ts/*.js.map' 'ts/**/*.js.map' && rimraf tsconfig.tsbuildinfo;",
+    "protobuf": "pbjs --target static-module --wrap commonjs --out session-messenger/ts/protobuf/compiled.js session-messenger/protos/*.proto && pbts --out session-messenger/ts/protobuf/compiled.d.ts session-messenger/ts/protobuf/compiled.js --force-long",
+    "clean": "rimraf 'src/**/*.js' 'examples/**/*.js' 'session-messenger/ts/**/*.js' 'session-messenger/ts/*.js' 'session-messenger/ts/*.js.map' 'session-messenger/ts/**/*.js.map' && rimraf session-messenger/tsconfig.tsbuildinfo;",
     "postinstall": "yarn patch-package",
-    "worker:utils": "webpack  --config=./utils.worker.config.js",
-    "worker:libsession": "rimraf 'ts/webworker/workers/node/libsession/*.node' && webpack  --config=./libsession.worker.config.js"
+    "worker:utils": "webpack  --config=./session-messenger/utils.worker.config.js",
+    "worker:libsession": "rimraf 'session-messenger/ts/webworker/workers/node/libsession/*.node' && webpack  --config=./session-messenger/libsession.worker.config.js"
   },
   "dependencies": {
     "@emoji-mart/data": "^1.1.2",

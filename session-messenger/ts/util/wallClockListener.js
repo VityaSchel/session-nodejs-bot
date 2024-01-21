@@ -1,0 +1,24 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.initWallClockListener = void 0;
+let lastTime = Date.now();
+const interval = 10 * 1000;
+let timeTravelListener;
+function checkTime() {
+    const currentTime = Date.now();
+    if (currentTime > lastTime + interval * 2) {
+        if (!timeTravelListener) {
+            throw new Error('timeTravelListener should have been set in initWallClockListener');
+        }
+        timeTravelListener();
+    }
+    lastTime = currentTime;
+}
+const initWallClockListener = (onTimeTravelDetectedListener) => {
+    if (timeTravelListener) {
+        throw new Error('Wall clock listener already init');
+    }
+    timeTravelListener = onTimeTravelDetectedListener;
+    global.setInterval(checkTime, interval);
+};
+exports.initWallClockListener = initWallClockListener;

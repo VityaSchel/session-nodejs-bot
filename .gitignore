@@ -1,6 +1,5 @@
 node_modules
 .parcel-cache
-.sass-cache
 .eslintcache
 /dist
 .DS_Store
@@ -16,10 +15,6 @@ sql/
 ts/**/*.js
 ts/protobuf/*.d.ts
 ts/**/*.js.map
-test/ts/**/*.js.map
-test/ts/**/*.js
-ts/test/automation/**/*.js
-ts/test/automation/**/*.js.map
 
 
 # Swapfiles
@@ -38,8 +33,6 @@ yarn-error.log
 .vscode/
 .vscrof/
 
-
-playwright.config.js
 *.js.map
 ts/node/**/*.d.ts
 ts/node/**/*.d.ts.map
