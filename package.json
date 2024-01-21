@@ -1,7 +1,7 @@
 {
   "name": "session-messenger-nodejs",
   "description": "Headless Session messenger instance as a module that runs entirely inside Node.js",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "license": "MIT",
   "author": "Viktor Shchelochkov <hi@hloth.dev> (https://hloth.dev)",
   "repository": {
@@ -35,7 +35,7 @@
     "build:workers": "yarn worker:utils && yarn worker:libsession",
     "watch": "yarn clean && yarn protobuf && yarn build-everything:watch",
     "protobuf": "pbjs --target static-module --wrap commonjs --out session-messenger/ts/protobuf/compiled.js session-messenger/protos/*.proto && pbts --out session-messenger/ts/protobuf/compiled.d.ts session-messenger/ts/protobuf/compiled.js --force-long",
-    "clean": "rimraf 'src/**/*.d.ts' 'src/**/*.js' 'examples/**/*.js' 'examples/**/*.d.ts' 'session-messenger/ts/**/*.js' 'session-messenger/ts/sessionjs-logger.d.ts' 'session-messenger/ts/*/**/*.d.ts' 'session-messenger/ts/*.js' 'session-messenger/ts/*.js.map' 'session-messenger/ts/**/*.js.map' && rimraf session-messenger/tsconfig.tsbuildinfo;",
+    "clean": "cp session-messenger/ts/webworker/workers/browser/libsession_worker_functions.d.ts ./libsession_worker_functions.d.ts && rimraf 'src/**/*.d.ts' 'src/**/*.js' 'examples/**/*.js' 'examples/**/*.d.ts' 'session-messenger/ts/**/*.js' 'session-messenger/ts/sessionjs-logger.d.ts' 'session-messenger/ts/*/**/*.d.ts' 'session-messenger/ts/*.js' 'session-messenger/ts/*.js.map' 'session-messenger/ts/**/*.js.map' && cp ./libsession_worker_functions.d.ts session-messenger/ts/webworker/workers/browser/libsession_worker_functions.d.ts && rimraf ./libsession_worker_functions.d.ts && rimraf session-messenger/tsconfig.tsbuildinfo;",
     "postinstall": "patch-package",
     "worker:utils": "webpack  --config=./session-messenger/utils.worker.config.js",
     "worker:libsession": "rimraf 'session-messenger/ts/webworker/workers/node/libsession/*.node' && webpack  --config=./session-messenger/libsession.worker.config.js"
@@ -73,6 +73,7 @@
     "os-locale": "5.0.0",
     "p-retry": "^4.2.0",
     "pify": "3.0.0",
+    "patch-package": "^6.4.7",
     "protobufjs": "^7.2.4",
     "read-last-lines-ts": "^1.2.1",
     "redux": "4.2.0",
@@ -137,7 +138,6 @@
     "mini-css-extract-plugin": "^2.7.5",
     "mocha": "10.0.0",
     "node-loader": "^2.0.0",
-    "patch-package": "^6.4.7",
     "postinstall-prepare": "^1.0.1",
     "prettier": "1.19.0",
     "protobufjs-cli": "^1.1.1",

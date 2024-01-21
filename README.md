@@ -40,6 +40,11 @@ This is why this repository mustn't be used in production. It is basically fun s
 
 ## Installation
 
+```
+warn
+Please note that Session requires exactly `18.15.0` version of Node.js to be used. Install it with nvm and use in your project. If you can't use it, spawn node.js process and run Session instance in it.
+```
+
 Using npm:
 ```
 npm i session-messenger-nodejs
