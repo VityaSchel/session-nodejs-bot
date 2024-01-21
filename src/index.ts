@@ -1,13 +1,23 @@
 import { getConversationController } from '../ts/session/conversations'
 
-let isInitialized = false
+let isInitialized = false,
+  isInitializing = false
 
-export async function initializeSession() {
+// @ts-ignore
+global.SBOT ??= {}
+
+export async function initializeSession(options?: {
+  verbose?: boolean
+}) {
+  if (isInitialized || isInitializing) return
+  isInitializing = true
+  global.SBOT.verbose = options?.verbose ?? false
   const { getIsReady } = await import('../ts/mains/main_node')
   await new Promise<void>(resolve => setInterval(() => {
     if (getIsReady()) resolve()
   }, 10))
   isInitialized = true
+  isInitializing = false
 }
 
 export type SessionOutgoingMessage = {

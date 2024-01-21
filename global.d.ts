@@ -10,5 +10,6 @@ declare module globalThis {
     openInbox: () => any,
     ConfigurationSyncJobDone: () => any,
     SqlChannelKey: (...args: any) => any,
+    verbose: boolean
   }
 }

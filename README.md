@@ -11,6 +11,12 @@ Session fork that runs entirely inside Node.js without renderer such as Electron
   - [Examples](#examples)
     - [Calculator bot](#calculator-bot)
   - [Methods](#methods)
+  - [API reference](#api-reference)
+    - [initializeSession(options?: { verbose?: boolean }): Promise\<void\>](#initializesessionoptions--verbose-boolean--promisevoid)
+    - [getConversations(): ConversationModel\[\]](#getconversations-conversationmodel)
+    - [class EventEmitter](#class-eventemitter)
+    - [sendMessage(sessionID: string, message: SessionOutgoingMessage): Promise\<void\>](#sendmessagesessionid-string-message-sessionoutgoingmessage-promisevoid)
+  - [Usage](#usage)
     - [Get latest conversations](#get-latest-conversations)
     - [Subscribe to new messages](#subscribe-to-new-messages)
     - [Send message](#send-message)
@@ -55,6 +61,29 @@ Since this is an early prototype that is in active development, there is no npm 
 
 Please be aware that this app generates A LOT of console logs. I'm working on reducing it, in stage of active development I need it to be able to at least have a smallest idea what's happening. Sorry for shit code 🙂
 
+## API reference
+
+### initializeSession(options?: { verbose?: boolean }): Promise\<void\>
+
+Initialize Session instance in current Node.js process. Must be called and await'ed before using any Session-related methods. Must be only called once per Node.js process. If you need more instances running simultaniously, spawn Node.js children processes.
+
+### getConversations(): ConversationModel[]
+
+Get cached conversations. Keep in mind that this does not actually fetches anything from network, it just returns in-memory state that is updated with events.
+
+### class EventEmitter
+
+EventEmitter allows you to listen for events that happen inside Session instance.
+
+List of events:
+- `message`. Callback when a new incoming message found. Callback signature: `(content: SignalService.Content, conversation: ConversationModel) => any`
+
+### sendMessage(sessionID: string, message: SessionOutgoingMessage): Promise\<void\>
+
+Sends message to private chat
+
+## Usage
+
 ### Get latest conversations
 
 ```ts
@@ -74,7 +103,7 @@ You can use any methods available in the official `ConversationModel` type infer
 ### Subscribe to new messages
 
 ```ts
-import { initializeSession, getConversations } from '../src'
+import { initializeSession, EventEmitter } from '../src'
 
 async function main() {
   await initializeSession()
@@ -91,12 +120,11 @@ async function main() {
 ### Send message
 
 ```ts
-import { initializeSession, getConversations } from '../src'
+import { initializeSession, sendMessage } from '../src'
 
 async function main() {
   await initializeSession()
-  const conversationModel = getConversationController().get('05f7fe7bd047099e5266c2ffbc74c88fc8543e6f16a08575e96959fedb2dd74d54')
-  await conversationModel.sendMessage({
+  await sendMessage('05f7fe7bd047099e5266c2ffbc74c88fc8543e6f16a08575e96959fedb2dd74d54', {
     body: 'test!!! ' + new Date().toISOString(),
     attachments: undefined,
     quote: undefined,
