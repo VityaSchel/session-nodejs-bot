@@ -58,8 +58,10 @@ export async function sendMessage(sessionID: string, message: Partial<SessionOut
       break
     } else {
       await new Promise(resolve => setTimeout(resolve, 100))
+      retries++
     }
   } while(retries < 30)
+  throw new Error('Error while resolving getConversationController')
 }
 
 export function getConversations() {
@@ -91,7 +93,7 @@ export async function createIdentity(profileName: string) {
   
   const mnemonic = await generateMnemonic()
   const sessionID = await registerSingleDevice(mnemonic, 'english', profileName)
-
+  await new Promise(resolve => setTimeout(resolve, 1000))
   await startConnecting()
   isAuthorized = true
 
@@ -104,7 +106,7 @@ export async function signIn(mnemonic: string) {
   }
   
   const sessionID = await signInByLinkingDevice(mnemonic, 'english')
-
+  await new Promise(resolve => setTimeout(resolve, 1000))
   await startConnecting()
   isAuthorized = true
 
