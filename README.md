@@ -25,6 +25,7 @@ Watch demo on YouTube:
     - [getConversations(): ConversationModel\[\]](#getconversations-conversationmodel)
     - [class EventEmitter](#class-eventemitter)
     - [sendMessage(sessionID: string, message: SessionOutgoingMessage): Promise\<void\>](#sendmessagesessionid-string-message-sessionoutgoingmessage-promisevoid)
+    - [getSessionID(): string](#getsessionid-string)
   - [Contributing](#contributing)
   - [Donate](#donate)
   - [License](#license)
@@ -55,12 +56,12 @@ Please note that Session requires exactly `18.15.0` version of Node.js to be use
 
 Using npm:
 ```
-npm i session-messenger-nodejs
+npm i session-messenger-nodejs && npm i -D @types/backbone
 ```
 
 Using pnpm:
 ```
-pnpm i session-messenger-nodejs
+pnpm i session-messenger-nodejs && pnpm i -D @types/backbone
 ```
 
 ## Building from source
@@ -167,6 +168,10 @@ List of events:
 ### sendMessage(sessionID: string, message: SessionOutgoingMessage): Promise\<void\>
 
 Sends message to private chat
+
+### getSessionID(): string
+
+Gets SessionID/public key in current loaded Session profile
 
 ## Contributing
 

@@ -1,4 +1,5 @@
 import { getConversationController } from '../session-messenger/ts/session/conversations'
+import { getOurPubKeyFromCache } from '../session-messenger/ts/session/utils/User'
 
 let isInitialized = false,
   isInitializing = false
@@ -51,6 +52,14 @@ export function getConversations() {
   }
 
   return getConversationController().getConversations()
+}
+
+export function getSessionID() {
+  if(!isInitialized) {
+    throw new Error('Session is not initialized')
+  }
+
+  return getOurPubKeyFromCache().key
 }
 
 export { EventEmitter } from './events'
