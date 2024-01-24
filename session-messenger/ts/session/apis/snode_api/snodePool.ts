@@ -180,7 +180,15 @@ export async function getRandomSnodePool(): Promise<Array<Snode>> {
  */
 
 export async function TEST_fetchFromSeedWithRetriesAndWriteToDb() {
-  const seedNodes = window.getSeedNodeList();
+  const useTestNet = false
+  const seedNodes = useTestNet
+    ? ['http://seed2.getsession.org:38157']
+    : [
+      // Note: for each of the seed nodes, the cert pinned is the one provided on the port 4443 and not the 4433, because the 4443 is a 10year one
+      'https://seed1.getsession.org:4443/',
+      'https://seed2.getsession.org:4443/',
+      'https://seed3.getsession.org:4443/',
+    ];
 
   if (!seedNodes || !seedNodes.length) {
     console.error(

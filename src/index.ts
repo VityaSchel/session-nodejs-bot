@@ -1,8 +1,11 @@
+import { startConnecting } from '../session-messenger/ts/mains/main_node'
 import { getConversationController } from '../session-messenger/ts/session/conversations'
 import { getOurPubKeyFromCache } from '../session-messenger/ts/session/utils/User'
+import { generateMnemonic, registerSingleDevice, signInByLinkingDevice } from '../session-messenger/ts/util/accountManager'
 
 let isInitialized = false,
-  isInitializing = false
+  isInitializing = false,
+  isAuthorized = false
 
 // @ts-ignore
 global.SBOT ??= {}
@@ -22,12 +25,14 @@ export async function initializeSession(options?: {
   }
 
   const { getIsReady } = await import('../session-messenger/ts/mains/main_node')
-  await new Promise<void>(resolve => setInterval(() => {
-    if (getIsReady()) resolve()
+  const state = await new Promise<{ isAuthorized: boolean }>(resolve => setInterval(() => {
+    const state = getIsReady()
+    if (state.isReady) resolve({ isAuthorized: state.isAuthorized })
   }, 10))
 
   isInitialized = true
   isInitializing = false
+  isAuthorized = state.isAuthorized
 }
 
 export type SessionOutgoingMessage = {
@@ -37,18 +42,32 @@ export type SessionOutgoingMessage = {
   preview: any | undefined;
   groupInvitation: { url: string | undefined; name: string } | undefined;
 }
-export async function sendMessage(sessionID: string, message: SessionOutgoingMessage) {
+export async function sendMessage(sessionID: string, message: Partial<SessionOutgoingMessage> & { body: string }) {
   if(!isInitialized) {
     throw new Error('Session is not initialized')
   }
+  if (!isAuthorized) {
+    throw new Error('User is not authorized')
+  }
 
-  const conversationModel = getConversationController().get(sessionID)
-  await conversationModel.sendMessage(message)
+  let retries = 0
+  do {
+    const conversationModel = getConversationController().get(sessionID)
+    if(conversationModel) {
+      await conversationModel.sendMessage(message)
+      break
+    } else {
+      await new Promise(resolve => setTimeout(resolve, 100))
+    }
+  } while(retries < 30)
 }
 
 export function getConversations() {
   if(!isInitialized) {
     throw new Error('Session is not initialized')
+  }
+  if (!isAuthorized) {
+    throw new Error('User is not authorized')
   }
 
   return getConversationController().getConversations()
@@ -58,8 +77,38 @@ export function getSessionID() {
   if(!isInitialized) {
     throw new Error('Session is not initialized')
   }
+  if (!isAuthorized) {
+    throw new Error('User is not authorized')
+  }
 
   return getOurPubKeyFromCache().key
+}
+
+export async function createIdentity(profileName: string) {
+  if(!isInitialized) {
+    throw new Error('Session is not initialized')
+  }
+  
+  const mnemonic = await generateMnemonic()
+  const sessionID = await registerSingleDevice(mnemonic, 'english', profileName)
+
+  await startConnecting()
+  isAuthorized = true
+
+  return { mnemonic, sessionID }
+}
+
+export async function signIn(mnemonic: string) {
+  if(!isInitialized) {
+    throw new Error('Session is not initialized')
+  }
+  
+  const sessionID = await signInByLinkingDevice(mnemonic, 'english')
+
+  await startConnecting()
+  isAuthorized = true
+
+  return { sessionID }
 }
 
 export { EventEmitter } from './events'

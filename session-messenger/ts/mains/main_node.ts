@@ -27,7 +27,8 @@ import { initializeLogger } from '../node/logging';
 import { sqlNode } from '../node/sql';
 import * as sqlChannels from '../node/sql_channel';
 
-let isReady = false;
+let isReady = false
+let isAuthorized = false
 
 sqlChannels.initializeSqlChannel()
 
@@ -49,6 +50,7 @@ import { runners } from '../session/utils/job_runners/JobRunner';
 import { queueAllCached } from '../receiver/receiver';
 import { AttachmentDownloads } from '../session/utils';
 import { getSwarmPollingInstance } from '../session/apis/snode_api';
+import { getOurPubKeyFromCache } from '../session/utils/User';
 
 
 global.SBOT.ready = async () => {
@@ -118,7 +120,13 @@ async function showMainWindow(sqlKey: string, passwordAttempt = false) {
   await runners.configurationSyncRunner.loadJobsFromDb();
   runners.configurationSyncRunner.startProcessing();
 
-  if (Registration.isDone()) {
+  try {
+    isAuthorized = Boolean(getOurPubKeyFromCache().key)
+  } catch(e) {
+    isAuthorized = false
+  }
+
+  if (Registration.isDone() && isAuthorized) {
     try {
       await LibSessionUtil.initializeLibSessionUtilWrappers();
     } catch (e) {
@@ -134,8 +142,21 @@ async function showMainWindow(sqlKey: string, passwordAttempt = false) {
   await BlockedNumberController.load()
   await getConversationController().loadPromise()
 
+  if (isAuthorized) {
+    startConnecting()
+  } else {
+    console.warn('Registration is not done, not starting')
+  }
+
+  isReady = true
+
+  while(true) {
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+  }
+}
+
+export async function startConnecting() {
   Registration.markDone()
-  // console.log('result', result)
 
   setTimeout(() => {
     void queueAllCached();
@@ -147,18 +168,10 @@ async function showMainWindow(sqlKey: string, passwordAttempt = false) {
 
   await new Promise(resolve => setTimeout(resolve, 1000))
 
-  runners.configurationSyncRunner.startProcessing();
+  runners.configurationSyncRunner.startProcessing()
 
   await getSwarmPollingInstance().start()
-
-  isReady = true
-
-  while(true) {
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-  }
 }
-
-//windowMarkShouldQuit()
 
 global.SBOT.resetDatabase = async () => {
   await removeDB();
@@ -215,4 +228,4 @@ global.SBOT.setPassword = async (passPhrase, oldPhrase) => {
 }
 global.SBOT.ready()
 
-export const getIsReady = () => isReady
+export const getIsReady = () => ({ isReady, isAuthorized })

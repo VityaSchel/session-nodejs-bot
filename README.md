@@ -26,6 +26,8 @@ Watch demo on YouTube:
     - [class EventEmitter](#class-eventemitter)
     - [sendMessage(sessionID: string, message: SessionOutgoingMessage): Promise\<void\>](#sendmessagesessionid-string-message-sessionoutgoingmessage-promisevoid)
     - [getSessionID(): string](#getsessionid-string)
+    - [createIdentity(profileName: string): Promise\<{ mnemonic: string, sessionID: string }\>](#createidentityprofilename-string-promise-mnemonic-string-sessionid-string-)
+    - [signIn(mnemonic: string): Promise\<{ sessionID: string }\>](#signinmnemonic-string-promise-sessionid-string-)
   - [Contributing](#contributing)
   - [Donate](#donate)
   - [License](#license)
@@ -172,6 +174,14 @@ Sends message to private chat
 ### getSessionID(): string
 
 Gets SessionID/public key in current loaded Session profile
+
+### createIdentity(profileName: string): Promise\<{ mnemonic: string, sessionID: string }\>
+
+Create new account. Returns generated mnemonic and Session ID of created account.
+
+### signIn(mnemonic: string): Promise\<{ sessionID: string }\>
+
+Sign in or "Link new device". Returns Session ID of found account.
 
 ## Contributing
 

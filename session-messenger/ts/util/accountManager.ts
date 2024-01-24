@@ -126,6 +126,8 @@ export async function registerSingleDevice(
 
   const pubKeyString = toHex(identityKeyPair.pubKey);
   await registrationDone(pubKeyString, profileName);
+
+  return pubKeyString
 }
 
 export async function generateMnemonic() {
