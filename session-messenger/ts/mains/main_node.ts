@@ -148,14 +148,14 @@ async function showMainWindow(sqlKey: string, passwordAttempt = false) {
     console.warn('Registration is not done, not starting')
   }
 
-  isReady = true
-
   while(true) {
     await new Promise((resolve) => setTimeout(resolve, 3000));
   }
 }
 
 export async function startConnecting() {
+  isReady = true
+  
   Registration.markDone()
 
   setTimeout(() => {
