@@ -58,7 +58,7 @@ export async function sendMessage(sessionID: string, message: Partial<SessionOut
       .getOrCreateAndWait(sessionID, ConversationTypeEnum.PRIVATE)
     if(conversationModel) {
       await conversationModel.sendMessage(message)
-      break
+      return
     } else {
       await new Promise(resolve => setTimeout(resolve, 100))
       retries++
