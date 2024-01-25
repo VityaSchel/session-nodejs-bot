@@ -33,6 +33,8 @@ Watch demo on YouTube:
   - [Donate](#donate)
   - [License](#license)
 
+Subscribe to the official [Telegram channel](https://t.me/session_nodejs)
+
 # WORK IN PROGRESS
 
 Since there is zero documentation about swarms and zero help from Session developers, I've decided to fork session-desktop and try to split render from node instead of writing everything from scratch.
