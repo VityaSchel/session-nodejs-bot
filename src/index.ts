@@ -1,5 +1,6 @@
 import { startConnecting } from '../session-messenger/ts/mains/main_node'
 import { ConversationTypeEnum } from '../session-messenger/ts/models/conversationAttributes'
+import { ONSResolve } from '../session-messenger/ts/session/apis/snode_api/onsResolve'
 import { getConversationController } from '../session-messenger/ts/session/conversations'
 import { getOurPubKeyFromCache } from '../session-messenger/ts/session/utils/User'
 import { generateMnemonic, registerSingleDevice, signInByLinkingDevice } from '../session-messenger/ts/util/accountManager'
@@ -53,7 +54,8 @@ export async function sendMessage(sessionID: string, message: Partial<SessionOut
 
   let retries = 0
   do {
-    const conversationModel = getConversationController().getOrCreate(sessionID, ConversationTypeEnum.PRIVATE)
+    const conversationModel = await getConversationController()
+      .getOrCreateAndWait(sessionID, ConversationTypeEnum.PRIVATE)
     if(conversationModel) {
       await conversationModel.sendMessage(message)
       break
@@ -114,4 +116,10 @@ export async function signIn(mnemonic: string) {
   return { sessionID }
 }
 
+export async function resolveSessionIdByONSName(onsName: string) {
+  return await ONSResolve.getSessionIDForOnsName(onsName)
+}
+
 export { EventEmitter } from './events'
+
+export const ONSNameRegex = ONSResolve.onsNameRegex

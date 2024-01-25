@@ -28,6 +28,7 @@ Watch demo on YouTube:
     - [getSessionID(): string](#getsessionid-string)
     - [createIdentity(profileName: string): Promise\<{ mnemonic: string, sessionID: string }\>](#createidentityprofilename-string-promise-mnemonic-string-sessionid-string-)
     - [signIn(mnemonic: string): Promise\<{ sessionID: string }\>](#signinmnemonic-string-promise-sessionid-string-)
+    - [resolveSessionIdByONSName(onsName: string): Promise\<string\>](#resolvesessionidbyonsnameonsname-string-promisestring)
   - [Contributing](#contributing)
   - [Donate](#donate)
   - [License](#license)
@@ -182,6 +183,12 @@ Create new account. Returns generated mnemonic and Session ID of created account
 ### signIn(mnemonic: string): Promise\<{ sessionID: string }\>
 
 Sign in or "Link new device". Returns Session ID of found account.
+
+### resolveSessionIdByONSName(onsName: string): Promise\<string\>
+
+You can use `import { ONSNameRegex } from 'session-messenger-nodejs'` to check if it's pubkey or ONSName.
+
+This method will throw if ONSName cannot be resolved
 
 ## Contributing
 
