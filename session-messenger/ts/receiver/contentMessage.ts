@@ -23,7 +23,7 @@ import { getConversationController } from '../session/conversations';
 import { concatUInt8Array, getSodiumRenderer } from '../session/crypto';
 import { removeMessagePadding } from '../session/crypto/BufferPadding';
 import { ProfileManager } from '../session/profile_manager/ProfileManager';
-import { GroupUtils, UserUtils } from '../session/utils';
+import { GroupUtils, StringUtils, UserUtils } from '../session/utils';
 import { perfEnd, perfStart } from '../session/utils/Performance';
 import { fromHexToArray, toHex } from '../session/utils/String';
 import { assertUnreachable } from '../types/sqlSharedTypes';
@@ -455,7 +455,23 @@ export async function innerHandleSwarmContentMessage(
 
     const ourSessionID = getOurPubKeyFromCache().key
     if (senderConversationModel.id !== ourSessionID) {
-      SBOTEvents.emitToAllInstances('message', content, senderConversationModel)
+      const isGroup = Boolean(content.dataMessage && 'group' in content.dataMessage && content.dataMessage.group)
+      let groupId: string | undefined
+      if (isGroup) {
+        const groupPubKey = content.dataMessage?.group?.id
+        if (groupPubKey instanceof Uint8Array) {
+          const match = StringUtils.decode(groupPubKey.buffer, 'utf8')
+            .match(/__textsecure_group__!([a-zA-Z0-9]+)/)
+          if (match !== null)
+            groupId = match[1]
+        }
+      }
+      const conversation = {
+        type: isGroup ? 'group' : 'private',
+        id: groupId || senderConversationModel.id as string,
+        raw: senderConversationModel,
+      } as const
+      SBOTEvents.emitToAllInstances('message', content, conversation)
     }
 
     if (content.dataMessage) {

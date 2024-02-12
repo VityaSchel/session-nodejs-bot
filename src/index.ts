@@ -2,6 +2,7 @@ import { startConnecting } from '../session-messenger/ts/mains/main_node'
 import { ConversationTypeEnum } from '../session-messenger/ts/models/conversationAttributes'
 import { ONSResolve } from '../session-messenger/ts/session/apis/snode_api/onsResolve'
 import { getConversationController } from '../session-messenger/ts/session/conversations'
+import { PubKey } from '../session-messenger/ts/session/types'
 import { getOurPubKeyFromCache } from '../session-messenger/ts/session/utils/User'
 import { generateMnemonic, registerSingleDevice, signInByLinkingDevice } from '../session-messenger/ts/util/accountManager'
 
@@ -24,6 +25,8 @@ export async function initializeSession(options?: {
     let profileDataPath = options?.profileDataPath
     if (!profileDataPath.endsWith('/')) profileDataPath += '/'
     global.SBOT.profileDataPath = profileDataPath
+  } else {
+    global.SBOT.profileDataPath = './session-data'
   }
 
   const { getIsReady } = await import('../session-messenger/ts/mains/main_node')
@@ -44,7 +47,7 @@ export type SessionOutgoingMessage = {
   preview: any | undefined;
   groupInvitation: { url: string | undefined; name: string } | undefined;
 }
-export async function sendMessage(sessionID: string, message: Partial<SessionOutgoingMessage> & { body: string }) {
+export async function sendMessage(sessionID: string | PubKey, message: Partial<SessionOutgoingMessage> & { body: string }) {
   if(!isInitialized) {
     throw new Error('Session is not initialized')
   }

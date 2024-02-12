@@ -4,7 +4,11 @@ import { ConversationModel } from "../session-messenger/ts/models/conversation";
 type EventCallback<T extends (...args: any[]) => any> = T;
 
 type Events = {
-  message: (content: SignalService.Content, conversation: ConversationModel) => any
+  message: (content: SignalService.Content, conversation: {
+    type: 'group' | 'private'
+    id: string
+    raw: ConversationModel
+  }) => any
 }
 
 class EventEmitter<E extends Record<string, (...args: any[]) => any> = Events> {

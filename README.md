@@ -106,10 +106,12 @@ async function main() {
   events.on('message', (message, conversation) => {
     if (message.dataMessage) {
       const text = message.dataMessage.body
-      console.log('New message!', text)
+      console.log('New message!', text, 'from', conversation.type, conversation.id)
     }
   })
 }
+
+main()
 ```
 
 ### Send message
@@ -121,12 +123,10 @@ async function main() {
   await initializeSession()
   await sendMessage('05f7fe7bd047099e5266c2ffbc74c88fc8543e6f16a08575e96959fedb2dd74d54', {
     body: 'test!!! ' + new Date().toISOString(),
-    attachments: undefined,
-    quote: undefined,
-    preview: undefined,
-    groupInvitation: undefined,
   })
 }
+
+main()
 ```
 
 ## Examples
@@ -168,19 +168,54 @@ Get cached conversations. Keep in mind that this does not actually fetches anyth
 EventEmitter allows you to listen for events that happen inside Session instance.
 
 List of events:
-- `message`. Callback when a new incoming message found. Callback signature: `(content: SignalService.Content, conversation: ConversationModel) => any`
+- `message`. Callback when a new incoming message found. Callback signature: `(content: SignalService.Content, conversation: { type: "group" | "private"; id: string; raw: ConversationModel; }) => any`
+
+Example:
+```ts
+events.on('message', (message, conversation) => {
+  if (message.dataMessage) {
+    if (conversation.type === 'group') {
+      sendMessage(conversation.id, {
+        body: 'Hi, chat!',
+      })
+    } else if(conversation.type === 'private') {
+      sendMessage(conversation.id, {
+        body: 'I only work in groups ;)',
+      })
+    }
+  }
+})
+```
 
 ### sendMessage(sessionID: string, message: SessionOutgoingMessage): Promise\<void\>
 
 Sends message to private chat
 
+Example:
+```ts
+sendMessage(conversation.id, {
+  body: 'Hi, chat!',
+})
+```
+
 ### getSessionID(): string
 
 Gets SessionID/public key in current loaded Session profile
 
+Example:
+```ts
+console.log(getSessionID())
+```
+
 ### createIdentity(profileName: string): Promise\<{ mnemonic: string, sessionID: string }\>
 
 Create new account. Returns generated mnemonic and Session ID of created account.
+
+Example:
+```ts
+await initializeSession()
+await createIdentity('test-bot-' + Math.random().toString(36).substring(7))
+```
 
 ### signIn(mnemonic: string): Promise\<{ sessionID: string }\>
 
@@ -191,6 +226,13 @@ Sign in or "Link new device". Returns Session ID of found account.
 You can use `import { ONSNameRegex } from 'session-messenger-nodejs'` to check if it's pubkey or ONSName.
 
 This method will throw if ONSName cannot be resolved
+
+Example:
+```ts
+await resolveSessionIdByONSName('hloth') // -> 057aeb66e45660c3bdfb7c62706f6440226af43ec13f3b6f899c1dd4db1b8fce5b
+```
+
+Browse all ONS names quickly with free API: [https://ons.sessionbots.directory](https://ons.sessionbots.directory)
 
 ## Contributing
 
