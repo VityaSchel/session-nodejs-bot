@@ -1,3 +1,7 @@
+// This script contains low-level implementation of file handling.
+// These methods are used in Session Messenger Desktop client itself.
+// This is for educational purposes only, use file-manager.ts example instead.
+
 import fsSync from 'fs'
 import fs from 'fs/promises'
 import os from 'os'
@@ -13,6 +17,8 @@ async function main() {
   await initializeSession()
   console.log('SessionID', getSessionID())
   
+  // Remember: You're looking for file-manager.ts example in the same directory
+  // unless you are very experienced programmer and ready for deep dive into Session source code
   const events = new EventEmitter()
   events.on('message', async (msg) => {
     if (msg.dataMessage?.profile?.profilePicture && msg.dataMessage.profileKey) {
