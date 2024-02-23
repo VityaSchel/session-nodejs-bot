@@ -88,7 +88,8 @@ function initUserWrapper(options: Array<any>, wrapperType: ConfigWrapperObjectTy
 
   const wrapper = getUserWrapper(wrapperType);
   if (wrapper) {
-    throw new Error(`${wrapperType} already init`);
+    console.error(`${wrapperType} already init`);
+    return
   }
   if (options.length !== 2) {
     throw new Error(`${wrapperType} init needs two arguments`);

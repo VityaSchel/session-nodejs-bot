@@ -19,6 +19,7 @@ Watch demo on YouTube:
   - [Examples](#examples)
     - [Calculator bot](#calculator-bot)
     - [Anonymous chat (chat with random strangers bot)](#anonymous-chat-chat-with-random-strangers-bot)
+    - [Working with files (attachments)](#working-with-files-attachments)
   - [Methods](#methods)
   - [API reference](#api-reference)
     - [initializeSession(options?: { verbose?: ('warn' | 'info' | 'error')\[\], profileDataPath?: string }): Promise\<void\>](#initializesessionoptions--verbose-warn--info--error-profiledatapath-string--promisevoid)
@@ -142,6 +143,10 @@ How to run: `yarn build ; node examples/calculator-bot.js`
 ### Anonymous chat (chat with random strangers bot)
 
 Want to see more complex bot built with session-messenger-nodejs? Check out [here](https://github.com/VityaSchel/session-random-chat-bot)
+
+### Working with files (attachments)
+
+To see how to receive and send files (message attachments: images, videos and other files), please see [file-manager.ts](examples/file-manager.ts) example
 
 ## Methods
 

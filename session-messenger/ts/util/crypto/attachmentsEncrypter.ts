@@ -1,3 +1,4 @@
+import crypto from 'crypto'
 /* eslint-disable more/no-then */
 
 async function sign(key: any, data: any) {
