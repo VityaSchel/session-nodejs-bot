@@ -67,7 +67,8 @@ export async function initializeAttachmentLogic() {
   const userDataPath = global.SBOT.profileDataPath
 
   if (attachmentsPath) {
-    throw new Error('attachmentsPath already initialized');
+    return
+    // throw new Error('attachmentsPath already initialized');
   }
 
   if (!userDataPath || userDataPath.length <= 10) {

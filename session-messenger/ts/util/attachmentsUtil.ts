@@ -78,6 +78,8 @@ export async function autoScaleForAvatar<T extends { contentType: string; blob: 
  * Resize an avatar when we receive it, before saving it locally.
  */
 export async function autoScaleForIncomingAvatar(incomingAvatar: ArrayBuffer) {
+  globalThis.console.error('[session-messenger-nodejs] WARNING WARNING WARNING You should never use autoScaleForIncomingAvatar() method because it relies on client-side blueimp-load-image which is intended for browser only. You should use Sharp or other libraries installed in your codespace, because this method will end up in error.')
+  
   const maxMeasurements = {
     maxSide: AVATAR_MAX_SIDE,
     maxSize: 1000 * 1024,
