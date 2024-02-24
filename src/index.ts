@@ -125,6 +125,6 @@ export async function resolveSessionIdByONSName(onsName: string) {
 
 export { EventEmitter } from './events'
 
-export { downloadAttachment } from './files'
+export { downloadAttachment, downloadProfilePicture } from './files'
 
 export const ONSNameRegex = ONSResolve.onsNameRegex

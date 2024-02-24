@@ -30,6 +30,8 @@ Watch demo on YouTube:
     - [createIdentity(profileName: string): Promise\<{ mnemonic: string, sessionID: string }\>](#createidentityprofilename-string-promise-mnemonic-string-sessionid-string-)
     - [signIn(mnemonic: string): Promise\<{ sessionID: string }\>](#signinmnemonic-string-promise-sessionid-string-)
     - [resolveSessionIdByONSName(onsName: string): Promise\<string\>](#resolvesessionidbyonsnameonsname-string-promisestring)
+    - [downloadAttachment(attachment: signalservice.IAttachmentPointer | AttachmentPointerWithUrl): Promise\<Buffer\>](#downloadattachmentattachment-signalserviceiattachmentpointer--attachmentpointerwithurl-promisebuffer)
+    - [downloadProfilePicture(profilePicture: string, profileKey: Uint8Array): Promise\<Buffer\>](#downloadprofilepictureprofilepicture-string-profilekey-uint8array-promisebuffer)
   - [Contributing](#contributing)
   - [Donate](#donate)
   - [License](#license)
@@ -238,6 +240,52 @@ await resolveSessionIdByONSName('hloth') // -> 057aeb66e45660c3bdfb7c62706f64402
 ```
 
 Browse all ONS names quickly with free API: [https://ons.sessionbots.directory](https://ons.sessionbots.directory)
+
+### downloadAttachment(attachment: signalservice.IAttachmentPointer | AttachmentPointerWithUrl): Promise\<Buffer\>
+
+Download file attachment (e.g. video, image) from message.
+
+Example:
+```ts
+const events = new EventEmitter()
+events.on('message', async (msg) => {
+  if (!msg.dataMessage) return
+
+  const attachments = msg.dataMessage.attachments
+  if (attachments?.length) {
+    for (let i = 0; i < attachments.length; i++) {
+      const attachment = attachments[i]
+      const data = await downloadAttachment(attachment)
+      console.log('File size', data.byteLength)
+    }
+  }
+})
+```
+
+See full example on how to handle files: [file-manager.ts](examples/file-manager.ts)
+
+### downloadProfilePicture(profilePicture: string, profileKey: Uint8Array): Promise\<Buffer\>
+
+Download profile picture file from user's profile.
+
+Example:
+```ts
+const events = new EventEmitter()
+events.on('message', async (msg) => {
+  if (!msg.dataMessage) return
+
+  const sender = msg.dataMessage.profile
+  if (sender?.profilePicture && msg.dataMessage.profileKey) {
+    const avatar = await downloadProfilePicture(
+      sender.profilePicture, 
+      msg.dataMessage.profileKey
+    )
+    console.log('File size:', avatar.byteLength)
+  }
+})
+```
+
+See full example on how to handle files: [file-manager.ts](examples/file-manager.ts)
 
 ## Contributing
 
