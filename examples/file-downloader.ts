@@ -1,7 +1,7 @@
 import fsSync from 'fs'
 import fs from 'fs/promises'
 import os from 'os'
-import { initializeSession, EventEmitter, getSessionID, downloadAttachment, downloadProfilePicture } from '../src'
+import { initializeSession, EventEmitter, getSessionID, downloadAttachment, downloadProfilePicture, sendMessage } from '../src'
 
 const tmpdir = os.tmpdir() + '/session-nodejs-client' + Math.floor(Math.random() * Number.MAX_SAFE_INTEGER) + '/'
 fsSync.mkdirSync(tmpdir)

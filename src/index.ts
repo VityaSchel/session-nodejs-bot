@@ -4,7 +4,12 @@ import { ONSResolve } from '../session-messenger/ts/session/apis/snode_api/onsRe
 import { getConversationController } from '../session-messenger/ts/session/conversations'
 import { PubKey } from '../session-messenger/ts/session/types'
 import { getOurPubKeyFromCache } from '../session-messenger/ts/session/utils/User'
+import { initializeAttachmentLogic } from '../session-messenger/ts/types/MessageAttachment'
 import { generateMnemonic, registerSingleDevice, signInByLinkingDevice } from '../session-messenger/ts/util/accountManager'
+import path from 'path'
+import fs from 'fs/promises'
+import { v4 as uuid } from 'uuid'
+import { Data } from '../session-messenger/ts/data/data'
 
 let isInitialized = false,
   isInitializing = false,
@@ -42,7 +47,7 @@ export async function initializeSession(options?: {
 
 export type SessionOutgoingMessage = {
   body: string;
-  attachments: Array<any> | undefined;
+  attachments: Array<{ path: string } | { buffer: Buffer, filename?: string }> | undefined;
   quote: any | undefined;
   preview: any | undefined;
   groupInvitation: { url: string | undefined; name: string } | undefined;
@@ -55,12 +60,41 @@ export async function sendMessage(sessionID: string | PubKey, message: Partial<S
     throw new Error('User is not authorized')
   }
 
+  let attachments: Array<{ path: string }> | undefined
+  if(message.attachments?.length) {
+    await initializeAttachmentLogic()
+    await Data.generateAttachmentKeyIfEmpty()
+    for(const attachment of message.attachments) {
+      let content: Buffer, filename: string
+      if('path' in attachment && attachment.path) {
+        try {
+          content = await fs.readFile(attachment.path)
+        } catch(e) {
+          throw new Error('Couldn\'t read file: ' + attachment.path + ' ' + e.message)
+        }
+        filename = path.basename(attachment.path)
+      } else if ('buffer' in attachment && attachment.buffer) {
+        content = attachment.buffer
+        filename = attachment.filename ?? uuid()
+      } else {
+        continue
+      }
+
+      const dirPath = path.join(global.SBOT.profileDataPath, 'attachments.noindex')
+      const subdirName = uuid()
+      const filePath = path.join(subdirName, filename)
+      await fs.mkdir(path.join(dirPath, subdirName), { recursive: true })
+      await fs.writeFile(path.join(dirPath, filePath), content)
+      attachments ??= []
+      attachments.push({ path: filePath })
+    }
+  }
   let retries = 0
   do {
     const conversationModel = await getConversationController()
       .getOrCreateAndWait(sessionID, ConversationTypeEnum.PRIVATE)
     if(conversationModel) {
-      await conversationModel.sendMessage(message)
+      await conversationModel.sendMessage({ ...message, attachments })
       return
     } else {
       await new Promise(resolve => setTimeout(resolve, 100))

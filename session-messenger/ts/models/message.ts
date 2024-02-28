@@ -686,7 +686,7 @@ export class MessageModel extends Backbone.Model<MessageAttributes> {
       quotePromise = uploadQuoteThumbnailsV3(openGroupV2, quoteWithData);
     } else {
       // if that's not an sogs, the file is uploaded to the fileserver instead
-      attachmentPromise = uploadAttachmentsToFileServer(finalAttachments);
+    attachmentPromise = uploadAttachmentsToFileServer(finalAttachments);
       linkPreviewPromise = uploadLinkPreviewToFileServer(firstPreviewWithData);
       quotePromise = uploadQuoteThumbnailsToFileServer(quoteWithData);
     }
