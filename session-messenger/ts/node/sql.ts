@@ -161,6 +161,7 @@ async function initializeSql({
     }
     db = openAndSetUpSQLCipher(databaseFilePath, { key });
     if (!db) {
+      console.error('[SessionBot] The following error may have occured because of incompatible Node.js version. It is recommended to pass initializeSession({ verbose: [\'error\', \'warn\', \'info\'] }) to see full logs next time the bot crashes to determine exact reason DB fails to open')
       throw new Error('db is not set');
     }
     await updateSchema(db);

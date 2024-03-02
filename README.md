@@ -228,6 +228,8 @@ await createIdentity('test-bot-' + Math.random().toString(36).substring(7))
 
 Sign in or "Link new device". Returns Session ID of found account.
 
+**CAUTION: This method syncs all messages from swarms as if they were new. Either wait for these messages to sync (it may take about a minute) and then proceed to handling new messages normally, or check for timestamp and ignore messages older than a few days**
+
 ### resolveSessionIdByONSName(onsName: string): Promise\<string\>
 
 You can use `import { ONSNameRegex } from 'session-messenger-nodejs'` to check if it's pubkey or ONSName.
@@ -262,7 +264,7 @@ events.on('message', async (msg) => {
 })
 ```
 
-See full example on how to handle files: [file-manager.ts](examples/file-manager.ts)
+See full example on how to handle files: [file-downloader.ts](examples/file-downloader.ts) and [file-uploader.ts](examples/file-uploader.ts)
 
 ### downloadProfilePicture(profilePicture: string, profileKey: Uint8Array): Promise\<Buffer\>
 

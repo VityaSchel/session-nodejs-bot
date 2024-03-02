@@ -20,10 +20,18 @@ global.SBOT ??= {}
 
 export async function initializeSession(options?: {
   verbose?: ('warn' | 'info' | 'error')[],
+  ignoreNodeVersion: boolean
   profileDataPath?: string
 }) {
   if (isInitialized || isInitializing) return
   isInitializing = true
+
+  if (options?.ignoreNodeVersion !== true) {
+    const supportedVersions = ['v18.15.0']
+    if (!supportedVersions.includes(process.version)) {
+      throw new Error(`You're running Node.js with version ${process.version} which is not tested with session-nodejs-messenger. Please either use one of these versions: ${supportedVersions.join(', ')} or pass initializeSession({ ignoreNodeVersion: true }) at your own risk`)
+    }
+  }
 
   global.SBOT.verbose = options?.verbose ?? ['error']
   if (options?.profileDataPath) {
@@ -33,6 +41,8 @@ export async function initializeSession(options?: {
   } else {
     global.SBOT.profileDataPath = './session-data'
   }
+  
+  await fs.mkdir(global.SBOT.profileDataPath, { recursive: true })
 
   const { getIsReady } = await import('../session-messenger/ts/mains/main_node')
   const state = await new Promise<{ isAuthorized: boolean }>(resolve => setInterval(() => {

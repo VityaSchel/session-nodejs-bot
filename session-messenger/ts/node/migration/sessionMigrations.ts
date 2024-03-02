@@ -1835,7 +1835,7 @@ function updateToSessionSchemaVersion31(currentVersion: number, db: BetterSqlite
 
       // we've just created the initial dumps. A ConfSyncJob is run when the app starts after 20 seconds
     } catch (e) {
-      console.error(
+      console.log(
         `failed to create initial wrapper. Might just not have a logged in user yet? `,
         e.message,
         e.stack,
