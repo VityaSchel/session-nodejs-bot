@@ -101,7 +101,7 @@ You can use any methods available in the official `ConversationModel` type infer
 ### Subscribe to new messages
 
 ```ts
-import { initializeSession, EventEmitter } from '../src'
+import { initializeSession, EventEmitter } from 'session-messenger-nodejs'
 
 async function main() {
   await initializeSession()
@@ -120,7 +120,7 @@ main()
 ### Send message
 
 ```ts
-import { initializeSession, sendMessage } from '../src'
+import { initializeSession, sendMessage } from 'session-messenger-nodejs'
 
 async function main() {
   await initializeSession()
