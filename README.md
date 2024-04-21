@@ -7,8 +7,8 @@ Watch demo on YouTube:
 [![Watch demo](https://img.youtube.com/vi/af7-DFSbFZ4/0.jpg)](https://www.youtube.com/watch?v=af7-DFSbFZ4)
 
 - [Session Node.js Client](#session-nodejs-client)
-- [WORK IN PROGRESS](#work-in-progress)
-- [Session Bots directory](#session-bots-directory)
+  - [WORK IN PROGRESS](#work-in-progress)
+  - [Session Bots directory](#session-bots-directory)
   - [Features](#features)
   - [Installation](#installation)
   - [Building from source](#building-from-source)
@@ -38,15 +38,15 @@ Watch demo on YouTube:
 
 Subscribe to the official [Telegram channel](https://t.me/session_nodejs)
 
-# WORK IN PROGRESS
+## WORK IN PROGRESS
 
 Since there is zero documentation about swarms and zero help from Session developers, I've decided to fork session-desktop and try to split render from node instead of writing everything from scratch.
 
 This is why this repository mustn't be used in production. It is basically fun side project for me with 90% dead, unreachable, untested, insecure code that may leak everything about you and break randomly. I have no idea how it works and I'm absolutely shocked I was able to make it run.
 
-# Session Bots directory
+## Session Bots directory
 
-I'm planning to release sessions bots directory website with automatic checks and moderation in the following few days. Once I'm done, there will be a link to it so you can add your own bots there and discover others!
+Publish your bot there and discover others: https://sessionbots.directory
 
 ## Features
 
