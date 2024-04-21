@@ -20,7 +20,7 @@ global.SBOT ??= {}
 
 export async function initializeSession(options?: {
   verbose?: ('warn' | 'info' | 'error')[],
-  ignoreNodeVersion: boolean
+  ignoreNodeVersion?: boolean
   profileDataPath?: string
 }) {
   if (isInitialized || isInitializing) return

@@ -22,7 +22,7 @@ Watch demo on YouTube:
     - [Working with files (attachments)](#working-with-files-attachments)
   - [Methods](#methods)
   - [API reference](#api-reference)
-    - [initializeSession(options?: { verbose?: ('warn' | 'info' | 'error')\[\], profileDataPath?: string }): Promise\<void\>](#initializesessionoptions--verbose-warn--info--error-profiledatapath-string--promisevoid)
+    - [initializeSession(options?: { verbose?: ('warn' | 'info' | 'error')\[\], profileDataPath?: string, ignoreNodeVersion?: boolean }): Promise\<void\>](#initializesessionoptions--verbose-warn--info--error-profiledatapath-string-ignorenodeversion-boolean--promisevoid)
     - [getConversations(): ConversationModel\[\]](#getconversations-conversationmodel)
     - [class EventEmitter](#class-eventemitter)
     - [sendMessage(sessionID: string, message: SessionOutgoingMessage): Promise\<void\>](#sendmessagesessionid-string-message-sessionoutgoingmessage-promisevoid)
@@ -58,7 +58,6 @@ I'm planning to release sessions bots directory website with automatic checks an
 ## Installation
 
 ```
-warn
 Please note that Session requires exactly `18.15.0` version of Node.js to be used. Install it with nvm and use in your project. If you can't use it, spawn node.js process and run Session instance in it.
 ```
 
@@ -158,13 +157,15 @@ Please be aware that this app generates A LOT of console logs. I'm working on re
 
 ## API reference
 
-### initializeSession(options?: { verbose?: ('warn' | 'info' | 'error')[], profileDataPath?: string }): Promise\<void\>
+### initializeSession(options?: { verbose?: ('warn' | 'info' | 'error')[], profileDataPath?: string, ignoreNodeVersion?: boolean }): Promise\<void\>
 
 Initialize Session instance in current Node.js process. Must be called and await'ed before using any Session-related methods. Must be only called once per Node.js process. If you need more instances running simultaniously, spawn Node.js children processes.
 
 Don't want to see any logs? Pass `verbose: []`. This parameter defaults to `['error']`
 
 Want to specify location for Session profile (account data)? Pass `profileDataPath` with path to directory. This way you can have multiple instances running at the same time. Defaults to `session-data` directory
+
+Want to experiment with node versions and disable error when using anything except well-tested v18.15.0? Use `ignoreNodeVersion: true`
 
 ### getConversations(): ConversationModel[]
 
