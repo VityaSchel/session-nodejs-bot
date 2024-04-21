@@ -106,10 +106,10 @@ import { initializeSession, EventEmitter } from 'session-messenger-nodejs'
 async function main() {
   await initializeSession()
   const events = new EventEmitter()
-  events.on('message', (message, conversation) => {
+  events.on('message', (message, { conversation, id, timestamp }) => {
     if (message.dataMessage) {
       const text = message.dataMessage.body
-      console.log('New message!', text, 'from', conversation.type, conversation.id)
+      console.log('New message!', id, text, 'from', conversation.type, conversation.id, 'sent at', timestamp)
     }
   })
 }
@@ -175,7 +175,7 @@ Get cached conversations. Keep in mind that this does not actually fetches anyth
 EventEmitter allows you to listen for events that happen inside Session instance.
 
 List of events:
-- `message`. Callback when a new incoming message found. Callback signature: `(content: SignalService.Content, conversation: { type: "group" | "private"; id: string; raw: ConversationModel; }) => any`
+- `message`. Callback when a new incoming message found. Callback signature: `(content: SignalService.Content, options: { conversation: { type: "group" | "private"; id: string; raw: ConversationModel; }, id: string, timestamp: number }) => any`
 
 Example:
 ```ts
@@ -295,7 +295,7 @@ PRs are welcome! Feel free to help development.
 
 ## Donate
 
-[Contact me in Telegram](https://t.me/hlothdev)
+Donate in crypto: [hloth.dev/donate](https://hloth.dev/donate)
 
 ## License
 

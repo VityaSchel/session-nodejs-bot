@@ -471,7 +471,11 @@ export async function innerHandleSwarmContentMessage(
         id: groupId || senderConversationModel.id as string,
         raw: senderConversationModel,
       } as const
-      SBOTEvents.emitToAllInstances('message', content, conversation)
+      SBOTEvents.emitToAllInstances('message', content, {
+        conversation,
+        timestamp: sentAtTimestamp as number,
+        id: envelope.id as string,
+      })
     }
 
     if (content.dataMessage) {
