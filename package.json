@@ -1,6 +1,6 @@
 {
   "name": "session-messenger-nodejs",
-  "description": "Headless Session messenger instance as a module that runs entirely inside Node.js",
+  "description": "DEPRECATED Headless Session messenger instance as a module that runs entirely inside Node.js",
   "version": "1.2.5",
   "license": "MIT",
   "author": "Viktor Shchelochkov <hi@hloth.dev> (https://hloth.dev)",

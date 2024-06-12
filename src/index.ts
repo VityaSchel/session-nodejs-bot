@@ -1,3 +1,5 @@
+console.error('session-messenger-nodejs is deprecated, please use session.js (https://npmjs.com/package/session-oxen) instead.')
+
 import { startConnecting } from '../session-messenger/ts/mains/main_node'
 import { ConversationTypeEnum } from '../session-messenger/ts/models/conversationAttributes'
 import { ONSResolve } from '../session-messenger/ts/session/apis/snode_api/onsResolve'

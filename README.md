@@ -1,5 +1,11 @@
 # Session Node.js Client
 
+# DEPRECATED
+
+Please consider switching to [Session.js](https://github.com/VityaSchel/session.js) — new framework made by me from scratch which runs on blazingly fast Bun.sh runtime instead of one specific Node.js version. It is highly customizable and flexible, allowing you to create hundreds of Session instances in one file, run multiple pollers with different settings, generally more stable and much faster.
+
+Link: https://npmjs.com/package/session-oxen
+
 Headless Session messenger instance that runs entirely inside Node.js without renderer such as Electron. Use it in your bots as a NPM module (2.1MB).
 
 Watch demo on YouTube:
@@ -7,6 +13,7 @@ Watch demo on YouTube:
 [![Watch demo](https://img.youtube.com/vi/af7-DFSbFZ4/0.jpg)](https://www.youtube.com/watch?v=af7-DFSbFZ4)
 
 - [Session Node.js Client](#session-nodejs-client)
+- [DEPRECATED](#deprecated)
   - [WORK IN PROGRESS](#work-in-progress)
   - [Session Bots directory](#session-bots-directory)
   - [Features](#features)
